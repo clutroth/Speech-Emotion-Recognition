@@ -4,32 +4,38 @@ classdef EmpatorTest < matlab.unittest.TestCase
 		frameTime;
 	end
 	methods
-		function verifySignalDuration(testCase, data, sampleFrequency, expectedDuration)
+		function verifySignalDuration(testCase, len, sampleFrequency, expectedDuration)
+            data = testCase.mockFrame(len);
 			actualDuration = empator.Empator.signalDuration(data, sampleFrequency);
-			testCase.verifyEqual(expectedDuration, actualDuration, ...
+			testCase.verifyEqual(actualDuration, expectedDuration, ...
 				'duration differ than excpected');
-		end
+        end
+        function frame = mockFrame(testCase,length)
+            frame = zeros(length,1);
+        end
 	end
 	methods(TestMethodSetup)
 		function setUp(testCase)
-			testCase.filename = 'audio/03a01Fa.wav';
+			testCase.filename = '03a01Fa.wav';
 			testCase.frameTime = .25;
 		end
 	end
 	methods (Test)
+        % recognize
 		function testRecognizeSampleSignal(testCase)
-			[data, sampleFrequency] = audioread(filename);
-			result = empator.Empator.recognizeSignal(...
+			[data, sampleFrequency] = audioread(testCase.filename);
+			result = empator.Empator.recognize(...
 				data, sampleFrequency, testCase.frameTime);
 			testCase.verifyEqual(result.judgment, empator.BasicEmotions.JOY, ...
 				'Judgment is inorrect');
 		end
-		function testRecognizeSampleFile(testCase)
-			result = empator.Empator.recognize(...
-				testCase.filename, testCase.frameTime);
-			testCase.verifyEqual(result.judgment, empator.BasicEmotions.JOY, ...
-				'Judgment is inorrect');
-		end
+% 		function testRecognizeSampleFile(testCase)
+% 			result = empator.Empator.recognizeFile(...
+% 				testCase.filename, testCase.frameTime);
+% 			testCase.verifyEqual(result.judgment, empator.BasicEmotions.JOY, ...
+% 				'Judgment is inorrect');
+%         end
+        % signalDuration
 		function testShortSignalDuration(testCase)
 			testCase.verifySignalDuration(5, 10, .5);
 		end
@@ -41,6 +47,14 @@ classdef EmpatorTest < matlab.unittest.TestCase
 		end
 		function testOneFrameSignalDuration(testCase)
 			testCase.verifySignalDuration(10, 10, 1);
-		end
+        end
+        % splitSignal
+        function testSplitSignal(testCase)
+            signal = ones(100,1);
+            frames = empator.Empator.splitSignal(signal, 100, .25);
+            testCase.verifyEqual(size(frames), ...
+                [4,25],...
+                'Signal hasn''t been splited as excpected')
+        end
 	end
 end

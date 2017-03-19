@@ -6,7 +6,8 @@ addpath '../../../main/src/matlab';
 % voicebox library
 addpath '../../../main/lib/voicebox';
 % test resources
-addpath '../../../test/resources';
+RESOURCES = '../../../test/resources/audio';
+addpath(RESOURCES);
 % create test suite
 empatorPackage = TestSuite.fromPackage('empator');
 
