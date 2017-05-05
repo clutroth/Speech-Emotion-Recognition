@@ -34,7 +34,7 @@ classdef EmpatorTest < matlab.unittest.TestCase
 % 				testCase.filename, testCase.frameTime);
 % 			testCase.verifyEqual(result.judgment, empator.BasicEmotions.JOY, ...
 % 				'Judgment is inorrect');
-%         end
+%         endfilename = '03a01Fa.wav';
         % signalDuration
 		function testShortSignalDuration(testCase)
 			testCase.verifySignalDuration(5, 10, .5);

@@ -1,4 +1,5 @@
 #!/bin/sh
-src='main/src/matlab'
-test='test/src/matlab'
+szkic=$mgr/szkic
+src=$szkic/main/src/matlab
+test=$szkic/test/src/matlab
 

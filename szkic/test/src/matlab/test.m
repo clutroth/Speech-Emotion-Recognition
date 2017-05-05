@@ -1,4 +1,4 @@
-close all;
+fclose all;
 clear all;
 import matlab.unittest.TestSuite;
 % tested code
@@ -10,7 +10,7 @@ RESOURCES = '../../../test/resources/audio';
 addpath(RESOURCES);
 % create test suite
 empatorPackage = TestSuite.fromPackage('empator');
-
-allTests = [empatorPackage];
+featurePackage = TestSuite.fromPackage('feature');
+allTests = [empatorPackage, featurePackage];
 
 run(allTests);
