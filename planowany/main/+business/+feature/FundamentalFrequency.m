@@ -8,7 +8,13 @@ classdef FundamentalFrequency < business.feature.AbstractFeature
             obj@business.feature.AbstractFeature(parent);
         end
         function feature =  extract(obj, signal)
-            feature = 1;
+            y=signal.data;
+            Fs=signal.sampleFrequency;
+            ydft = fft(y);
+            freq = 0:Fs/length(y):Fs/2;
+            ydft = ydft(1:floor(length(y)/2)+1);
+            [~,idx] = max(abs(ydft));
+            feature = freq(idx);
         end
     end
 end
