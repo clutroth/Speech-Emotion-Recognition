@@ -4,7 +4,8 @@ import matlab.unittest.TestSuite;
 addpath ../main/
 
 modelPackage = TestSuite.fromPackage('model');
-applicationPackage = TestSuite.fromPackage('application');
-allTests = [modelPackage, applicationPackage];
+businessPackage = TestSuite.fromPackage('business');
+businessFeaturePackage = TestSuite.fromPackage('business.feature');
+allTests = [modelPackage, businessPackage, businessFeaturePackage];
 run(allTests);
 
