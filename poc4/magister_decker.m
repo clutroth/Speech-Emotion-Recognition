@@ -1,20 +1,23 @@
 clear all
+
+addpath ./lib/voicebox/
 %% Params
 filename = 'korpus/RA/AKA_RA_C.wav';
-frameLength = 512;
+frameLength = 400;
 
+%% Preemphasis
+[y,fs] = audioread(filename);
+preemphasisFilter = @(x)(filter( [1 -.97], 1, x ));
+filtered = preemphasisFilter(y);
 %% Split to frames
-[y,Fs] = audioread(filename);
-totalSamplesNumber = size(y,1);
-framesNumber = ceil(totalSamplesNumber / frameLength);
-frames = zeros(framesNumber, frameLength,1);
+frames = enframe(y, frameLength);
 h = hamming(frameLength);
-for n = 1:framesNumber
-    from = (n-1)*frameLength;
-    to = min(n*frameLength, totalSamplesNumber-1);
-    frames(n,1:to-from) = y(from+1:to,:);
-    frames(n,:) = frames(n,:);
-end
+% hamminged = frames * h';
 %% extract features
-[lp,g] = lpc(frames(1,:),10)
+hamminged=h' .* frames;
+frame = hamminged(1,:);
+
+features = features.Features(frame, fs);
+
+[lp,g] = lpc(frame,10);
 %sound(frames(1,:),Fs)
