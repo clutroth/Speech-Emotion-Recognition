@@ -2,7 +2,7 @@ clear all
 
 addpath ./lib/voicebox/
 %% Params
-filename = 'korpus/RA/JMI_RA_C.wav';
+filename = '/home/wdk/uczelnia/mgr/materiały/agh/Emotive Korpus/RA/AKL_RA_T.wav';
 % filename = 'korpus/RA/AKA_RA_C.wav';
 
 frameLength = 200;
@@ -34,9 +34,9 @@ end
 data = createFeatureData(features.DataFeatures(framesNumber),...
     segmentalFeatures,...
     suprasegmentalFeatures);
-
+sa = analysis.SpeechAnalysis();
+speech = sa.createSpeech(data, 'joy', filename);
 %% Plot features
-stats = stat.StatisticMap(data);
 t = (1:framesNumber) * frameLength / fs;
 t=t.';
 plot(t, zscore(data.energy),...
