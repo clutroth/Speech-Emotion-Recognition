@@ -408,3 +408,4 @@ tags
 
 # End of https://www.gitignore.io/api/vim,latex,intellij,java,scala,matlab,eclipse
 poc4/aghCorpus.dat
+poc4/working_dir/

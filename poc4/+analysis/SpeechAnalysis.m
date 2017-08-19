@@ -10,7 +10,6 @@ classdef SpeechAnalysis
         function analysedSpeach=analyse(obj,corpus)
             files = corpus.listFiles();
             analysedSpeach = cell(size(files));
-            parpool(8)
             parfor j = 1:length(files)
                 file = files{j};
                 j, file,
