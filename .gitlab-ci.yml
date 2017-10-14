@@ -3,5 +3,3 @@ before_srcipt:
 
 thesis:
   script: "bash buildThesis.sh"
-
-S
