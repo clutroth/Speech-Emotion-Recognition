@@ -1,0 +1,11 @@
+before_srcipt:
+  - apt-get install -y texlive-full
+
+thesis:
+  script: "bash buildThesis.sh"
+
+<<<<<<< HEAD:.gitlab-ci.yml
+S
+=======
+
+>>>>>>> przeniesienie gitlab-ci:.gitlab-ci.yml

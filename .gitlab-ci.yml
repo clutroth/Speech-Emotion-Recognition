@@ -3,3 +3,27 @@ before_srcipt:
 
 thesis:
   script: "bash buildThesis.sh"
+
+
+image: java:8
+
+stages:
+  - build
+#  - deploy
+
+before_script:
+  - apt-get update -y
+  - apt-get install texlive-full -y
+
+build:
+  stage: build
+  script:
+    - pdflatex ./LATEX_dyplom/praca_dyplomowa.tex
+
+#deploy:
+#  stage: deploy
+#  script:
+#    - apt-get update -yq
+#    - apt-get install rubygems ruby-dev -y
+#    - gem install dpl
+#    - dpl --provider=heroku --app=gitlab-play-sample-app --api-key=$HEROKU_API_KEY
