@@ -3,13 +3,6 @@ classdef AghDescriptor
         corpusLocation,
         emotions,
     end
-% IR - ironia
-% NE - stan neutralny
-% RA - radość
-% SM - smutek
-% ST - strach
-% ZD - zdziwienie
-% ZL - złość
     methods
         function obj = AghDescriptor()
             obj.emotions = containers.Map();
