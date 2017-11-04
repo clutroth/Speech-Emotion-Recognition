@@ -3,6 +3,7 @@ set -e
 
 THESIS_DIR=LATEX_dyplom
 THESIS_NAME=praca_dyplomowa
+WORKING_DIR=/tmp/magisterka
 
 cd $THESIS_DIR
 pdflatex $THESIS_NAME
