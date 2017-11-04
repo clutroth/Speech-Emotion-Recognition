@@ -1,2 +1,20 @@
 Skrypt w matlabie
 coś co działa
+
+
+/przetwarzanie wstępne zależy od wyciąganych cech.
+200 próbek to zaa mało 1300próbek  0.3s 
+
+Przetwarzanie wstępnym. Zredukować różnice w poziomie głośności (amplitudzie) i zreukować szumy.
+HAmming ma sens prze FFT
+
+Ekstrakcja cech ma wymagania.
+Normalizacja plików
+
+Czy AGH preprocesował. 
+Największy problem jest z korpusem. 
+Przeanalizować, opisać korpus. 
+Jaki przeprocesing jest potrzebny
+Doprowadzić sygnało do takiejn samej wariancji i amplitudy. Wyselekcjonować cechy. 
+JAkie cechy są w voicetoolbox. 
+Segmentlai/Sequential forward search
