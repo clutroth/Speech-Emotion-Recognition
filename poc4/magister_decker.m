@@ -1,58 +1,15 @@
 clear all
 
 addpath ./lib/voicebox/
+% emocje IR NE RA SM ST ZD ZL
+% mówca AKA AKL HKR JMI MCH MGR MIG MMA MPO PJU PKE
+% wypowiedzi C P T Z
 %% Params
-filename = '/home/wdk/uczelnia/mgr/materiały/agh/Emotive Korpus/RA/AKL_RA_T.wav';
-% filename = 'korpus/RA/AKA_RA_C.wav';
+% filename=@(s,e,t)(strcat( '/home/wdk/uczelnia/mgr/materiały/agh/Emotive Korpus/',e,'/',s,'_',e,'_',t,'.wav'));
+% AKL_RA_T = filename('AKL','RA','T');
+% JMI_ST_C = filename('JMI','ST','C');
+% JMI_ST_T = filename('JMI','ST','T');
+% AKL_RA_C = filename('AKL','RA','C');
 
-frameLength = 200;
 
-%% Preemphasis
-
-[y,fs] = audioread(filename);
-preemphasisFilter = @(x)(filter( [1 -.97], 1, x ));
-filtered = preemphasisFilter(y);
-%% Split to frames
-
-frames = enframe(y, frameLength);
-h = hamming(frameLength);
-hamminged= frames .* h.';
-
-%% Extract features
-
-framesNumber = size(hamminged,1);
-segmentalFeatures = ObjectArray(framesNumber);
-r = zeros(framesNumber,1);
-suprasegmentalFeatures = features.SuprasegmentalFeatures(y, fs);
-for j = 1:framesNumber
-    frame = hamminged(j,:);
-    segmentalFeatures(j).Value = features.SegmentalFeatures(frame, fs);
-end
-
-%% Map features 
-
-data = createFeatureData(features.DataFeatures(framesNumber),...
-    segmentalFeatures,...
-    suprasegmentalFeatures);
-sa = analysis.SpeechAnalysis();
-speech = sa.createSpeech(data, 'joy', filename);
-%% Plot features
-t = (1:framesNumber) * frameLength / fs;
-t=t.';
-plot(t, zscore(data.energy),...
-    t, zscore(data.fundamentalFrequency),...
-    t, zscore(data.formant1),...
-    t, zscore(data.formant2),...
-    t, zscore(data.formant3),...
-    t, zscore(data.formant4),...
-    t, zscore(data.mfcc1),...
-    t, zscore(data.mfcc2),...
-    t, zscore(data.mfcc3),...
-    t, zscore(data.mfcc4),...
-    t, zscore(data.mfcc5),...
-    t, zscore(data.mfcc6),...
-    t, zscore(data.mfcc7));
-
-legend('energy', 'fundamental frequency', ...
-    'formant1', 'formant2', 'formant3', 'formant4', ...
-    'mfcc1', 'mfcc2', 'mfcc3', 'mfcc4', 'mfcc5', 'mfcc6', 'mfcc7');
+toolkit.audioFilePresentation(toolkit.filename('RA', 'AKL', 'T'))

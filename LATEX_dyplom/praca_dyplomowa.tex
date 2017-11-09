@@ -81,155 +81,89 @@
 %%% koniec od P.W
 
 \opinie{%
-\input{opiniaopiekuna.tex}
-\newpage
-\input{recenzja.tex}
+	\input{opiniaopiekuna.tex}
+	\newpage
+	\input{recenzja.tex}
 }
 
 \streszczenia{
-\input{streszczenia.tex}
+	\input{streszczenia.tex}
 }
 \newcommand{\ang}[1]{\textit{(ang. #1)}}
 \newcommand{\MATLAB}{\textsc{Matlab}\xspace}
 
 \begin{document}
-    \maketitle
-    %-----------------
-    % Wstęp
-    %-----------------
-    \chapter{Wstęp}
-    \label{ch:wstep}
-    % krótka definicja emocji
-    Emocje to stany ludzkiego umysłu.
-    Powstają w odpowiedzi na zdarzenie, są ukierunkowane i krótkotrwałe.
-    Różnią się intensywnością i zabarwieniem.
-    Wpływają na interpretację bodźców z otoczenia,
-    myśli a w konsekwencji mają istotny wpływ na zachowanie i reakcje.
+\maketitle
+%-----------------
+% Wstęp
+%-----------------
+\chapter{Wstęp}
+\label{ch:wstep}
+% krótka definicja emocji
+Emocje to stany ludzkiego umysłu.
+Powstają w odpowiedzi na zdarzenie, są ukierunkowane i krótkotrwałe.
+Różnią się intensywnością i zabarwieniem.
+Wpływają na interpretację bodźców z otoczenia,
+myśli a w konsekwencji mają istotny wpływ na zachowanie i reakcje.
 
-    % informacje zakodowane w mowie
-    Mowa jest nośnikiem informacji wykorzystywanym w komunikacji międzyludzkiej,
-    oraz pomiędzy człowiekiem i komputerem \ang{Human-Computer Interaction}.
-    Komunikat głosowy składa się z treści językowej,
-    którą można zapisać w formie tekstu,
-    oraz akustycznej, która również opisuje wypowiedź takie jak:
-    drżący ze strachu głos, czy ciężki oddech świadczący o gniewie.
+% informacje zakodowane w mowie
+Mowa jest nośnikiem informacji wykorzystywanym w komunikacji międzyludzkiej,
+oraz pomiędzy człowiekiem i komputerem \ang{Human-Computer Interaction}.
+Komunikat głosowy składa się z treści językowej,
+którą można zapisać w formie tekstu,
+oraz akustycznej, która również opisuje wypowiedź takie jak:
+drżący ze strachu głos, czy ciężki oddech świadczący o gniewie.
 
-    % Zastosowanie maszynowego rozpoznawania emocji
-    Rozpoznawanie emocji mówcy jest istotne w aplikacjach wykorzystujących mowę w komunikacji człowiek-maszyna.
-    Zwłaszcza, jeśli odpowiedź systemu jest uzależniona od nastroju człowieka.
-    Klasyfikacja emocji wypowiedzi jest wykorzystywana w terapiach,
-    gdzie terapeuta wspiera się maszyną w odczytywaniu emocji pacjenta.
-    Systemy tłumaczenia maszynowego mowy mogą wykorzystać informacje mówiące o kontekście wypowiedzi i stanie mówcy.
-    Telefoniczne centra obsługi klienta \ang{call center} rozpoznają stan klienta,
-    oraz jego reakcję na ofertę prezentowaną przez konsultanta.
+% Zastosowanie maszynowego rozpoznawania emocji
+Rozpoznawanie emocji mówcy jest istotne w aplikacjach wykorzystujących mowę w komunikacji człowiek-maszyna.
+Zwłaszcza, jeśli odpowiedź systemu jest uzależniona od nastroju człowieka.
+Klasyfikacja emocji wypowiedzi jest wykorzystywana w terapiach,
+gdzie terapeuta wspiera się maszyną w odczytywaniu emocji pacjenta.
+Systemy tłumaczenia maszynowego mowy mogą wykorzystać informacje mówiące o kontekście wypowiedzi i stanie mówcy.
+Telefoniczne centra obsługi klienta \ang{call center} rozpoznają stan klienta,
+oraz jego reakcję na ofertę prezentowaną przez konsultanta.
 
-    % Jaki jest cel?
-    Celem pracy jest przybliżenie tematyki komputerowego rozpoznawania mowy,
-    przegląd wykorzystywanych narzędzi, oraz ocena znanych rozwiązań.
-    Produktem końcowym będzie aplikacja komputerowa rozpoznająca emocje w sygnale mowy.
-    W trakcje tworzenia pracy zostanie dokonana analiza znanych rozwiązań tego zagadnienia.
-    Następnie zostanie opracowany schemat aplikacji, bazujący na poprzednich badaniach,
-    pozwalający stworzyć aplikację w warunkach powstawania pracy magisterskiej.
-    Kolejnym etapem będzie implementacja aplikacji w środowisku MATLAB.
-    Na zakończenie zostaną przeprowadzone testy aplikacji,
-    analiza wyników i prezentacja wniosków.
+% Jaki jest cel?
+Celem pracy jest przybliżenie tematyki komputerowego rozpoznawania mowy,
+przegląd wykorzystywanych narzędzi, oraz ocena znanych rozwiązań.
+Produktem końcowym będzie aplikacja komputerowa rozpoznająca emocje w sygnale mowy.
+W trakcje tworzenia pracy zostanie dokonana analiza znanych rozwiązań tego zagadnienia.
+Następnie zostanie opracowany schemat aplikacji, bazujący na poprzednich badaniach,
+pozwalający stworzyć aplikację w warunkach powstawania pracy magisterskiej.
+Kolejnym etapem będzie implementacja aplikacji w środowisku MATLAB.
+Na zakończenie zostaną przeprowadzone testy aplikacji,
+analiza wyników i prezentacja wniosków.
 
-    \chapter{Opis korpusu}
-    W pracy wykorzystano korpus emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
-    Nagrania zawierają pięć emocji podstawowych: radość, smutek, złość, strach, zdziwienie.
-    Ponadto zostały nagrane wypowiedzi w tonie neutralnym jako punkt odniesienia i ironicznym, jako emocja złożona.
-    W nagraniu wzięło udział 6 mężczyzn i 6 kobiet od 20 do 30 lat. 
-    Mówcy byli zarówno profesjonalnymi aktorami jak i amatorami, czy wolontariuszami.
-    Baza została zrealizowana jako korpus emocji odgrywanych. 
+\chapter{Opis prac}
+\section{Opis korpusu}
+W pracy wykorzystano korpus emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
+Nagrania zawierają pięć emocji podstawowych: radość, smutek, złość, strach, zdziwienie.
+Ponadto zostały nagrane wypowiedzi w tonie neutralnym jako punkt odniesienia i ironicznym, jako emocja złożona.
+W nagraniu wzięło udział 6 mężczyzn i 6 kobiet od 20 do 30 lat. 
+Mówcy byli zarówno profesjonalnymi aktorami jak i amatorami, czy wolontariuszami.
+Baza została zrealizowana jako korpus emocji odgrywanych. 
 
-    Nagrano 4 typy wypowiedzi.
-    \begin{description}
-	    \item [Zdania] będące sekwencją 46 prostych wypowiedzi często wykorzystywanych w życiu codziennym 
-		    np. ,,Dzień dobry'', ,,Witam serdecznie''. 
-	    \item [Polecenia]  np. ,,Nowy'', ,,Otwórz''. 
-		    Jest to głosowa reprezentacja standardowych komend wykorzystywanych w komunikacji człowieka z komputerem.
-	    \item [Cyfry] od 0 do 9.
-	    \item [Tekst] czyli fragment artykułu. 
-		    Lity tekst będący spójnym logicznie ciągiem zdań, lecz wyrwanym z kontekstu.
-    \end{description}
-    Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich stanach emocjonalnych.
+Nagrano 4 typy wypowiedzi.
+\begin{description}
+	\item [Zdania] będące sekwencją 46 prostych wypowiedzi często wykorzystywanych w życiu codziennym 
+		np. ,,Dzień dobry'', ,,Witam serdecznie''. 
+	\item [Polecenia]  np. ,,Nowy'', ,,Otwórz''. 
+		Jest to głosowa reprezentacja standardowych komend wykorzystywanych w komunikacji człowieka z komputerem.
+	\item [Cyfry] od 0 do 9.
+	\item [Tekst] czyli fragment artykułu. 
+		Lity tekst będący spójnym logicznie ciągiem zdań, lecz wyrwanym z kontekstu.
+\end{description}
+Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich stanach emocjonalnych.
 
-    Korpus składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
-    Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
-    Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bit ~\cite{Igras2009}.
-
-    \chapter{Omówienie problemu rozpoznawania emocji}
-    \label{ch:omowienie_problemu}
-    \section{Ogólny algorytm rozpoznawania emocji}
-    \label{sec:ogol}
-    \begin{figure}[h]
-        \centering
-        \includegraphics[width=0.5\textwidth]{generic_schema}
-        \caption{Schemat systemu rozpoznawania emocji}
-    \end{figure}
-    \section{Przetwarzanie wstępne}
-    Wejściem jest plik audio z zapisem sygnału mowy.
-    Przed rozpoczęciem przetwarzania musi zostać podzielone na ramki,
-    na których będą wykonywane operacje w późniejszych etapach.
-
-    Sygnał odczytany z pliku przefiltrowano wybieraną funkcją operatorową(ang.  rational transfer function).
-    Przyjmując współczynniki numeratora (b) i denominatora(a)
-    $b = 0.03$ $a = 1$  % funkcja filter z matlaba
-
-    Sygnał jest podzielony na ramki o stałej długości.
-    Każda ramka zawierała 200 próbek.
-    Ramki nie nachodziły na siebie.
-    Każda ramka została przetworzona przez okno Hamminga \ref{eq:hamming}.
-
-    \begin{figure}
-        \label{eq:hamming}
-        \[w(n) = \alpha - \beta \cos(\frac{2 \pi n}{N -1})\]
-        \caption{Okno Hamminga}
-    \end{figure}
-
-    Przyjęto wartości parametrów $\alpha = 0.54$ $\beta = 0.46$
-
-
-    \section{Ekstrakcja cech}
-    Przyjmując za dane wejściowe sygnał podzielony na ramki przeprowadzono ekstrakcję cech z sygnału.
-    Każdą ramkę przetworzono obliczając cechy:
-    \begin{enumerate}
-        \item MFCC (7 pierwszych współczynników)
-        \item energia ramki
-        \item częstotliwość podstawowa (dla całego sygnału)
-        \item formanty(pierwsze 4)
-    \end{enumerate}
-    \subsection{Opis współczyników}
-    \subsubsection{MFCC}
-    \subsubsection{Energia}
-    \subsubsection{Częstotliwość podstawowa}
-    \subsubsection{Formanta}
-    \section{Selekcja cech}
-    Współczynniki z ramek poddano analizie statystycznej.
-    Dla każdej ramki obliczono:
-    \begin{enumerate}
-        \item średnią
-        \item wariancję
-        \item zakres
-        \item wartość minimalną
-        \item skośność
-        \item kurtozę
-    \end{enumerate}
-
-    \section{Klasyfikacja}
-    Wybrano siedem wartości opisujących każdą wypowiedź:
-    \begin{enumerate}
-        \item zakres pierwszego współczynnika MFCC
-        \item średnia drugiej formanty
-        \item minimalna szóstego współczynnika MFCC
-        \item zakres tonu podstawowego
-        \item minimalna siódmego współczynnika MFCC
-        \item kurioza szóśtego współczynnika MFCC
-        \item zakres drugiej formanty
-    \end{enumerate}
-    Klasyfikacji dokonano z wykorzystanie klasyfikatora najbliższych sąsiadów.
-    Z wszystkich wypowiedzi 10\% zostało wykoryzstane jako dane testowe.
-    \bibliography{praca_dyplomowa}{}
-    \bibliographystyle{plain}
+Korpus składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
+Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
+Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bit ~\cite{Igras2009}.
+\section{Przetwarzanie wstępne}
+Nagrania z korpusu nie były przetworzone wstępnie.
+Poziom głośności nagrań różnił się pomiędzy nagraniami.
+Zapis wypowiedzi został ustandaryzowany w celu zniwelowania różnic wynikających z głośności nagrania.
+\section{}
+\bibliography{praca_dyplomowa}{}
+\bibliographystyle{plain}
 \end{document}
 %+++ END +++
