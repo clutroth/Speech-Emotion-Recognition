@@ -129,10 +129,16 @@ przegląd wykorzystywanych narzędzi, oraz ocena znanych rozwiązań.
 Produktem końcowym będzie aplikacja komputerowa rozpoznająca emocje w sygnale mowy.
 W trakcje tworzenia pracy zostanie dokonana analiza znanych rozwiązań tego zagadnienia.
 Następnie zostanie opracowany schemat aplikacji, bazujący na poprzednich badaniach,
-pozwalający stworzyć aplikację w warunkach powstawania pracy magisterskiej.
+pozwalający stworzyć aplikację w warunkach tworzenia pracy magisterskiej.
 Kolejnym etapem będzie implementacja aplikacji w środowisku MATLAB.
 Na zakończenie zostaną przeprowadzone testy aplikacji,
 analiza wyników i prezentacja wniosków.
+
+% roboczo
+Jakie współczynniki można liczyć? 
+Jak przetworzyć dane, żeby otrzymać lepsze wyniki?
+Jakie przetwarzanie jest wymagane?
+
 
 \chapter{Opis prac}
 \section{Opis korpusu}
@@ -157,11 +163,14 @@ Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich sta
 
 Korpus składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
 Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
-Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bit ~\cite{Igras2009}.
+Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bitów. ~\cite{Igras2009}.
 
-\section{Przetwarzanie wstępne}
-Większość nagrań nie została przetworzona.
-Sygnał niektórych nagrań został poddany standaryzacji.
+Nagrania nie zostały poddane przetwarzaniu wstępnemu. 
+Różnią się poziomem głośności.
+Pojedyncze nagrania wyglądają na ustandaryzowane, ale stanowią wyjątek.
+Dokładna historia nagrań nie jest znana, ich stan jest niejednolity.
+Brak jest informacji o operacjach wykonywanych na nagraniach.
+Stan nagrań jest niejednorodny i nieznany.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{MGR_ZL_C-plot}
@@ -173,10 +182,28 @@ Sygnał niektórych nagrań został poddany standaryzacji.
 	\caption{Przykład nie ustandaryzowanego sygnału}
 \end{figure}
 
-Nagrania z korpusu nie były przetworzone wstępnie.
-Poziom głośności nagrań różnił się pomiędzy nagraniami.
 Zapis wypowiedzi został ustandaryzowany w celu zniwelowania różnic wynikających z głośności nagrania.
-\section{}
+\section{Cechy sygnału}
+Wyliczenie cech sygnału zostało poprzedzone podziałem na ramki o długości 400ms każda. 
+Dla każdej ramki został obliczony zbiór współczynników.
+Dla każdego współczynnika została policzona średnia \TODO{Jakie funkcjonały? Średnia, itd.}
+za  czas trwania wypowiedzi. 
+Wartość każdego funkcjonału w sygnale jest cechą.
+\section{Częstotliwość podstawowa}
+Każdy sygnał okresowy można przedstawić jako sumę ważoną sinusoid, których częstotliwości są całkowitymi wielokrotnościami pewnej wartości podstawowej.
+\cite{Nielsena2016}
+Częstotliwość podstawowa mowy jest zmienna w czasie. 
+Jej wartość jest zależna od osoby, jej płci, wieku.
+Zmiana wartości częstotliwości podstawowej niesie informacje o nastroju mówcy.
+Można ja określić jako maksimum funkcji autokorelacji wartości sygnału.
+\TODO{opisać cepstrum?}
+\cite{Boersma1993}
+
+\section{MFCC}
+
+
+
+\section{Wybrane współczynniki}
 \bibliography{praca_dyplomowa}{}
 \bibliographystyle{plain}
 \end{document}

@@ -5,14 +5,14 @@ classdef File
     properties
         fileanme;
         fs;
-        signal;
+        data;
     end
     
     methods
         function obj = File(filename)
             [y,fs] = audioread(filename);
             obj.fileanme = filename;
-            obj.signal = y;
+            obj.data = y;
             obj.fs = fs;
         end
     end
