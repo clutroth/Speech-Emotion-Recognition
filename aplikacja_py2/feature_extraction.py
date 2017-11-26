@@ -27,12 +27,6 @@ def extract_features(frame):
         energy=np.sum(frame.signal ** 2)
     )
 
-
-class FileDescription:
-    def __init__(self, file):
-        pass
-
-
 class Features:
     def __init__(self, mfcc, energy):
         self.mfcc = mfcc
@@ -104,34 +98,34 @@ def values(file, description):
     row.extend(file.values())
     return row
 
+def find_file(path, name):
+    fileList = []
+    # Walk through directory
+    for dName, sdName, fList in os.walk(path):
+        for fileName in fList:
+            if fnmatch.fnmatch(fileName, name):  # Match search string
+                fileList.append(os.path.join(dName, fileName))
+    return fileList
 
-auio_path = '/home/wdk/uczelnia/mgr/aplikacja_py/audio_sample/'
-sample_file = '/home/wdk/uczelnia/mgr/aplikacja_py/audio_sample/AKA_NE_C.wav'
 
-# allMtFeatures, wavFilesList = aF.dirWavFeatureExtraction(auio_path, 30.0, 30.0, 0.050, 0.050, computeBEAT = True)
+
+
 korpus = '/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/'
-pattern = '*.wav'
-fileList = []
 
-# Walk through directory
-for dName, sdName, fList in os.walk(korpus):
-    for fileName in fList:
-        if fnmatch.fnmatch(fileName, pattern):  # Match search string
-            fileList.append(os.path.join(dName, fileName))
+korpusFileList=find_file(korpus, '*.wav')
 
 angry_files = ['/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/RA/AKL_RA_T.wav',
          '/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/NE/MCH_NE_P.wav']
-# firstFile
+
 firstFileName = '/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/RA/AKL_RA_T.wav'
 firstFile = analyse_file(firstFileName)
-des = FileDescription(firstFileName)
 names = ['filename', 'emotion', 'speaker', 'type']
 names.extend(firstFile.keys())
 
 with open("features_analysis.csv", "wb") as file:
     writer = csv.writer(file)
     writer.writerow(names)
-    for filename in fileList:
+    for filename in korpusFileList:
         print "processing " + filename
         firstFile = analyse_file(filename)
         des = FileDescription(filename)
