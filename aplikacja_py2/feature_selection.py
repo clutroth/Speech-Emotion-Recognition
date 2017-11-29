@@ -8,6 +8,7 @@ from mlxtend.feature_selection import SequentialFeatureSelector as SFS
 import csv
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import scale
 
 emotions = [
     ('IR', 'ironia'),
@@ -31,19 +32,20 @@ def load(filename, emotions):
         np.array(data[1:], dtype=np.float64)
 
 
+y, X = load('features_analysis-cc.csv', map(lambda x:x[0], emotions))
+X_scaled = scale(X)
 
-y, X = load('features_analysis.csv', map(lambda x:x[0], emotions))
 # iris = load_iris()
 # X = iris.data
 # y = iris.target
 X_train, X_test, y_train, y_test = train_test_split(
-         X, y, test_size=0.33, random_state=1)
+    X_scaled, y, test_size=0.33, random_state=1)
 
 knn = KNeighborsClassifier(n_neighbors=3)
 
 
 sfs1 = SFS(knn,
-          k_features=3,
+          k_features=10,
           forward=True,
           floating=False,
           scoring='accuracy',

@@ -578,4 +578,4 @@ aplikacja/korpus_*
 
 materiały/
 szkic/main/lib/
-aplikacja_py2/features_analysis.csv
+aplikacja_py2/features_analysis*.csv
