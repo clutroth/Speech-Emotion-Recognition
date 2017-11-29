@@ -9,30 +9,13 @@ import csv
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import scale
+from sklearn.mixture import GaussianMixture
+from sklearn.svm import SVC
+import agh
 
-emotions = [
-    ('IR', 'ironia'),
-    ('NE', 'stan neutralny'),
-    ('RA', 'radość'),
-    ('SM', 'smutek'),
-    ('ST', 'strach'),
-    ('ZD', 'zdziwienie'),
-    ('ZL', 'złość')
-]
-def load(filename, emotions):
-
-    with open(filename, 'rb') as csvfile:
-        data = []
-        target = []
-        spamreader = csv.reader(csvfile)
-        for row in spamreader:
-            data.append(row[4:])
-            target.append(row[1])
-    return np.array( map(lambda e:emotions.index(e), target[1:]), dtype=np.float64),        \
-        np.array(data[1:], dtype=np.float64)
-
-
-y, X = load('features_analysis-cc.csv', map(lambda x:x[0], emotions))
+d=agh.load_file('features_analysis-cc.csv')
+X = d.data
+y=d.target
 X_scaled = scale(X)
 
 # iris = load_iris()
@@ -41,11 +24,13 @@ X_scaled = scale(X)
 X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y, test_size=0.33, random_state=1)
 
-knn = KNeighborsClassifier(n_neighbors=3)
+classificator = KNeighborsClassifier(n_neighbors=len(d.target_names))
+# classificator = GaussianMixture(n_components=len(d.target_names), covariance_type='full')
+# classificator=SVC()
+# najlepsze wyniki dla KNN !!?
 
-
-sfs1 = SFS(knn,
-          k_features=10,
+sfs1 = SFS(classificator,
+          k_features=5,
           forward=True,
           floating=False,
           scoring='accuracy',
@@ -56,11 +41,10 @@ print('Selected features:', sfs1.k_feature_idx_)
 
 X_train_sfs = sfs1.transform(X_train)
 X_test_sfs = sfs1.transform(X_test)
-
 # Fit the estimator using the new feature subset
 # and make a prediction on the test data
-knn.fit(X_train_sfs, y_train)
-y_pred = knn.predict(X_test_sfs)
+classificator.fit(X_train_sfs, y_train)
+y_pred = classificator.predict(X_test_sfs)
 
 # Compute the accuracy of the prediction
 acc = float((y_test == y_pred).sum()) / y_pred.shape[0]
