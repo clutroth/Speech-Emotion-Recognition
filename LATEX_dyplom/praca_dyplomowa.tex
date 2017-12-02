@@ -16,6 +16,9 @@
 \usepackage[polish]{babel}
 \usepackage{subfigure}
 \usepackage{amsfonts}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 \usepackage{verbatim}
 \usepackage{indentfirst}
 \usepackage[pdftex]{hyperref}
@@ -198,6 +201,60 @@ Zmiana wartości częstotliwości podstawowej niesie informacje o nastroju mówc
 Można ja określić jako maksimum funkcji autokorelacji wartości sygnału.
 \TODO{opisać cepstrum?}
 \cite{Boersma1993}
+
+\section{Klasyfikator Najbliższych Sąsiadów}
+Klasyfikator najbliższych sąsiadów pozwala szybko otrzymać rezultaty. 
+Jest prosty w działaniu i implementacji.
+Otrzymane rezultaty mogą nie być zadowalające w bardziej złożonych zagadnieniach.
+Zasada działania w uproszczeniu sprowadza się do reprezentacji obserwacji za pomocą wektorów cech.
+Obliczane są odległości pomiędzy wektorami. \cite{Du2013}
+Klasa jest przypisywana na podstawie klasy najbliższej, sąsiedniej obserwacji.
+Klasyfikator jest podatny na ilość cech branych pod uwagę w czasie klasyfikacji.
+Redukcja liczby parametrów, uwzględniająca usunięcie cech silnie skorelowanych i słabo różnicujących znacząco podnosi wydajność i skuteczność klasyfikatora.
+
+Metoda klasyfikuje obserwacje biorąc pod uwagę najbliższą obserwację ze zbioru uczącego.
+Obserwacje ze zbioru uczącego rozmieszczone są w wielowymiarowej przestrzeni cech.
+Przestrzeń ta jest podzielona na strefy odpowiadające klasom.
+Obserwacja znajdująca się w danej strefie zostaje przypisana do klasy do której ta strefa należy.
+Podział na strefy odbywa się w czasie fazy uczenia klasyfikatora.
+Kształt i klasa strefy zależy od odległości obserwacji ze zbioru uczącego.
+Punkt w przestrzeni przypisany zostaje do klasy, jeżeli w jego najbliższym sąsiedztwie zostanie znalezionych $k$ sąsiadów należących do tej klasy.
+Klasyfikatorowi należy zdefiniować liczbę $k$ - liczbę wymaganych sąsiadów klasy, pozwalającą określić klasę badanej obserwacji, 
+oraz funkcję liczącą dystans pomiędzy dwoma wektorami. Najczęściej jest to norma euklidesowa. \cite{Martin2011}
+
+\begin{algorithm}
+	\caption{Klasyfikator Najbliższych sąsiadów}
+	\begin{algorithmic}[1]
+		\Procedure {kNN}{$T$, $k$, $dist$, $o$}
+		\State $D \leftarrow []$
+		\ForAll {$t \in T$}
+		\State $D(t) \leftarrow dist(t, o)$
+		\EndFor
+		\State $S \leftarrow sort(D, T)$ \Comment obserwacje posortowane względem odległości
+		\State $selectedClass \leftarrow 0$
+		\State $counter \leftarrow []$ \Comment licznik najbliższych sąsiadów z klasy
+		\Repeat
+		\ForAll {$s \in S$}
+		\State $counter(class(s))++$
+		\EndFor
+		\Until{$\neg selectedClass$}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+Dane wejściowe muszą być znormalizowane. 
+W przeciwnym razie cechy o bezwzględnie wyższych wartościach będą miały większy wpływ na klasyfikację,
+bez rozróżnienia ich zdolności różnicowania zbioru.
+Algorytm jest wrażliwy na liczbę cech - wymiarów przestrzeni w której umieszczana jest obserwacja.
+Każda cecha wprowadza wymiar równoważny z pozostałymi wymiarami. 
+Nie jest brana pod uwagę korelacja cech, ani ich zdolność różnicowania obserwacji.
+Dla klasyfikowanej obserwacji obliczany jest dystans pomiędzy nią,
+a każdą obserwacją ze zbiory testowego, uwzględniająca wszystkie wymiary.
+Prowadzi to do znacznego wzrostu złożoności obliczeniowej klasyfikacji, dla większej liczby cech, czy zbiorów danych uczących.
+
+Istnieją modyfikacje klasyfikatora najbliższych sąsiadów redukujące wymienione wady. 
+Opisana została klasyczna wersja algorytmu.
+
 
 \section{Wyniki}
 
