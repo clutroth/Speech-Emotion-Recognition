@@ -22,13 +22,16 @@
 \usepackage{verbatim}
 \usepackage{indentfirst}
 \usepackage[pdftex]{hyperref}
-
+\usepackage{bm}
+\usepackage{amsmath}
 
 % rozmaite polecenia pomocnicze
 % gdzie rysunki?
 \graphicspath{ {rys/} }
 % oznaczenie rzeczy do zrobienia/poprawienia
 \newcommand{\TODO}{\textbf{TODO}}
+\newcommand*\NewPage{\newpage\null\thispagestyle{empty}\newpage}
+
 
 
 % wyroznienie slow kluczowych
@@ -141,16 +144,16 @@ analiza wyników i prezentacja wniosków.
 Jakie współczynniki można liczyć? 
 Jak przetworzyć dane, żeby otrzymać lepsze wyniki?
 Jakie przetwarzanie jest wymagane?
-
-
-\chapter{Opis prac}
-\section{Opis korpusu}
-W pracy wykorzystano korpus emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
+\NewPage
+\chapter{Aplikacja klasyfikująca emocje}
+\section{Opis bazy danych}
+\TODO{sposób katalogowania}
+W pracy wykorzystano bazę danych emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
 Nagrania zawierają pięć emocji podstawowych: radość, smutek, złość, strach, zdziwienie.
 Ponadto zostały nagrane wypowiedzi w tonie neutralnym jako punkt odniesienia i ironicznym, jako emocja złożona.
 W nagraniu wzięło udział 6 mężczyzn i 6 kobiet od 20 do 30 lat. 
 Mówcy byli zarówno profesjonalnymi aktorami jak i amatorami, czy wolontariuszami.
-Baza została zrealizowana jako korpus emocji odgrywanych. 
+Baza została zrealizowana jako baza danych emocji odgrywanych. 
 
 Nagrano 4 typy wypowiedzi.
 \begin{description}
@@ -164,7 +167,7 @@ Nagrano 4 typy wypowiedzi.
 \end{description}
 Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich stanach emocjonalnych.
 
-Korpus składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
+Baza danych składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
 Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
 Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bitów. ~\cite{Igras2009}.
 
@@ -186,23 +189,38 @@ Stan nagrań jest niejednorodny i nieznany.
 \end{figure}
 
 Zapis wypowiedzi został ustandaryzowany w celu zniwelowania różnic wynikających z głośności nagrania.
-\section{Cechy sygnału}
-Wyliczenie cech sygnału zostało poprzedzone podziałem na ramki o długości 400ms każda. 
-Dla każdej ramki został obliczony zbiór współczynników.
-Dla każdego współczynnika została policzona średnia \TODO{Jakie funkcjonały? Średnia, itd.}
-za  czas trwania wypowiedzi. 
-Wartość każdego funkcjonału w sygnale jest cechą.
-\section{Częstotliwość podstawowa}
-Każdy sygnał okresowy można przedstawić jako sumę ważoną sinusoid, których częstotliwości są całkowitymi wielokrotnościami pewnej wartości podstawowej.
-\cite{Nielsena2016}
-Częstotliwość podstawowa mowy jest zmienna w czasie. 
-Jej wartość jest zależna od osoby, jej płci, wieku.
-Zmiana wartości częstotliwości podstawowej niesie informacje o nastroju mówcy.
-Można ja określić jako maksimum funkcji autokorelacji wartości sygnału.
-\TODO{opisać cepstrum?}
-\cite{Boersma1993}
-
-\section{Klasyfikator Najbliższych Sąsiadów}
+\section{Przetwarzanie wstępne}
+\TODO{od czytania pliku z dysku, do rozpoczęcia ekstrakcji cech}
+\NewPage
+\NewPage
+\section{Ekstrakcja cech}
+\subsection{Cechy bazowe}
+\subsubsection{MFCC}
+\NewPage
+\NewPage
+\subsubsection{Energia}
+\subsubsection{Liczba przejść przez zero}
+\subsubsection{Energia entropii}
+\NewPage
+\subsubsection{SSC}
+\NewPage
+\NewPage
+\subsection{Opis statystyczny}
+\TODO{Opisać  'minmax', 'mean', 'variance', 'skewness', 'kurtosis'}
+\NewPage
+\NewPage
+\NewPage
+\section{Selekcja cech}
+\subsection{SFS}
+\NewPage
+\NewPage
+\NewPage
+\subsection{PCA}
+\NewPage
+\NewPage
+\NewPage
+\section{Klasyfikacja}
+\subsection{Klasyfikator Najbliższych Sąsiadów}
 Klasyfikator najbliższych sąsiadów pozwala szybko otrzymać rezultaty. 
 Jest prosty w działaniu i implementacji.
 Otrzymane rezultaty mogą nie być zadowalające w bardziej złożonych zagadnieniach.
@@ -255,20 +273,87 @@ Prowadzi to do znacznego wzrostu złożoności obliczeniowej klasyfikacji, dla w
 Istnieją modyfikacje klasyfikatora najbliższych sąsiadów redukujące wymienione wady. 
 Opisana została klasyczna wersja algorytmu.
 
+\subsection{Support Vector Machine}
 
-\section{Wyniki}
+Algorytm SVM jest wykorzystywany do klasyfikacji i regresji danych.
+Rozmieszcza obserwacje w wielowymiarowej przestrzeni i znajduje hiperpłaszczyznę rozdzielającą obserwacje różnych klas.
 
+\cite{Cortes1995}
+
+Hiperpłaszczyzna z definicji rozdziela przestrzeń.
+Mając przestrzeń dwuwymiarową może przeciąć prosta, więc jest jej hiperpłaszczyzną.
+Przestrzeń trójwymiarową przecina płaszczyzna, więc ona jest hiperpłaszczyzną przestrzeni trójwymiarowej.
+
+Model wykorzystujący sigmoidalną funkcję jądrową jest tożsamy z dwuwarstwową siecią neuronową \cite{Elangovan2011}.
+
+Klasyfikator SVM zalicza się do klasyfikatorów binarnych - przyporządkowuje obserwację do jednej z dwóch klas.
+Obserwacje $x_i$ rozmieszczone są w $n$-wymiarowej przestrzeni cech, gdzie $x_i \in R^n$.
+Klasy $y_i$ są oznaczone jako $-1$ i $+1$, gdzie $y_i \in \{-1, +1\}$, co można zapisać jako:
+\begin{equation}
+	(\bm{x_1},y_1), ..., (\bm{x_i}, y_i), \textrm{ gdzie } y_i \in \{-1, +1\}
+\end{equation}
+
+Obserwacje są liniowo spparowalne, jeżeli istnieje wektor $\bm{w}$ i taki skalar $b$, że
+\begin{gather}
+	\bm{w} \cdot \bm{x_i} + b \geq 1 \textrm{ jeśli } y_i = 1\\
+	\bm{w} \cdot \bm{x_i} + b \leq 1 \textrm{ jeśli } y_i = -1,
+\end{gather}
+\cite{Cortes1995}
+SVM poszykuje takiej hiperpłaszczyzny, aby odległość pomiędzy hiperpłaszczyzną, a najbliższymi obserwacjami była jak największa.
+Hiperpłaszczyzna rozdzielająca obserwacje dwóch klas w przestrzeni zachowująca maksymalną odległość od najbliższych obserwacji nazywana jest hiperpłaszczyzną optymalną.
+
+\subsubsection{Funkcje jądrowe}
+Funkcja jądrowa jest matematyczną sztuczką \ang{mathematical trick} pozwalającą przenieść 
+obserwacje z przestrzeni oryginalnej do przestrzeni o większej liczbie wymiarów.
+Umożliwia to zalezienie hiperpłaszczyzny separującej liniowo, jeżeli w przestrzeni oryginalnej taka hiperpłaszczyzna nie istniała.
+\begin{equation}
+	\langle \bm{x_1} \cdot \bm{x_2} \rangle \gets K(\bm{x_1}, \bm{x_2}) = \langle \Phi(\bm{x_1}) \cdot \Phi(\bm{x_2}) \rangle
+\end{equation}
+
+
+\cite{Patle2013}
+
+
+
+Tworząc model SVM obserwacje zostają rozmieszczone w przestrzeni liniowej lub nieliniowej. 
+Przestrzeń zależy od funkcji jądrowej.
+Przestrzeń zostaje przecięta hiperpłaszczyzną oddzielającą obserwacje jednej klasy od drugich.
+Hiperpłaszczyzna płaszczyzna zostaje ulokowana w jak największej odległości od najbliższych obserwacji.
+Klasyfikator z założenia klasyfikuje dokładnie dwie klasy, ale możliwe jest rozszerzenie modelu o obsługę większej liczby klas.
+Sprowadza się to do wytrenowania kilku modeli.
+Klasyfikator skutecznie uwzględnia wiele cech.
+Liczba cech i obserwacji w zbiorze uczącym nie wpływa na szybkość klasyfikacji.
+
+\NewPage
+\NewPage
+\subsection{GMM}
+\NewPage
+\NewPage
+\NewPage
+\chapter{Wyniki}
+\TODO{
+	Wywołania aplikacji.
+	Różne klasyfikatory, parametry, klasy.
+	Dużo tabel.
+}
 \begin{figure}[hc!]
 	\centering
 	\input{./app/accuaricy_table.tex}
 	\caption{Otrzymane wyniki}
 \end{figure}
 
-\section{MFCC}
+\NewPage
+\NewPage
+\NewPage
+\NewPage
+\NewPage
+\NewPage
+\NewPage
 
+\chapter{Wnioski}
+\NewPage
+\NewPage
 
-
-\section{Wybrane współczynniki}
 \bibliography{praca_dyplomowa}{}
 \bibliographystyle{plain}
 \end{document}
