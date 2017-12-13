@@ -275,32 +275,63 @@ Opisana została klasyczna wersja algorytmu.
 
 \subsection{Support Vector Machine}
 
-Algorytm SVM jest wykorzystywany do klasyfikacji i regresji danych.
-Rozmieszcza obserwacje w wielowymiarowej przestrzeni i znajduje hiperpłaszczyznę rozdzielającą obserwacje różnych klas.
-
+Algorytm SVM jest wykorzystywany do klasyfikacji obserwacji w uczeniu maszynowym.
+Obserwacje zostają rozmieszczone w przestrzeni wielowymiarowej,
+algorytm ma za zadanie znalezienie hiperpłaszczyzny rozdzielającej obserwacje należące do dwóch klas.
+Jest więc klasyfikatorem binarnym. 
+Każda obserwacja zostaje umieszczona w $n$-wymiarowej przestrzeni cech i reprezentowana jest przez wektor
+zaczynający się w początku układu współrzędnych, a kończący się w punkcie określającym obserwację. 
+Hiperpłaszczyzna \ang{hiperplane} jest $n-1$ wymiarowa i zgodnie z definicją rozdziela przestrzeń na dwie części.
+Poszukiwana hiperpłaszczyzna powinna być hiperpłaszczyzną optymalną \ang{optimal hiperplane}, 
+to znaczy powinna posiadać możliwe największy margines - czyli odległość od najbliższych obserwacji należących do różnych klas.
 \cite{Cortes1995}
 
-Hiperpłaszczyzna z definicji rozdziela przestrzeń.
-Mając przestrzeń dwuwymiarową może przeciąć prosta, więc jest jej hiperpłaszczyzną.
-Przestrzeń trójwymiarową przecina płaszczyzna, więc ona jest hiperpłaszczyzną przestrzeni trójwymiarowej.
+Biorąc przestrzeń dwuwymiarową, możemy ją osadzić na płaszczyźnie. 
+Na płaszczyźnie tej kładziemy dowolną prostą. 
+Prosta ta dzieli płaszczyznę na dwie części.
+Prosta jest więc hiperpłaszczyzną przestrzeni dwuwymiarowej.
+Analogicznie sytuacja przestawia się w przestrzeni trójwymiarowej.
+Może ją przeciąć dowolna płaszczyzna.
+Płaszczyzna dzieli przestrzeń trójwymiarową na dwie części, jest więc jej hiperpłaszczyzną.
 
-Model wykorzystujący sigmoidalną funkcję jądrową jest tożsamy z dwuwarstwową siecią neuronową \cite{Elangovan2011}.
-
-Klasyfikator SVM zalicza się do klasyfikatorów binarnych - przyporządkowuje obserwację do jednej z dwóch klas.
+Sposób tworzenia klasyfikatora SVM przedstawia się następująco.
 Obserwacje $x_i$ rozmieszczone są w $n$-wymiarowej przestrzeni cech, gdzie $x_i \in R^n$.
 Klasy $y_i$ są oznaczone jako $-1$ i $+1$, gdzie $y_i \in \{-1, +1\}$, co można zapisać jako:
 \begin{equation}
 	(\bm{x_1},y_1), ..., (\bm{x_i}, y_i), \textrm{ gdzie } y_i \in \{-1, +1\}
 \end{equation}
 
-Obserwacje są liniowo spparowalne, jeżeli istnieje wektor $\bm{w}$ i taki skalar $b$, że
+Obserwacje są liniowo separowalne, jeżeli istnieje wektor $\bm{w}$ i taki skalar $b$, że nierówności
 \begin{gather}
 	\bm{w} \cdot \bm{x_i} + b \geq 1 \textrm{ jeśli } y_i = 1\\
 	\bm{w} \cdot \bm{x_i} + b \leq 1 \textrm{ jeśli } y_i = -1,
 \end{gather}
+są prawdziwe dla wszystkich obserwacji w zbiorze.
 \cite{Cortes1995}
-SVM poszykuje takiej hiperpłaszczyzny, aby odległość pomiędzy hiperpłaszczyzną, a najbliższymi obserwacjami była jak największa.
-Hiperpłaszczyzna rozdzielająca obserwacje dwóch klas w przestrzeni zachowująca maksymalną odległość od najbliższych obserwacji nazywana jest hiperpłaszczyzną optymalną.
+Powyższy układ nierówności można zapisać w postaci:
+\begin{equation}
+	y_i(\bm{w} \cdot \bm{x_i} + b) \geq 1
+\end{equation}
+Hiperpłaszczyzna optymalna 
+\begin{equation}
+	\bm{w_0} \cdot \bm{x_i}  + b_0 = 0
+\end{equation}
+
+istnieje w przypadku, kiedy rozdziela zbiór treningowy z zachowaniem największej możliwej odległości od obserwacji obydwu klas.
+Odległość pomiędzy obserwacjami a hiperpłaszczyzną definiuje się następująco:
+\begin{equation}
+	\rho(\bm{w}, b) = \min\limits_{\{x:y=1\}} \frac{\bm{x} \cdot \bm{w}} {|\bm{w}|} - \max\limits_{\{x:y=-1\}}  \frac{\bm{x} \cdot \bm{w}} {|\bm{w}|} 
+\end{equation}
+czyli rzut skalarny \ang{scalar projection} wektora obserwacji $\bm{x}$ na wektor jednostkowy $\hat{\bm{w}} = \frac{\bm{w}}{|\bm{w}|}$
+obrazujący położenie płaszczyzny.
+Wartość rzutu skalarnego jest odległością obserwacji od hiperpłaszczyzny. 
+Różnica najmniejszej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=1$,
+oraz największej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=-1$ 
+jest marginesem pomiędzy hiperpłaszczyzną, a obserwacjami
+Obserwacje znajdujące się w najmniejszej odległości od hiperpłaszczyzny nazywane są wektorami wspierającymi \ang{support vectors}
+
+Klasyfikacja polega na umieszczeniu klasyfikowanej obserwacji w przestrzeni cech.
+Obserwacja należy do tej klasy, do której należą obserwacje leżące po tej samej stronie hiperpłaszczyzny.
 
 \subsubsection{Funkcje jądrowe}
 Funkcja jądrowa jest matematyczną sztuczką \ang{mathematical trick} pozwalającą przenieść 
@@ -310,22 +341,33 @@ Umożliwia to zalezienie hiperpłaszczyzny separującej liniowo, jeżeli w przes
 	\langle \bm{x_1} \cdot \bm{x_2} \rangle \gets K(\bm{x_1}, \bm{x_2}) = \langle \Phi(\bm{x_1}) \cdot \Phi(\bm{x_2}) \rangle
 \end{equation}
 
-
 \cite{Patle2013}
 
-
-
-Tworząc model SVM obserwacje zostają rozmieszczone w przestrzeni liniowej lub nieliniowej. 
-Przestrzeń zależy od funkcji jądrowej.
-Przestrzeń zostaje przecięta hiperpłaszczyzną oddzielającą obserwacje jednej klasy od drugich.
-Hiperpłaszczyzna płaszczyzna zostaje ulokowana w jak największej odległości od najbliższych obserwacji.
-Klasyfikator z założenia klasyfikuje dokładnie dwie klasy, ale możliwe jest rozszerzenie modelu o obsługę większej liczby klas.
-Sprowadza się to do wytrenowania kilku modeli.
-Klasyfikator skutecznie uwzględnia wiele cech.
-Liczba cech i obserwacji w zbiorze uczącym nie wpływa na szybkość klasyfikacji.
-
-\NewPage
-\NewPage
+\begin{figure}[hc]
+	\begin{equation}
+		K(x, x_i) = x \cdot x ^ T
+	\end{equation}
+	\caption{Liniowa funkcja jądrowa}
+\end{figure}
+\begin{figure}[hc]
+	\begin{equation}
+		K(x, x_i) = (1 + x \cdot x ^ T _ i )^d
+	\end{equation}
+	\caption{Wielomianowa funkcja jądrowa}
+\end{figure}
+\begin{figure}[hc]
+	\begin{equation}
+	K(x, x_i) = e ^ {- \gamma || x - x_i||^2}
+	\end{equation}
+	\caption{Radialna podstawowa funkcja jądrowa}
+\end{figure}
+\begin{figure}[hc]
+	\begin{equation}
+		K(x_i, x_j) = tanh( \gamma x_i  x_j + r)
+	\end{equation}
+	\caption{Sigmoidalna funkcja jądrowa}
+\end{figure}
+%http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
 \subsection{GMM}
 \NewPage
 \NewPage
