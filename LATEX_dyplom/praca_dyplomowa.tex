@@ -332,6 +332,7 @@ Obserwacje znajdujące się w najmniejszej odległości od hiperpłaszczyzny naz
 
 Klasyfikacja polega na umieszczeniu klasyfikowanej obserwacji w przestrzeni cech.
 Obserwacja należy do tej klasy, do której należą obserwacje leżące po tej samej stronie hiperpłaszczyzny.
+\TODO{Jak hiperpłaszczyzna jest wyszukiwana?}
 
 \subsubsection{Funkcje jądrowe}
 Funkcja jądrowa jest matematyczną sztuczką \ang{mathematical trick} pozwalającą przenieść 
@@ -369,6 +370,24 @@ Umożliwia to zalezienie hiperpłaszczyzny separującej liniowo, jeżeli w przes
 \end{figure}
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
 \subsection{GMM}
+Modele Mieszane Gaussa \ang{Gaussian Mixture Models} jest to model probabilistyczny.
+Przedstawia podgrupy z całości obserwacji.
+Podgrupy mają rozkład normalny.
+Modele mieszane nie wymagają informacji jaką podgrupę reprezentuje dana część populacji.
+Model rozpoznaje istnienie podgrupy wykorzystując cechy rozkładu statystycznego.
+Dzięki temu tworzenie modeli rozpoznających podgrupy może odbywać się w sposób automatyczny i nienadzorowany.
+
+Przykładowo wzrost człowieka może zostać przedstawiony za pomocą Mieszanych Modeli Gaussa.
+W populacji ludzi można wyróżnić dwie grupy - kobiet i mężczyzn,
+gdzie statystyka rozkładu wzrostu w populacji mężczyzn i populacji kobiet przestawia się rozkładem normalnym dla każdej  z grup z osobna.
+Rozkład wzrostu dla ludzi w ogólności nie jest rozkładem normalnym,
+ponieważ jest sumą dwóch rozkładów normalnych o różnej wartości średniej i odchyleniu standardowym.
+Przykładowo średni wzrost w Polsce wynosi odpowiednio 178,7cm dla mężczyzn i 163,7cm dla kobiet \cite{Kuaga2011}
+Stosując Mieszane modele Gaussa dla powyższego przypadku otrzymamy dwa komponenty.
+Pierwszy komponent będzie modelował rozkład normalny wzrostu w populacji mężczyzn, drugi rozkład normalny wzrostu w populacji kobiet.
+
+
+
 \NewPage
 \NewPage
 \NewPage
