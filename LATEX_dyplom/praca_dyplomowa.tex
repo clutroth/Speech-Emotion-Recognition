@@ -343,7 +343,8 @@ Umożliwia to zalezienie hiperpłaszczyzny separującej liniowo, jeżeli w przes
 \end{equation}
 
 \cite{Patle2013}
-
+\TODO{Wykresy poglądowe funkcji jądrowych}
+\TODO{Algorytm w pseudokodzie}
 \begin{figure}[hc]
 	\begin{equation}
 		K(x, x_i) = x \cdot x ^ T
@@ -384,11 +385,54 @@ Rozkład wzrostu dla ludzi w ogólności nie jest rozkładem normalnym,
 ponieważ jest sumą dwóch rozkładów normalnych o różnej wartości średniej i odchyleniu standardowym.
 Przykładowo średni wzrost w Polsce wynosi odpowiednio 178,7cm dla mężczyzn i 163,7cm dla kobiet \cite{Kuaga2011}
 Stosując Mieszane modele Gaussa dla powyższego przypadku otrzymamy dwa komponenty.
-Pierwszy komponent będzie modelował rozkład normalny wzrostu w populacji mężczyzn, drugi rozkład normalny wzrostu w populacji kobiet.
+Pierwszy komponent będzie modelował rozkład normalny wzrostu w populacji mężczyzn,
+drugi rozkład normalny wzrostu w populacji kobiet.
 
+Rozkład Gaussa jest najbardziej spodziewanym rozkładem prawdopodobieństwa  w przyrodzie.
+Niezależnie od wielkości badanej populacji występujące wartości średnie będą zbliżone, 
+a wartości skrajne będą występowały odpowiednio rzadziej. 
+Jedną z przesłanek sugerującą zasadność wykorzystania GMM jest występowanie wielu wierzchołków w rozkładzie.
+Próby przybliżania rozkładu wielowierzchołkowego będącego sumą wielu rozkładów normalnych nie da zadowalających rezultatów.
 
+Mieszany model Gaussa definiują dwa typy parametrów: waga komponentu, oraz jego średnia i wariancja lub kowariancja.
+Dla $k$-elementowego zbioru komponentów, komponent $k$ty posiada średnią $\mu_k$ i wariancję $\sigma_k$.
+Dla przypadku wielowymiarowego $k$ty komponent posiada wektor średnich$\vec{\mu_k}$ oraz macierz kowariancji $\Sigma_k$.
+Wagę $k$tego komponentu $C_k$ oznacza się symbolem $\phi_k$. 
+Wagi komponentów muszą spełniać warunek $\sum_{i=1}^{K}\phi_i = 1$.
 
-\NewPage
+\begin{figure}[hc]
+	\begin{align}
+		p(x) &= \sum_{i=1}^K\phi_i \mathcal{N}(x \;|\; \mu_i, \sigma_i)\\
+		\mathcal{N}(x \;|\; \mu_i, \sigma_i) &= \frac{1}{\sigma_i\sqrt{2\pi}} \exp\left(-\frac{(x-\mu_i)^2}{2\sigma_i^2}\right)\\
+		\sum_{i=1}^K\phi_i &= 1
+	\end{align}
+	\caption{Mieszany model Gaussa dla jednego wymiaru}
+\end{figure}
+\begin{figure}[hc]
+	\begin{align}
+	p(\vec{x}) &= \sum_{i=1}^K\phi_i \mathcal{N}(\vec{x} \;|\; \vec{\mu}_i, \Sigma_i)\\
+	\mathcal{N}(\vec{x} \;|\; \vec{\mu}_i, \Sigma_i) &= \frac{1}{\sqrt{(2\pi)^K|\Sigma_i|}} \exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu}_i)^\mathrm{T}{\Sigma_i}^{-1}(\vec{x}-\vec{\mu}_i)\right)\\
+	\sum_{i=1}^K\phi_i &= 1
+\end{align}
+\caption{Mieszany model Gaussa dla wielu wymiarów}
+\end{figure}
+
+Zadana jest liczba komponentów.
+Do znalezienia parametrów modeli najczęściej wykorzystuje się metodę maksymalizacji oczekiwań 
+\ang{expectation maximization}.
+Zazwyczaj do trenowania modelu używa się przybliżenie największego podobieństwa
+\and{maximum likelihood estimation} poszukującą największego podobieństwa obserwacji i trenowanych modeli.
+Algorytm maksymalizacji oczekiwań pozwala znaleźć przybliżenie największego podobieństwa dla parametrów modelu przy niekompletnych danych, 
+brakujących lub ukrytych obserwacjach.
+Jest metodą iteracyjną przybliżającą funkcję największego podobieństwa. 
+Przybliżenie największego podobieństwa pozwala znaleźć najlepsze dopasowanie dla zbioru danych,
+ale nie jest w stanie dla niekompletnych zbiorów danych.
+Maksymalizacja oczekiwań, 
+jako algorytm bardziej złożony,
+jest w stanie znaleźć parametry modelu, nawet jeżeli badany zbiór danych nie jest kompletny.
+Brakujące wartości zastępowane są losowymi,
+następnie z ich wykorzystaniem znajdowane jest przybliżenie drugiego zbioru danych.
+
 \NewPage
 \NewPage
 \chapter{Wyniki}
