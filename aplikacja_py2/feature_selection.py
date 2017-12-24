@@ -7,6 +7,7 @@ from sklearn.preprocessing import scale
 from sklearn.svm import SVC
 
 import agh
+from emo.NoSelector import NoSelector
 from emo.prezentation import generate_table, saveLatex
 
 bunch = agh.load_file('features_analysis-cc.csv')
@@ -25,13 +26,6 @@ X_train, X_test, y_train, y_test = train_test_split(
 # classificator=BayesianGaussianMixture(n_components=len(bunch.target_names), covariance_type='spherical', verbose=True, n_init=10)
 classificator=SVC(verbose=True)
 # najlepsze wyniki dla KNN !!?
-class NoSelector:
-    def __init__(self):
-        self.k_feature_idx_ = ('wszystkie',)
-    def transform(self, x):
-        return x
-    def fit(self, a, b):
-        return self
 # selector = SFS(classificator,
 #                k_features=20,
 #                forward=True,

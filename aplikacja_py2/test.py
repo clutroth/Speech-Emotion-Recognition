@@ -3,8 +3,33 @@
 import numpy
 import unittest
 
+from util import filter, binarizer
 from emo.model import *
 from emo.stage import preprocess
+
+class TestDataFilter(unittest.TestCase):
+    def test_binarizer_wirks(self):
+        sda = [0, 0, 2, 2, 5, 6]
+        self.assertEquals(binarizer(sda), [0, 0, 1, 1, 2, 3])
+
+    def test_binarizer_wirks2(self):
+        sda = [3,2]
+        self.assertEquals(binarizer(sda), [1, 0])
+
+    def test_if_works(self):
+        x = [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ]
+        y = [0, 1, 2]
+        allowed = (0, 2)
+        [new_x, new_y] = filter(x, y, allowed)
+        self.assertEquals(new_x, [
+            [1, 2, 3],
+            [7, 8, 9]
+        ])
+        self.assertEquals(new_y, [0, 1])
 
 
 class TestStringMethods(unittest.TestCase):
@@ -12,13 +37,13 @@ class TestStringMethods(unittest.TestCase):
         self.verifyDoubleZeroSignal(numpy.zeros(3, numpy.int16))
 
     def test_preprocess_3_2_int(self):
-        self.verifyDoubleZeroSignal(numpy.zeros((3,2), numpy.int16))
+        self.verifyDoubleZeroSignal(numpy.zeros((3, 2), numpy.int16))
 
     def test_preprocess_3_1_float(self):
         self.verifyDoubleZeroSignal(numpy.zeros(3, numpy.float32))
 
     def test_preprocess_3_2_float(self):
-        self.verifyDoubleZeroSignal(numpy.zeros((3,2), numpy.float32))
+        self.verifyDoubleZeroSignal(numpy.zeros((3, 2), numpy.float32))
 
     def verifyDoubleZeroSignal(self, enterSignal):
         sig = Signal(enterSignal, 1)
@@ -39,7 +64,5 @@ class TestStringMethods(unittest.TestCase):
         # check that s.split fails when the separator is not a string
         with self.assertRaises(TypeError):
             s.split(2)
-
-
 
             # ['/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/RA/AKL_RA_T.wav','/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/NE/MCH_NE_P.wav']
