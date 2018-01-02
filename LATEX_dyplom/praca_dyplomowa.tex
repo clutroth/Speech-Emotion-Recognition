@@ -275,18 +275,22 @@ Opisana została klasyczna wersja algorytmu.
 
 \subsection{Support Vector Machine}
 
-Algorytm SVM jest wykorzystywany do klasyfikacji obserwacji w uczeniu maszynowym.
-Obserwacje zostają rozmieszczone w przestrzeni wielowymiarowej,
-algorytm ma za zadanie znalezienie hiperpłaszczyzny rozdzielającej obserwacje należące do dwóch klas.
-Jest więc klasyfikatorem binarnym. 
+SVM wykorzystywany jest do klasyfikacji obserwacji w uczeniu maszynowym.
+Należy do grupy modeli uczonych w sposób nadzorowany. 
+Uczenie odbywa się przez zadanie zbioru danych testowych, 
+każda obserwacja jest oznaczona jako należąca do jednej z dwóch klas.
+Algorytm uczący SVM tworzy model rozróżniający obserwacje obydwu klas.
+Jako rezultat powstaje klasyfikator binarny, nie probabilistyczny. 
+
+Model powstaje przez rozmieszczenie obserwacji w przestrzeni wielowymiarowej.
 Każda obserwacja zostaje umieszczona w $n$-wymiarowej przestrzeni cech i reprezentowana jest przez wektor
 zaczynający się w początku układu współrzędnych, a kończący się w punkcie określającym obserwację. 
-Hiperpłaszczyzna \ang{hiperplane} jest $n-1$ wymiarowa i zgodnie z definicją rozdziela przestrzeń na dwie części.
-Poszukiwana hiperpłaszczyzna powinna być hiperpłaszczyzną optymalną \ang{optimal hiperplane}, 
-to znaczy powinna posiadać możliwe największy margines - czyli odległość od najbliższych obserwacji należących do różnych klas.
+Hiperpłaszczyzna \ang{hyperplane} jest $n-1$ wymiarowa i zgodnie z definicją rozdziela przestrzeń na dwie części.
+Poszukiwana hiperpłaszczyzna powinna być hiperpłaszczyzną optymalną \ang{optimal hyperplane}, 
+to czyli znajdować się w jak największej odległości od najbliższych obserwacji należących do różnych klas.
 \cite{Cortes1995}
 
-Biorąc przestrzeń dwuwymiarową, możemy ją osadzić na płaszczyźnie. 
+Biorąc przestrzeń dwuwymiarową, możemy ją rozmieścić na płaszczyźnie. 
 Na płaszczyźnie tej kładziemy dowolną prostą. 
 Prosta ta dzieli płaszczyznę na dwie części.
 Prosta jest więc hiperpłaszczyzną przestrzeni dwuwymiarowej.
@@ -327,12 +331,46 @@ obrazujący położenie płaszczyzny.
 Wartość rzutu skalarnego jest odległością obserwacji od hiperpłaszczyzny. 
 Różnica najmniejszej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=1$,
 oraz największej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=-1$ 
-jest marginesem pomiędzy hiperpłaszczyzną, a obserwacjami
+powinna być jak największa.
 Obserwacje znajdujące się w najmniejszej odległości od hiperpłaszczyzny nazywane są wektorami wspierającymi \ang{support vectors}
 
 Klasyfikacja polega na umieszczeniu klasyfikowanej obserwacji w przestrzeni cech.
 Obserwacja należy do tej klasy, do której należą obserwacje leżące po tej samej stronie hiperpłaszczyzny.
-\TODO{Jak hiperpłaszczyzna jest wyszukiwana?}
+\subsubsection{Uczenie modelu}
+%http://fourier.eng.hmc.edu/e161/lectures/svm/node3.html
+Uczenie odbywa się przez zadanie zbioru obserwacji testowych. 
+Mamy zbiór obserwacji, separowalny liniowo, każda z obserwacji należy do klasy $P$ lub $N$:
+\begin{displaymath}\{ ({\bf x}_k, y_k), k=1,\cdots,K \} \end{displaymath}
+\subsubsection{The Soft Margin Hyperplane}
+Rzeczywiste problemy rozmieszczone w przestrzeni wielowymiarowej nie są separowalne liniowo. 
+Rozwiązanie problemu nieseparowalnego liniowo sprowadza się do znalezienia takiej hiperpłaszczyzny, 
+która rozdziela obserwacje dwóch klas zawierającą jak najmniejszą liczbę błędnych klasyfikacji.
+W takim przypadku błędne klasyfikacje są kosztem nie do uniknięcia. 
+Poszukiwanie rozwiązania polega na wyznaczeniu hiperpłaszczyzny dającej rozdzielającej przestrzeń 
+w sposób minimalizujący błędy klasyfikacji na zbiorze uczącym i nieznanym zbiorze testowym.
+
+Przyjmijmy zbiór uczący $D$, który nie jest separowalny liniowo. 
+Nie istnieje hiperpłaszczyzna rozdzielająca obserwacje dwóch klas.
+Zostanie więc stworzony margines błędu, dopuszczający istnienie błędnych klasyfikacji w swoim obrębie.
+Występowanie błędnych klasyfikacji jest tolerowane, ale wystąpienia błędnych klasyfikacji są minimalizowane.
+Błędną klasyfikację wyraża się niepewnością $\zeta_i$ \ang{slack variable}. 
+Wartość niepewności $\zeta_i$ jest wprost proporcjonalna do odległości obserwacji $\vec{x_i}$
+Formalnie problem optymalizacji SVM można zapisać w postaci:
+
+\begin{figure}[hc]
+	Znajdź $\vec{x}$, $b$, $\zeta_i > 0$ takie, żeby:
+	\begin{equation}
+		\textrm{zminimalizuj}\frac{1}{2}\vec{w}^T\vec{w}+C\sum_i\zeta_i
+	\end{equation}
+	\begin{equation}
+		\textrm{dla wszystkich} \{(\vec{x_i}, y_i)\}, y_i(\vec{w}^T\vec{x_i}+b) \geq 1 - \zeta_i
+	\end{equation}
+	\caption{Optymalizacja SVM}
+\end{figure}
+Optymalizacja ma na celu rozwiązać problem szerokości marginesu, 
+liczby obserwacji które on będzie zawierał.
+%http://fourier.eng.hmc.edu/e161/lectures/svm/node2.html
+
 
 \subsubsection{Funkcje jądrowe}
 Funkcja jądrowa jest matematyczną sztuczką \ang{mathematical trick} pozwalającą przenieść 
@@ -370,71 +408,8 @@ Umożliwia to zalezienie hiperpłaszczyzny separującej liniowo, jeżeli w przes
 	\caption{Sigmoidalna funkcja jądrowa}
 \end{figure}
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
-\subsection{GMM}
-Modele Mieszane Gaussa \ang{Gaussian Mixture Models} jest to model probabilistyczny.
-Przedstawia podgrupy z całości obserwacji.
-Podgrupy mają rozkład normalny.
-Modele mieszane nie wymagają informacji jaką podgrupę reprezentuje dana część populacji.
-Model rozpoznaje istnienie podgrupy wykorzystując cechy rozkładu statystycznego.
-Dzięki temu tworzenie modeli rozpoznających podgrupy może odbywać się w sposób automatyczny i nienadzorowany.
+\subsection{MLP}
 
-Przykładowo wzrost człowieka może zostać przedstawiony za pomocą Mieszanych Modeli Gaussa.
-W populacji ludzi można wyróżnić dwie grupy - kobiet i mężczyzn,
-gdzie statystyka rozkładu wzrostu w populacji mężczyzn i populacji kobiet przestawia się rozkładem normalnym dla każdej  z grup z osobna.
-Rozkład wzrostu dla ludzi w ogólności nie jest rozkładem normalnym,
-ponieważ jest sumą dwóch rozkładów normalnych o różnej wartości średniej i odchyleniu standardowym.
-Przykładowo średni wzrost w Polsce wynosi odpowiednio 178,7cm dla mężczyzn i 163,7cm dla kobiet \cite{Kuaga2011}
-Stosując Mieszane modele Gaussa dla powyższego przypadku otrzymamy dwa komponenty.
-Pierwszy komponent będzie modelował rozkład normalny wzrostu w populacji mężczyzn,
-drugi rozkład normalny wzrostu w populacji kobiet.
-
-Rozkład Gaussa jest najbardziej spodziewanym rozkładem prawdopodobieństwa  w przyrodzie.
-Niezależnie od wielkości badanej populacji występujące wartości średnie będą zbliżone, 
-a wartości skrajne będą występowały odpowiednio rzadziej. 
-Jedną z przesłanek sugerującą zasadność wykorzystania GMM jest występowanie wielu wierzchołków w rozkładzie.
-Próby przybliżania rozkładu wielowierzchołkowego będącego sumą wielu rozkładów normalnych nie da zadowalających rezultatów.
-
-Mieszany model Gaussa definiują dwa typy parametrów: waga komponentu, oraz jego średnia i wariancja lub kowariancja.
-Dla $k$-elementowego zbioru komponentów, komponent $k$ty posiada średnią $\mu_k$ i wariancję $\sigma_k$.
-Dla przypadku wielowymiarowego $k$ty komponent posiada wektor średnich$\vec{\mu_k}$ oraz macierz kowariancji $\Sigma_k$.
-Wagę $k$tego komponentu $C_k$ oznacza się symbolem $\phi_k$. 
-Wagi komponentów muszą spełniać warunek $\sum_{i=1}^{K}\phi_i = 1$.
-
-\begin{figure}[hc]
-	\begin{align}
-		p(x) &= \sum_{i=1}^K\phi_i \mathcal{N}(x \;|\; \mu_i, \sigma_i)\\
-		\mathcal{N}(x \;|\; \mu_i, \sigma_i) &= \frac{1}{\sigma_i\sqrt{2\pi}} \exp\left(-\frac{(x-\mu_i)^2}{2\sigma_i^2}\right)\\
-		\sum_{i=1}^K\phi_i &= 1
-	\end{align}
-	\caption{Mieszany model Gaussa dla jednego wymiaru}
-\end{figure}
-\begin{figure}[hc]
-	\begin{align}
-	p(\vec{x}) &= \sum_{i=1}^K\phi_i \mathcal{N}(\vec{x} \;|\; \vec{\mu}_i, \Sigma_i)\\
-	\mathcal{N}(\vec{x} \;|\; \vec{\mu}_i, \Sigma_i) &= \frac{1}{\sqrt{(2\pi)^K|\Sigma_i|}} \exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu}_i)^\mathrm{T}{\Sigma_i}^{-1}(\vec{x}-\vec{\mu}_i)\right)\\
-	\sum_{i=1}^K\phi_i &= 1
-\end{align}
-\caption{Mieszany model Gaussa dla wielu wymiarów}
-\end{figure}
-
-Zadana jest liczba komponentów.
-Do znalezienia parametrów modeli najczęściej wykorzystuje się metodę maksymalizacji oczekiwań 
-\ang{expectation maximization}.
-Zazwyczaj do trenowania modelu używa się przybliżenie największego podobieństwa
-\and{maximum likelihood estimation} poszukującą największego podobieństwa obserwacji i trenowanych modeli.
-Algorytm maksymalizacji oczekiwań pozwala znaleźć przybliżenie największego podobieństwa dla parametrów modelu przy niekompletnych danych, 
-brakujących lub ukrytych obserwacjach.
-Jest metodą iteracyjną przybliżającą funkcję największego podobieństwa. 
-Przybliżenie największego podobieństwa pozwala znaleźć najlepsze dopasowanie dla zbioru danych,
-ale nie jest w stanie dla niekompletnych zbiorów danych.
-Maksymalizacja oczekiwań, 
-jako algorytm bardziej złożony,
-jest w stanie znaleźć parametry modelu, nawet jeżeli badany zbiór danych nie jest kompletny.
-Brakujące wartości zastępowane są losowymi,
-następnie z ich wykorzystaniem znajdowane jest przybliżenie drugiego zbioru danych.
-
-\NewPage
-\NewPage
 \chapter{Wyniki}
 \TODO{
 	Wywołania aplikacji.
