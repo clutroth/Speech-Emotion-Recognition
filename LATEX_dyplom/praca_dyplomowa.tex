@@ -273,9 +273,9 @@ Prowadzi to do znacznego wzrostu złożoności obliczeniowej klasyfikacji, dla w
 Istnieją modyfikacje klasyfikatora najbliższych sąsiadów redukujące wymienione wady. 
 Opisana została klasyczna wersja algorytmu.
 
-\subsection{Support Vector Machine}
+\subsection{Maszyny Wektorów Wspierających}
 
-SVM wykorzystywany jest do klasyfikacji obserwacji w uczeniu maszynowym.
+Maszyny Wektorów Wspierających \ang{Support Vector Machine} wykorzystywany jest do klasyfikacji obserwacji w uczeniu maszynowym.
 Należy do grupy modeli uczonych w sposób nadzorowany. 
 Uczenie odbywa się przez zadanie zbioru danych testowych, 
 każda obserwacja jest oznaczona jako należąca do jednej z dwóch klas.
@@ -340,37 +340,71 @@ Obserwacja należy do tej klasy, do której należą obserwacje leżące po tej 
 %http://fourier.eng.hmc.edu/e161/lectures/svm/node3.html
 Uczenie odbywa się przez zadanie zbioru obserwacji testowych. 
 Mamy zbiór obserwacji, separowalny liniowo, każda z obserwacji należy do klasy $P$ lub $N$:
-\begin{displaymath}\{ ({\bf x}_k, y_k), k=1,\cdots,K \} \end{displaymath}
-\subsubsection{The Soft Margin Hyperplane}
+\begin{displaymath}
+	\{ ({\bf x}_k, y_k), k=1,\cdots,K \} 
+\end{displaymath}
+gdzie klasy są oznaczone jako $y_k \in \{1,-1\}$ określają obserwacje $\vec{x}_k$.
+Celem optymalizacji jest odnalezienie wektora $\vec{w}$ i stałej $b$ wyznaczających hiperpłaszczyznę
+sperarującą liniowo obserwacje różnych klas w przestrzeni. 
+
+Weźmy wektor początkowy $\vec{w} = 0$ i zbiór danych uczących $K$.
+Obliczamy pierwszą wartość wektora $\vec{w}$
+\begin{equation}\label{eq:svm:hyperplane}
+	{\vec{w}}=\sum_{i=1}^K \alpha_i y_i {\vec{x}}_i
+\end{equation}
+gdzie $\alpha_i>0$. 
+Podczas każdego cyklu uczącego, wektor $\vec{w}$ może zostać zmodyfikowany przez obserwację, 
+zgodnie z regułą:
+\begin{equation}
+	\mbox{jeżeli } y_i f({\vec{x}}_i)=y_i ({\vec{x}}_i^T{\vec{w}}^{stary}+b)
+	=y_i\left(\sum_{j=1}^m \alpha_j y_j({\vec{x}}_i^T{\vec{x}}_j)+b\right)<0,
+\end{equation}
+\begin{equation}
+	\mbox{to } {\vec{w}}^{nowy}={\vec{w}}^{stary}+\eta y_i {\vec{x}}_i
+	=\sum_{j=1}^{m} \alpha_j y_j\vec{x}_j +\eta y_i {\vec{x}}_i,
+\end{equation}
+\begin{equation}
+	\mbox{np. }
+	\alpha_i^{nowy}=\alpha_i^{stary}+\eta
+\end{equation}
+gdzie $0 < \eta < 1$ jest parametrem uczenia.
+Ostatecznie płaszczyznę \ref{eq:svm:hyperplane} określamy dobierając wartości $\alpha_i$ według zależności: 
+\begin{equation}
+	\mbox{jeżeli } y_i\left(\sum_{j=1}^m \alpha_j y_j({\vec{x}}_i^T\vec{x}_j)+b\right)<0,
+	\mbox{to } \alpha_i^{new}=\alpha_i^{old}+\eta 
+\end{equation}
+
+\subsubsection{Hiperpłaszczyzna Miękkiego Marginesu}
 Rzeczywiste problemy rozmieszczone w przestrzeni wielowymiarowej nie są separowalne liniowo. 
-Rozwiązanie problemu nieseparowalnego liniowo sprowadza się do znalezienia takiej hiperpłaszczyzny, 
+Rozwiązanie problemu nieseparowalnego liniowo sprowadza się do znalezienia hiperpłaszczyzny Miękkiego Marginesu \ang{Soft Margin}, 
 która rozdziela obserwacje dwóch klas zawierającą jak najmniejszą liczbę błędnych klasyfikacji.
 W takim przypadku błędne klasyfikacje są kosztem nie do uniknięcia. 
-Poszukiwanie rozwiązania polega na wyznaczeniu hiperpłaszczyzny dającej rozdzielającej przestrzeń 
-w sposób minimalizujący błędy klasyfikacji na zbiorze uczącym i nieznanym zbiorze testowym.
+Poszukiwanie rozwiązania polega na wyznaczeniu hiperpłaszczyzny rozdzielającej przestrzeń 
+minimalizując błędy klasyfikacji na zbiorze uczącym i nieznanym zbiorze testowym.
 
 Przyjmijmy zbiór uczący $D$, który nie jest separowalny liniowo. 
 Nie istnieje hiperpłaszczyzna rozdzielająca obserwacje dwóch klas.
 Zostanie więc stworzony margines błędu, dopuszczający istnienie błędnych klasyfikacji w swoim obrębie.
 Występowanie błędnych klasyfikacji jest tolerowane, ale wystąpienia błędnych klasyfikacji są minimalizowane.
-Błędną klasyfikację wyraża się niepewnością $\zeta_i$ \ang{slack variable}. 
-Wartość niepewności $\zeta_i$ jest wprost proporcjonalna do odległości obserwacji $\vec{x_i}$
+Błędną klasyfikację wyraża się niepewnością $\xi_i$ \ang{slack variable}. 
+Wartość niepewności $\xi_i$ jest wprost proporcjonalna do odległości obserwacji $\vec{x_i}$
 Formalnie problem optymalizacji SVM można zapisać w postaci:
 
-\begin{figure}[hc]
-	Znajdź $\vec{x}$, $b$, $\zeta_i > 0$ takie, żeby:
-	\begin{equation}
-		\textrm{zminimalizuj}\frac{1}{2}\vec{w}^T\vec{w}+C\sum_i\zeta_i
-	\end{equation}
-	\begin{equation}
-		\textrm{dla wszystkich} \{(\vec{x_i}, y_i)\}, y_i(\vec{w}^T\vec{x_i}+b) \geq 1 - \zeta_i
-	\end{equation}
-	\caption{Optymalizacja SVM}
-\end{figure}
-Optymalizacja ma na celu rozwiązać problem szerokości marginesu, 
-liczby obserwacji które on będzie zawierał.
+\begin{equation}
+\mbox{zminimalizuj } {\vec w}^T {\vec w}+C\sum_{i=1}^m \xi_i^k
+\end{equation}
 %http://fourier.eng.hmc.edu/e161/lectures/svm/node2.html
 
+\begin{equation}
+	\mbox{zakładając, że }  y_i ({\bf x}_i^T {\bf w}+b) \ge 1-\xi_i,
+	\mbox{, }x_i \ge 0 \mbox{, }(i=1,\cdots,m)
+\end{equation}
+Parametr $C$ steruje maksymalizacją marginesu i minimalizacją błędów uczenia.
+Jeżeli parametr $C$ ma małą wartość, margines dopuszcza zbyt wiele błędów klasyfikacji.
+Duża wartość parametru $C$ może skutkować przeuczeniem modelu.
+Parametr $k$ określa normę marginesu. 
+Margines pierwszej normy jest mniej wrażliwy na obserwacje leżące poza nim,
+dzięki temu margines pierwszej normy jest lepszy do klasyfikacji danych mniej uporządkowanych.
 
 \subsubsection{Funkcje jądrowe}
 Funkcja jądrowa jest matematyczną sztuczką \ang{mathematical trick} pozwalającą przenieść 
