@@ -407,25 +407,41 @@ Margines pierwszej normy jest mniej wrażliwy na obserwacje leżące poza nim,
 dzięki temu margines pierwszej normy jest lepszy do klasyfikacji danych mniej uporządkowanych.
 
 \subsubsection{Funkcje jądrowe}
-Funkcja jądrowa jest matematyczną sztuczką \ang{mathematical trick} pozwalającą przenieść 
-obserwacje z przestrzeni oryginalnej do przestrzeni o większej liczbie wymiarów.
-Umożliwia to zalezienie hiperpłaszczyzny separującej liniowo, jeżeli w przestrzeni oryginalnej taka hiperpłaszczyzna nie istniała.
+Funkcja jądrowa \ang{kernel method} 
+przyporządkowuje każdej reprezentacji obserwacji w przestrzeni,
+reprezentację w innej przestrzeni o większej liczbie wymiarów.
+Zabieg zwiększenia liczby wymiarów ma na celu ułatwienie 
+klasyfikacji, czy klasteryzacji zbioru danych względem
+reprezentacji w przestrzeni pierwotnej. 
+
+Przykładem jest SVM, poszukujący hiperpłaszczyzny.
+Jeżeli dane nie są seprowalne liniowo,
+ale są separowalne nieliniowo to stosując sztuczkę jądrową \ang{kernel trick} 
+przeniesiemy zbiór obserwacji do przestrzeni w której będzie on separowalny liniowo.
+\cite{Patle2013}
+
 \begin{equation}
-	\langle \bm{x_1} \cdot \bm{x_2} \rangle \gets K(\bm{x_1}, \bm{x_2}) = \langle \Phi(\bm{x_1}) \cdot \Phi(\bm{x_2}) \rangle
+	\langle \vec{x_1} \cdot \vec{x_2} \rangle \gets K(\vec{x_1}, \vec{x_2}) = \langle \Phi(\vec{x_1}) \cdot \Phi(\vec{x_2}) \rangle
 \end{equation}
 
-\cite{Patle2013}
-\TODO{Wykresy poglądowe funkcji jądrowych}
-\TODO{Algorytm w pseudokodzie}
+Jądro liniowe \ref{eq:svm:kern:lin} jest najprostszą funkcją jądrową. 
+sprowadza się do iloczyny wektorowego i dodania stałej $c$.
+Liniowa funkcja jądrowa w niektórych przypadkach nie wprowadza zmian zmieniających rezultat działania algorytmu.
 \begin{figure}[hc]
 	\begin{equation}
-		K(x, x_i) = x \cdot x ^ T
+		\label{eq:svm:kern:lin}
+		K(x, x_i) = x \cdot x ^ T + c
 	\end{equation}
 	\caption{Liniowa funkcja jądrowa}
 \end{figure}
+
+Jądro wielomianowe \ref{eq:svm:kern:poly} znajduje zastosowanie przy problemach,
+gdzie dane są znormalizowane. 
+Wielomianową funkcję jądrową określają współczynnik $\alpha$, stałą $c$ i stopień wielomiany $d$.
 \begin{figure}[hc]
 	\begin{equation}
-		K(x, x_i) = (1 + x \cdot x ^ T _ i )^d
+		\label{eq:svm:kern:poly}
+		K(x, x_i) = (\alpha x^T x_i + c)^d 
 	\end{equation}
 	\caption{Wielomianowa funkcja jądrowa}
 \end{figure}
