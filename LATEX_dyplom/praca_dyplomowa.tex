@@ -445,20 +445,22 @@ Wielomianową funkcję jądrową określają współczynnik $\alpha$, stałą $c
 	\end{equation}
 	\caption{Wielomianowa funkcja jądrowa}
 \end{figure}
+
+Jądro sigmoidalne \ref{eq:svm:kern:sig} pochodzi z dziedziny sieci neuronowych,
+gdzie funkcjonuje sigmoidalna funkcja aktywacji neuronu. 
+Model SVM z sigmoidalną funkcją jądrową jest równoważny dwuwarstwowej perceptonowej sieci neuronowej.
+Posiada dwa parametry: współczynnik $\alpha$ i stałą $c$, gdzie zazwyczaj $c$ przyjmuje wartość $1/N$,
+dla $N$-wymiarowej przestrzeni.
 \begin{figure}[hc]
 	\begin{equation}
-	K(x, x_i) = e ^ {- \gamma || x - x_i||^2}
-	\end{equation}
-	\caption{Radialna podstawowa funkcja jądrowa}
-\end{figure}
-\begin{figure}[hc]
-	\begin{equation}
-		K(x_i, x_j) = tanh( \gamma x_i  x_j + r)
+		\label{eq:svm:kern:sig}
+		K(x_i, x_j) = tanh( \alpha x_i  x_j + c)
 	\end{equation}
 	\caption{Sigmoidalna funkcja jądrowa}
 \end{figure}
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
 \subsection{MLP}
+\subsubsection{Sztuczne sieci neuronowe}
 
 \chapter{Wyniki}
 \TODO{
