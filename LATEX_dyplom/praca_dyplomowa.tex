@@ -461,6 +461,53 @@ dla $N$-wymiarowej przestrzeni.
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
 \subsection{MLP}
 \subsubsection{Sztuczne sieci neuronowe}
+Sztuczne sieci neutronowe \ang{Artificial Neural Network} są modelami zainspirowanymi ludzkim mózgiem.
+Składają się z ogromnej liczby węzłów, każdy węzeł wykonuje prostą operację matematyczną.
+Każdy neuron posiada wejścia, wyjście, oraz zestaw parametrów go określających. 
+Dzięki połączeniom węzłów - sztucznych neuronów sieci neuronowe są w stanie rozwiązywać złożone problemy.
+Proces uczenia sieci neuronowej polega na dostosowywaniu parametrów węzłów prowadzącego do znalezienia optymalnego rozwiązania problemu.
+Sztuczne sieci neuronowe są bardzo popularnym i rozbudowanym zagadnieniem uczenia maszynowego.
+Znajdują zastosowanie w rozpoznawaniu obrazów, mowy, pisma, robotyce. 
+
+\subsubsection{Model neutronu}
+Ludzki mózg jest złożony z ok $10^{11}$ neuronów.
+Odbierają one sygnały od innych neuronów, do których są podłączone.
+Na podstawie wejścia decydują, czy podać sygnał na wejście.
+Pojedynczy neuron nie rozwiązuje złożonych problemów.
+Wiele neuronów połączonych w sieć jest w stanie wykonać skomplikowane operacje matematyczne.
+Pojedynczy neuron składa się z wejścia $\vec{x}$, wyjścia $y$, wektora wag $\vec{w}$ i skoku $b$.
+Decyzję o podaniu sygnału na wyjście podejmuje funkcja aktywacji $g(\vec{x} \cdot \vec{w} + b)$.
+Wyjściem neuronu jest $0$, $1$, lub liczba zbliżona do którejś z tych wartości.
+Na potrzeby tej sekcji przyjmijmy progową funkcję aktywacji $g(x)$ \ref{eq:mlp:step}.
+\begin{figure}[hc]
+	\begin{equation}
+		\label{eq:mlp:step}
+	g(x)={\begin{cases}0{\text{, dla }}x<0\\1{\text{, dla }}x\geq 0\end{cases}}
+	\end{equation}
+	\caption{Progowa funkcja aktywacji}
+\end{figure}
+Neutron przyjmuje na wejście wektor $\vec{x}$.
+Wektor wejściowy zostaje pomnożony przez wektor wag $\vec{w}$ i dodany do progu aktywacji $b$.
+Rezultat jest argumentem funkcji aktywacji  $g(\vec{x} \cdot \vec{w} + b)$.
+Wartość funkcji aktywacji zostaje podana na wyjście. \ref{rys:mlp:neuron}
+Możliwości pojedynczego neuronu są ograniczone. 
+Posiada binarne wyjście $0$ lub $1$, 
+Zadaniem neuronu jest określenie, po której stronie hiperpłaszczyzny, 
+określonej przez wektor $\vec w$ i skalar $b$.
+Funkcja aktywacji normalizuje odpowiedź.
+\begin{figure}[h]
+	\label{rys:mlp:neuron}
+	\centering
+	\includegraphics[width=\textwidth]{neuron}
+	\caption{Schemat neuronu}
+\end{figure}
+
+
+\TODO{o funkcji aktywacji, budowie neuronu}
+\TODO{Rysunek i jakiś wzór}
+\subsubsection{Funkcja aktywacji}
+\TODO{sigmoidalna, liniowa, skokowa, poco dla czego}
+\subsubsection{}
 
 \chapter{Wyniki}
 \TODO{
