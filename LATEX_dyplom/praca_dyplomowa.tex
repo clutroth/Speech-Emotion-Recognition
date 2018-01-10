@@ -17,6 +17,7 @@
 \usepackage{subfigure}
 \usepackage{amsfonts}
 \usepackage{algorithmicx}
+\usepackage{gnuplottex}
 \usepackage{algpseudocode}
 \usepackage{algorithm}
 \usepackage{verbatim}
@@ -461,7 +462,7 @@ dla $N$-wymiarowej przestrzeni.
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
 \subsection{MLP}
 \subsubsection{Sztuczne sieci neuronowe}
-Sztuczne sieci neutronowe \ang{Artificial Neural Network} są modelami zainspirowanymi ludzkim mózgiem.
+Sztuczne sieci neuronowe \ang{Artificial Neural Network} są modelami zainspirowanymi ludzkim mózgiem.
 Składają się z ogromnej liczby węzłów, każdy węzeł wykonuje prostą operację matematyczną.
 Każdy neuron posiada wejścia, wyjście, oraz zestaw parametrów go określających. 
 Dzięki połączeniom węzłów - sztucznych neuronów sieci neuronowe są w stanie rozwiązywać złożone problemy.
@@ -469,7 +470,7 @@ Proces uczenia sieci neuronowej polega na dostosowywaniu parametrów węzłów p
 Sztuczne sieci neuronowe są bardzo popularnym i rozbudowanym zagadnieniem uczenia maszynowego.
 Znajdują zastosowanie w rozpoznawaniu obrazów, mowy, pisma, robotyce. 
 
-\subsubsection{Model neutronu}
+\subsubsection{Model neuronu}
 Ludzki mózg jest złożony z ok $10^{11}$ neuronów.
 Odbierają one sygnały od innych neuronów, do których są podłączone.
 Na podstawie wejścia decydują, czy podać sygnał na wejście.
@@ -502,13 +503,53 @@ Funkcja aktywacji normalizuje odpowiedź.
 	\caption{Schemat neuronu}
 \end{figure}
 
-
-\TODO{o funkcji aktywacji, budowie neuronu}
-\TODO{Rysunek i jakiś wzór}
 \subsubsection{Funkcja aktywacji}
-\TODO{sigmoidalna, liniowa, skokowa, poco dla czego}
-\subsubsection{}
+Funkcja aktywacji określa odpowiedź neuronu.
+Co do zasady neuron zwraca odpowiedź binarną \textit{wszystko albo nic}.
+Przykładem jest skokowa funkcja aktywacji \ref{eq:mlp:step}.
+\begin{figure}[h]
+	\label{wyk:mlp:step}
+	\centering
+	\begin{gnuplot}[terminal=pdf,terminaloptions=color]
+		set xrange [-1:1] 
+		set yrange [-.5:1.5]
+		step(x) = x>0 ? 1 : 0
+		plot step(x)
+	\end{gnuplot}
+	\begin{equation}
+		step(x)={\begin{cases}0{\text{, dla }}x<0\\1{\text{, dla }}x\geq 0\end{cases}}
+	\end{equation}
+	\caption{Progowa funkcja aktywacji}
+\end{figure}
 
+W praktyce stosuje się funkcje ciągłe, dające wartość z zakresu od $0$ do $1$.
+Najczęściej spotykaną ciągłą funkcją logiczną jest funkcja sigmoidalna.
+Może przyjąć wszystkie wartości z zakresu $y \in (0,1)$.
+Rzutuje to na interpretację wartości zwracanej przez neuron,
+która nie działa już zgodnie z regułą \textit{wszystko, albo nic}.
+Neuron z funkcją sigmoidalną nie jest już klasyfikatorem binarnym, ponieważ może zwrócić np. wartość $sigm(0) = 0,5$.
+Pozwala to na tworzenie bardziej ogólnych sieci neuronowych, znajdujących zastosowanie w większej liczbie zastosowań.
+
+%http://lowrank.net/gnuplot/datafile2-e.html
+
+\begin{figure}[h]
+	\label{wyk:mlp:sigm}
+	\centering
+	\begin{gnuplot}[terminal=pdf,terminaloptions=color]
+		set xrange [-10:10] 
+		set yrange [-.5:1.5]
+		sigm(x) = 1/(1+exp(-x))
+		plot sigm(x)
+	\end{gnuplot}
+	\begin{equation}
+		sigm(x)=\frac{1}{1+e^{-x}}
+	\end{equation}
+	\caption{Sigmoidalna funkcja aktywacji}
+\end{figure}
+\subsubsection{Schemat i zasada działania sztucznej sieci neuronowej}
+\TODO{rysunek grafu}
+\TODO{rysunek warstw i sens warstw}
+\TODO{MLP}
 \chapter{Wyniki}
 \TODO{
 	Wywołania aplikacji.

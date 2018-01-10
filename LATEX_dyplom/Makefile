@@ -30,8 +30,8 @@ all: praca_dyplomowa.pdf
 # missing file reference and interactively asking you for an alternative.
 
 praca_dyplomowa.pdf: praca_dyplomowa.tex praca_dyplomowa.bib
-	latexmk -pdf -pdflatex="pdflatex -bibtex -interaction=nonstopmode" -use-make praca_dyplomowa.tex
+	latexmk -pdf -pdflatex="pdflatex --shell-escape -bibtex -interaction=nonstopmode" -use-make praca_dyplomowa.tex
 
 clean:
-	latexmk -CA
+	latexmk -CA; rm praca_dyplomowa-gnuplottex*.gnuplot praca_dyplomowa-gnuplottex*.pdf
 
