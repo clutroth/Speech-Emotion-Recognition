@@ -497,10 +497,10 @@ Zadaniem neuronu jest określenie, po której stronie hiperpłaszczyzny,
 określonej przez wektor $\vec w$ i skalar $b$.
 Funkcja aktywacji normalizuje odpowiedź.
 \begin{figure}[h]
-	\label{rys:mlp:neuron}
 	\centering
 	\includegraphics[width=\textwidth]{neuron}
 	\caption{Schemat neuronu}
+	\label{rys:mlp:neuron}
 \end{figure}
 
 \subsubsection{Funkcja aktywacji}
@@ -547,9 +547,43 @@ Pozwala to na tworzenie bardziej ogólnych sieci neuronowych, znajdujących zast
 	\caption{Sigmoidalna funkcja aktywacji}
 \end{figure}
 \subsubsection{Schemat i zasada działania sztucznej sieci neuronowej}
-\TODO{rysunek grafu}
-\TODO{rysunek warstw i sens warstw}
-\TODO{MLP}
+Sieć neuronowa zbudowana jest z wielu neuronów połączonych ze sobą.
+Wyjścia jednych neuronów przekazywane są jako wejścia dla kolejnych.
+Schemat budowy sieci neuronowej można przedstawić za pomocą grafu skierowanego \ref{rys:mlp:graf}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{ann-graf}
+	\caption{Sieć neuronowa jako graf}
+	\label{rys:mlp:graf}
+\end{figure}
+Węzły grafu oznaczają neurony, a krawędzie wagi wejść neuronów do których prowadzą.
+Wyjścia jednych neuronów są wejściami dla drugich.
+Wyróżniamy dwa typy sieci neuronowych.
+Sieci neuronowe jednokierunkowe, w reprezentacji grafowej tworzą acykliczny graf skierowany.
+Dzięki wyeliminowaniu cykli z sieci jej reprezentacja, uczenie i obliczenia zostają w znacznej mierze uproszczone. 
+Sieci neuronowe w których występują cykle, nazywane są sieciami rekurencyjnymi.
+Węzły $x_1$ i $x_2$ są wejściami sieci neuronowej.
+Węzły $s_{1..5}$, $y_1$ i $y_2$ są neuronami z funkcją aktywacji.
+Wartości wyjściowe z węzłów $y_1$ i $y_2$ są wyjściami całej sieci neuronowej.
+Przykładowo wejście $x_1$ zostaje pomnożone przez wagę $w_{x_1s_1}$ i staje się pierwszym wejściem dla neuronu $s_1$, itd.
+
+Stosuje się logiczny podział węzłów na warstwy \ref{rys:mlp:warstwy}.
+Warstwa $L_0$ nazywana jest warstwą wejściową.
+Przyjmuje ona wektor $\vec x$, który jest przetwarzany w kolejnych warstwach.
+Warstwy $L_1$ i $L_2$ są warstwami ukrytymi sieci. 
+Wartości przyjmowane i zwracane przez neurony warstw ukrytych nie są widoczne z zewnątrz sieci.
+W sieciach jednokierunkowych każda warstwa zależy wyłącznie od wartości z warstwy poprzedniej.
+Wartości zwrócone przez warstwę $L_3$ - wyjściową są wynikiem działania całej sieci neuronowej.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{ann-warstwy}
+	\caption{Warstwy sieci neuronowej}
+	\label{rys:mlp:warstwy}
+\end{figure}
+\TODO{
+	MLP
+	może kiedyś o uczeniu
+}
 \chapter{Wyniki}
 \TODO{
 	Wywołania aplikacji.
