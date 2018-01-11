@@ -580,10 +580,51 @@ Wartości zwrócone przez warstwę $L_3$ - wyjściową są wynikiem działania c
 	\caption{Warstwy sieci neuronowej}
 	\label{rys:mlp:warstwy}
 \end{figure}
-\TODO{
-	MLP
-	może kiedyś o uczeniu
-}
+\subsubsection{Percepton wielowarstwowy}
+Percepton wielowarstwowy \ang{Multi-layer percepton} jest najpopularniejszym typem sztucznej sieci neuronowej.
+Jest zbudowany z warstw wejściowej, wyjściowej i wielu warstw ukrytych.
+Percepton wielowarstwowy w odróżnieniu od perceptonu jednowarstwowego może rozwiązywać problemy nieliniowe.
+Przykładem funkcji, której nie może zamodelować pojedynczy percepton jest XOR \ang{exclusive or} \ref{tab:mlp:xor}.
+\begin{figure}[h]
+	\centering
+	\begin{tabular}{ |l|c|r| }
+		\hline
+		$x_1$	& $x_2$& $XOR$ \\ \hline
+		0 	& 0 	& 0 \\ \hline
+		0 	& 1 	& 1 \\ \hline
+		1 	& 0 	& 1 \\ \hline
+		1 	& 1 	& 0 \\ \hline
+	\end{tabular}
+	\caption{Tabela funkcji XOR}
+	\label{tab:mlp:xor}
+\end{figure}
+Wykres \ref{wyk:mlp:xor} obrazuje funkcję $XOR$, oraz przykładowe hiperpłaszczyzny.
+Nie istnieje hiperpłaszczyzna rozdzielająca argumenty, dla których wartość $XOR$ przyjmuje $1$,
+od argumentów dla których $XOR$ przyjmuje wartość $0$.
+\begin{figure}[h]
+	\label{wyk:mlp:sigm}
+	\centering
+	\begin{gnuplot}[terminal=pdf,terminaloptions=color]
+		set xrange [-1:2]
+		set yrange [-1:2]
+		linia1(x)=x+.5
+		linia2(x)=-2*x+1.5
+		plot "-" using 1:2 title 'XOR(x1, x2)=1',\
+		"-" using 1:2  title 'XOR(x1, x2)=0',\
+		linia1(x),\
+		linia2(x)
+		0	1
+		1	0
+		end
+		0	0
+		1	1
+		end
+	\end{gnuplot}
+	\caption{Wykres XOR}
+	\label{wyk:mlp:xor}
+\end{figure}
+Percepton wielowarstwowy dzięki zastosowaniu wielu warstw ukrytych, 
+jest w stanie zróżnicować zbiory, które nie są separowalne liniowo.
 \chapter{Wyniki}
 \TODO{
 	Wywołania aplikacji.
