@@ -355,18 +355,38 @@ jak i liczba, oraz wzajemne położenie pasm.
 Ostatnim etapem ekstrakcji cech, jest określenie ich parametrów statystycznych.
 Dla każdej ramki sygnału zostały obliczone cechy bazowe, opisane w poprzedniej sekcji.
 Zostaną one zbadane statystycznie tworząc właściwe cechy, na podstawie których zostanie dokonana klasyfikacja.
+Użyto następujących funkcji:
 \begin{enumerate}
 	\item minimum 
 	\item maksimum 
-	\item średnia 
+	\item średnia arytmetyczna
 	\item wariancja 
 	\item skośność
-	\item kurioza
-\end{description}
-\TODO{Opisać  'minmax', 'mean', 'variance', 'skewness', 'kurtosis'}
-\NewPage
-\NewPage
-\NewPage
+	\item kurtoza
+\end{enumerate}
+Wykorzystano średnią arytmetyczną, gdzie $N$ jest liczbą ramek, a $x_n$ jest wartością cechy bazowej dla $n$-tej ramki.
+\begin{equation}
+	\mu = \frac{1}{N}\sum_1^Nx_n
+\end{equation}
+
+Skośność - trzeci moment centralny, jest miarą asymetrii rozkładu statystycznego. 
+Może przyjąć wartości rzeczywiste.
+Intuicyjnie skośność dodatnia oznacza, że lewy ogon rozkładu znajduje się dalej od prawego,
+skośność ujemna, że prawy ogon znajduje się dalej,
+a zerowa informuje o symetrycznym rozkładzie.
+Skośność definiujemy jako
+\begin{equation}
+	\gamma = E \left [ \left (  \frac{X - \mu}{ \sigma }   \right )^3 \right ]
+\end{equation}
+gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
+
+Kurtoza jest czwartym momentem centralnym.
+Wyraża spłaszczenie rozkładu. 
+Wyrażona jest wzorem
+\begin{equation}
+	\gamma = E \left [ \left (  \frac{X - \mu}{ \sigma }   \right )^4 \right ]
+\end{equation}
+gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
 \section{Selekcja cech}
 \subsection{SFS}
 \NewPage
@@ -509,7 +529,7 @@ Obliczamy pierwszą wartość wektora $\vec{w}$
 \begin{equation}\label{eq:svm:hyperplane}
 	{\vec{w}}=\sum_{i=1}^K \alpha_i y_i {\vec{x}}_i
 \end{equation}
-gdzie $\alpha_i>0$. 
+gdzie $\alpha_i>0$. \cite{Mittal2016}
 Podczas każdego cyklu uczącego, wektor $\vec{w}$ może zostać zmodyfikowany przez obserwację, 
 zgodnie z regułą:
 \begin{equation}
@@ -535,7 +555,7 @@ Ostatecznie płaszczyznę \ref{eq:svm:hyperplane} określamy dobierając wartoś
 Rzeczywiste problemy rozmieszczone w przestrzeni wielowymiarowej nie są separowalne liniowo. 
 Rozwiązanie problemu nieseparowalnego liniowo sprowadza się do znalezienia hiperpłaszczyzny Miękkiego Marginesu \ang{Soft Margin}, 
 która rozdziela obserwacje dwóch klas zawierającą jak najmniejszą liczbę błędnych klasyfikacji.
-W takim przypadku błędne klasyfikacje są kosztem nie do uniknięcia. 
+W takim przypadku błędne klasyfikacje są kosztem nie do uniknięcia. \cite{Dellepiane2015}
 Poszukiwanie rozwiązania polega na wyznaczeniu hiperpłaszczyzny rozdzielającej przestrzeń 
 minimalizując błędy klasyfikacji na zbiorze uczącym i nieznanym zbiorze testowym.
 
@@ -647,7 +667,7 @@ Neutron przyjmuje na wejście wektor $\vec{x}$.
 Wektor wejściowy zostaje pomnożony przez wektor wag $\vec{w}$ i dodany do progu aktywacji $b$.
 Rezultat jest argumentem funkcji aktywacji  $g(\vec{x} \cdot \vec{w} + b)$.
 Wartość funkcji aktywacji zostaje podana na wyjście. \ref{rys:mlp:neuron}
-Możliwości pojedynczego neuronu są ograniczone. 
+Możliwości pojedynczego neuronu są ograniczone. \cite{Jeon2018}
 Posiada binarne wyjście $0$ lub $1$, 
 Zadaniem neuronu jest określenie, po której stronie hiperpłaszczyzny, 
 określonej przez wektor $\vec w$ i skalar $b$.
@@ -720,7 +740,7 @@ Dzięki wyeliminowaniu cykli z sieci jej reprezentacja, uczenie i obliczenia zos
 Sieci neuronowe w których występują cykle, nazywane są sieciami rekurencyjnymi.
 Węzły $x_1$ i $x_2$ są wejściami sieci neuronowej.
 Węzły $s_{1..5}$, $y_1$ i $y_2$ są neuronami z funkcją aktywacji.
-Wartości wyjściowe z węzłów $y_1$ i $y_2$ są wyjściami całej sieci neuronowej.
+Wartości wyjściowe z węzłów $y_1$ i $y_2$ są wyjściami całej sieci neuronowej.\cite{Gurgen2017}
 Przykładowo wejście $x_1$ zostaje pomnożone przez wagę $w_{x_1s_1}$ i staje się pierwszym wejściem dla neuronu $s_1$, itd.
 
 Stosuje się logiczny podział węzłów na warstwy \ref{rys:mlp:warstwy}.
@@ -756,7 +776,7 @@ Przykładem funkcji, której nie może zamodelować pojedynczy percepton jest XO
 \end{figure}
 Wykres \ref{wyk:mlp:xor} obrazuje funkcję $XOR$, oraz przykładowe hiperpłaszczyzny.
 Nie istnieje hiperpłaszczyzna rozdzielająca argumenty, dla których wartość $XOR$ przyjmuje $1$,
-od argumentów dla których $XOR$ przyjmuje wartość $0$.
+od argumentów dla których $XOR$ przyjmuje wartość $0$.\cite{Labib2010}
 \begin{figure}[h]
 	\label{wyk:mlp:sigm}
 	\centering
