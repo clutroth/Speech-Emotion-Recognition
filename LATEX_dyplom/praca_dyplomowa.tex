@@ -191,22 +191,178 @@ Stan nagrań jest niejednorodny i nieznany.
 
 Zapis wypowiedzi został ustandaryzowany w celu zniwelowania różnic wynikających z głośności nagrania.
 \section{Przetwarzanie wstępne}
-\TODO{od czytania pliku z dysku, do rozpoczęcia ekstrakcji cech}
-\NewPage
+\TODO{
+	od czytania pliku z dysku, do rozpoczęcia ekstrakcji cech
+
+	stereo2mono, standaryzacja
+}
 \NewPage
 \section{Ekstrakcja cech}
 \subsection{Cechy bazowe}
+Celem cech bazowych jest przetworzenie sygnału czasowego podzielonego na ramki,
+do postaci, które zostaną przetworzone w dalszych etapach obliczeń.
+Sygnał w dziedzinie czasu, ma wszystkie informacje, jakie możemy wykorzystać, 
+ale analiza sygnału wyłącznie w dziedzinie czasu nie daje zadowalających rezultatów.
+Przeniesienie sygnału do dziedziny częstotliwości, przez zastosowanie transformaty Fouriera,
+pozwoli analizować jego zmienność w zależności od częstotliwości, 
+pomijając aspekty wydatne w dziedzinie czasu.
 \subsubsection{MFCC}
-\NewPage
-\NewPage
+Jedną z najpopularniejszych cech wykorzystywanych w systemach automatycznego rozpoznawania mowy,
+jest MFCC \ang{Mel-Frequency Cepstral Coefficients}.
+Biorąc pod uwagę warunki powstawania mowy, cech indywidualnych mówcy, sposobu działania narządów mowy, percepcji mowy przez człowieka,
+daje wektor współczynników reprezentujących mowę z założenia niezależny od mówcy. 
+Przekazuje informacje o analizowanym fragmencie mowy, pomijając cechy zależne od mówiącego, takie jak częstotliwość podstawowa i jej harmoniczne.
+Współczynniki MFC reprezentują dynamiczną naturę mowy, pokazując jej zmianę energii i częstotliwości w czasie.
+
+Algorytm obliczający MFCC przyjmuje na wejście sygnał mowy o długości kilkudziesięciu ms w dziedzinie czasu, zwracając wektor współczynników \ref{rys:mgcc:schemat}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{mfcc-schemat}
+	\caption{Algorytm MFCC}
+	\label{rys:mgcc:schemat}
+\end{figure}
+
+Pierwszym krokiem algorytmu jest obliczenie transformaty Fouriera. 
+Pozwala ona przenieść sygnał z dziedziny czasu, do dziedziny częstotliwości. 
+Operując na sygnale cyfrowym wykorzystana szybka transformata Fouriera,
+bardziej precyzyjnie w wariancie szybkiej transformaty Fouriera. 
+\begin{figure}[h]
+	\begin{equation}
+		X_{k}=\sum _{n=0}^{N-1}x_{n}e^{-i2\pi kn/N}\qquad k=0,\dots ,N-1
+	\end{equation}
+	\caption{Szybka transformata Fouriera}
+\end{figure}
+Szybka transformata Fouriera zwraca podobny wynik, jak dyskretna transformata Fouriera,
+ale znacznie szybciej.
+
+Drugim etapem algorytmu, jest reprezentacja widma w skali melowej. 
+Wzorując się na ludzkim narządzie słuchu, 
+który postrzega zmianę częstotliwości dźwięku nieliniowo, stosuje się skalę melową.
+Skala melowa została zdefiniowana w oparciu o subiektywne odczucia wysokości dźwięku.
+Za dźwięk podstawowy przyjmuje się, że dźwięk o częstotliwości 1000 Hz i głośności 40 dB wyraża się wartością 1000 melów.
+Następnie na podstawie pomiarów i ocen został stworzony wzór
+\begin{figure}[h]
+	\begin{equation}
+		m=2595\log _{10}\left(1+{\frac {f}{700}}\right)
+	\end{equation}
+	\caption{Wzór skali melowej}
+\end{figure}
+Przeniesienie widma do skali melowej wykonuje się przez aplikację szeregu trójkątnych filtrów środkowoprzepustowych. 
+Wprowadza to pewną różnicę, względem psychoakustycznego postrzegania dźwięku, gdzie skala dźwięku jest ciągła.
+Filtry środkowoprzepustowe wprowadzają pewną dyskretyzację możliwych wartości.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{melfilterbank}
+	\caption{Środkowoprzepustowe filtry melowe}
+	\label{rys:mfcc:melfilterbank}
+\end{figure}
+%https://srohrer32.github.io/eecs351project/
+
+Kolejnym etapem jest obliczenie logarytmu widma w skali melowej.
+Odpowiada to interpretacji głośności przez ludzkie ucho,
+które odczuwa zmianę głośności w skali logarytmicznej.
+\begin{figure}[h]
+	\begin{equation}
+		M'_k=log(M_k)\qquad k=0, \dots, N
+		\label{eq:mfcc:log}
+	\end{equation}
+	\caption{Logarytm widma w skali melowej}
+\end{figure}
+Dla każdej $k$-tej wartości sygnału $M$ jest liczony logarytm, gdzie $N$ jest liczbą wartości w skali melowej \ref{eq:mfcc:log}.
+
+Ostatnia faza to obliczenie współczynników cepstralnych.
+Daje ona odseparowanie sygnału od czynników zależnych od mówcy.
+Sygnał źródłowy - mowa był splotem informacji,
+które przekazywał oraz sygnału zależnych od mówcy wynikających z budowy jego narządu mowy, oraz sposobu mówienia.
+Cechy sygnału zależne od mówcy nie są istotne z punktu widzenia interpretacji przekazu i treści wypowiedzi.
+Odfiltrowanie tych cech, pozwoli na analizę samej treści przekazu.
+Cepstrum jest definiowane jako widmo widma.
+Okresowy sygnał czasowy spełniający warunki Dirichleta może zostać rozwinięty w szereg Fouriera.
+Rozwinięcie sygnału czasowego w trygonometryczny szereg Fouriera pozwala na analizę częstotliwości występujących w sygnale.
+Odrzucając informację jak szczególnie zmieniał się sygnał, otrzymujemy informację z jakich częstotliwości sygnał się składa.
+Powtarzając procedurę przenosimy widmo z dziedziny częstotliwości, do $quefrency$, opisującej zależności pomiędzy częstotliwościami,
+pomijając informację wartości tych częstotliwości. 
+W rezultacie uniezależniamy się od częstotliwości podstawowej i formant, które są ściśle zależne od mówcy,
+a otrzymujemy informację w jaki sposób te częstotliwości się zmieniały, niezależnie od ich wartości.
+Z definicji przeniesienie 
+
+\TODO zrozumieć
+
 \subsubsection{Energia}
+Energia sygnału jest sumą kwadratów próbek w ramce.
+\begin{figure}[h]
+	\begin{equation}
+		E_{s}=\sum _{n=-\infty }^{\infty }{|x(n)|^{2}}
+		\label{eq:energy}
+	\end{equation}
+	\caption{Energia sygnału}
+\end{figure}
+Energia sygnału jest wprost proporcjonalna do głośności wypowiedzi.
 \subsubsection{Liczba przejść przez zero}
+Liczba przejść przez zero \ang{zero crossing rate} znajduje zastosowanie w systemach detekcji mowy.
+Pozwala ona stwierdzić, czy w danej ramce występuje mowa.
+Jest też zależna od częstotliwości tonu. 
+Liczbę przejść przez zero wyraża się w liczbie miejsc, gdzie sąsiednie próbki sygnału zmieniły wartość z dodatniej na ujemną lub z ujemnej na dodatnią.
+\begin{figure}[h]
+	\begin{equation}
+		Z = \sum_{n=2}^{N}s(x_n \cdot x_{n-1})\text{, gdzie } s(x) = 
+		\begin{cases} 
+			0 \text{, dla } x \geq 0 \\
+			1 \text{, dla } x < 0
+		\end{cases}
+		\label{eq:zcr}
+	\end{equation}
+	\caption{Liczba przejść przez zero}
+\end{figure}
+Jeżeli liczba przejść przez zero jest duża, można założyć, że dana ramka nie zawiera mowy.
+Ramki zawierające mowę mają wysoką liczbę przejść przez zero. \cite{Walters-Williams2010}
 \subsubsection{Energia entropii}
-\NewPage
+Entropia energii mówi o sumie prawdopodobieństw wystąpienia danej wartości próbki $p_k$ w sygnale.
+\begin{figure}[h]
+	\begin{equation}
+		Ee_{s}=-\sum _{k=1}^{N}p_k log(p_k)
+		\label{eq:entropy_energy}
+	\end{equation}
+	\caption{Energia entropii}
+\end{figure}\cite{Majstorovic2011}
+Jeżeli w ramce występuje wiele skrajnych wartości, entropia sygnału będzie duża. 
+Pozwala to stwierdzić zmienność i rozbieżność wartości sygnału w ramce.
 \subsubsection{SSC}
-\NewPage
-\NewPage
+Centroidy Podpasm Widma \ang{Spectral Subband Centroids} opisuje cechy widma podobne do formant.
+Analizując widmo sygnału dzieli je na podpasma, następnie znajdując środek ciężkości w każdym podpaśmie.
+\begin{figure}[h]
+	\begin{equation}
+		C_m=\frac
+		{\int_{l_m}^{h_m} f w_m(f) P^\gamma(f)df}
+		{\int_{l_m}^{h_m} w_m(f) P^\gamma(f)df}
+		\label{eq:ssc}
+	\end{equation}
+	\caption{SSC}
+\end{figure}
+Powyższa formułą definiuje centroidy, gdzie dzieląc widmo na $m$ pasm:
+\begin{description}
+	\item[$C_m$] $m$-ty centroid
+	\item[$l_m$] dolna granica pasma
+	\item[$h_m$] górna granica pasma
+	\item[$w_m$] funkcja filtru
+	\item[$P(f)$] moc widma
+	\item[$\gamma$] współczynnik mocy widma
+\end{description}
+SSC pozwala na znaczną parametryzację, przez określenie szerokości pasma, np połowa częstotliwości próbkowania sygnału.\cite{Majstorovic2011}
+Kolejną decyzją jest określenie kształtu filtra środkowoprzepustowego, definiującego pasmo, 
+jak i liczba, oraz wzajemne położenie pasm.
 \subsection{Opis statystyczny}
+Ostatnim etapem ekstrakcji cech, jest określenie ich parametrów statystycznych.
+Dla każdej ramki sygnału zostały obliczone cechy bazowe, opisane w poprzedniej sekcji.
+Zostaną one zbadane statystycznie tworząc właściwe cechy, na podstawie których zostanie dokonana klasyfikacja.
+\begin{enumerate}
+	\item minimum 
+	\item maksimum 
+	\item średnia 
+	\item wariancja 
+	\item skośność
+	\item kurioza
+\end{description}
 \TODO{Opisać  'minmax', 'mean', 'variance', 'skewness', 'kurtosis'}
 \NewPage
 \NewPage
