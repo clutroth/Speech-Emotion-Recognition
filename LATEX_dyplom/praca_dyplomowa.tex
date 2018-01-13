@@ -388,14 +388,66 @@ Wyrażona jest wzorem
 \end{equation}
 gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
 \section{Selekcja cech}
+Głównym zadaniem selekcji cech jest redukcja wymiarowości obserwacji.
+W praktyce, wiele wymiarów jest ze sobą silnie skorelowanych.
+Rozważanie obserwacji w skorelowanych wymiarach obniża skuteczność klasyfikacji.
+Niektóre klasyfikatory interpretują cechę reprezentowaną przez wiele skorelowanych wymiarów, jako istotniejszą.
+Celem selekcji cech, jest wybór takiego zestawu cech, który gwarantuje największą zmienność eliminując wymiary silnie skorelowane, 
+lub transformując przestrzeń w sposób gwarantujący największą zmienność w wymiarach.
 \subsection{SFS}
 \NewPage
 \NewPage
 \NewPage
-\subsection{PCA}
-\NewPage
-\NewPage
-\NewPage
+\subsection{Analiza Głównych Składowych}
+Analiza Głównych Składowych - \ang{Principal Component Analysis} służy redukcji liczby wymiarów przestrzeni,
+w których rozpatrywane są obserwacje.
+Zmierza do wyboru cech exponujących największą zmienność w zbiorze obserwacji.
+Główne składowe zostają uporządkowane w kolejności od największej zmienności do najmniejszej.
+Definiowane są jako wektory własne macierzy kowariancji.
+
+\subsubsection{Standaryzacja}
+Do poprawnego działania PCA wymaga ustandaryzowanych danych wejściowych.
+Ponieważ PCA ma za zadanie stworzyć podprzestrzeń maksymalizującą wariancję,
+należy dane ustandaryzować, aby oryginalna wartość danych nie 
+przekłamywała jej różnorodności.
+Standaryzacja jest pierwszym etapem PCA.
+\subsubsection{Obliczenie wektorów i wartości własnych macierzy kowariancji}
+Wartości i wektory własne macierzy kowariancji są podstawą PCA.
+Wektory własne określają kierunki nowej przestrzeni cech, a wartości własne określają jej wielkość.
+W klasycznym ujęciu PCA polega na rozkładzie na wektory i wartości własne macierzy kowariancji o wymiarach $d \times d$,
+gdzie każdy element przedstawia kowariancję pomiędzy dwiema cechami. 
+Kowariancję pomiędzy parą cech definiuje się w następujący sposób:
+\begin{equation}
+	\sigma_{jk}=\frac{1}{n - 1}\sum_{i=1}{n}(x_{ij}-\bar x_j)(x_{ik} - \bar x_k)
+\end{equation}
+W zapisie macierzowym wzór na macierz kowariancji przedstawia się:
+\begin{equation}
+	\Sigma=\frac{1}{n - 1}\left((X-\bar x)^T(X - \bar x)\right)
+\end{equation}
+gdzie $\bar x$ jest wartością średnią cechy.
+Kolejnym krokiem jest znalezienie wartości własnych macierzy kowariancji i odpowiadających im wektorów własnych.
+\subsubsection{sortowanie par wartości i wektorów własnych}
+PCA najczęściej jest wykorzystywana do redukcji wymiarowości, 
+czyli znalezienia podprzestrzeni, gdzie wektory własne są względem siebie prostopadłe 
+i określają osie nowej podprzestrzeni.
+W celu określenia, które wektory własne nie wprowadzają istotnej informacji do analizy obserwacji w przestrzeni, bada się odpowiadające im wartości własne.
+Wektory własne sparowane z wartościami własnymi o najmniejszych wartościach, 
+niosą najmniej informacji o zbiorze. 
+Mogą one zostać pominięte w dalszej analizie.
+Pary wektorów i wartości własnych są sortowane względem wartości własnych,
+te najmniej istotne zostają odrzucone.
+W celu określenia, jaka najmniejsza liczba wymiarów pozwoli nam zróżnicować przestrzeń,
+wykorzystuje się wyjaśnioną wariancję.
+Wybiera się te wektory własne, które w sumie dają wariancję wystarczająco zbliżoną do wariancji wynikającej ze wszystkich wektorów własnych.
+
+\subsubsection{Macierz projekcji}
+Macierz projekcji służy przeniesieniu obserwacji z przestrzeni oryginalnej $d$ wymiarowej,
+do przestrzeni $k$-wymiarowej, nie tracąc znaczących informacji.
+Do zbudowania macierzy projekcji $W$ posłuży $k$ wektorów własnych posiadających największe własności własne.
+\begin{equation}
+	W = [\vec e_1 \vec e_2 \dots \vec e_k]
+\end{equation}
+Ostatnim etapem będzie przeniesienie obserwacji z przestrzeni oryginalnej $X$ do przestrzeni wynikowej $Y = X \times W$.
 \section{Klasyfikacja}
 \subsection{Klasyfikator Najbliższych Sąsiadów}
 Klasyfikator najbliższych sąsiadów pozwala szybko otrzymać rezultaty. 
