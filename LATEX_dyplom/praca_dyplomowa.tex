@@ -315,7 +315,7 @@ Liczbę przejść przez zero wyraża się w liczbie miejsc, gdzie sąsiednie pr�
 	\caption{Liczba przejść przez zero}
 \end{figure}
 Jeżeli liczba przejść przez zero jest duża, można założyć, że dana ramka nie zawiera mowy.
-Ramki zawierające mowę mają wysoką liczbę przejść przez zero. \cite{Walters-Williams2010}
+Ramki zawierające mowę mają wysoką liczbę przejść przez zero \cite{Walters-Williams2010}.
 \subsubsection{Energia entropii}
 Entropia energii mówi o sumie prawdopodobieństw wystąpienia danej wartości próbki $p_k$ w sygnale.
 \begin{figure}[h]
@@ -348,7 +348,7 @@ Powyższa formułą definiuje centroidy, gdzie dzieląc widmo na $m$ pasm:
 	\item[$P(f)$] moc widma
 	\item[$\gamma$] współczynnik mocy widma
 \end{description}
-SSC pozwala na znaczną parametryzację, przez określenie szerokości pasma, np połowa częstotliwości próbkowania sygnału.\cite{Majstorovic2011}
+SSC pozwala na znaczną parametryzację, przez określenie szerokości pasma, np połowa częstotliwości próbkowania sygnału \cite{Majstorovic2011}.
 Kolejną decyzją jest określenie kształtu filtra środkowoprzepustowego, definiującego pasmo, 
 jak i liczba, oraz wzajemne położenie pasm.
 \subsection{Opis statystyczny}
@@ -446,24 +446,23 @@ Do zbudowania macierzy projekcji $W$ posłuży $k$ wektorów własnych posiadaj�
 Ostatnim etapem będzie przeniesienie obserwacji z przestrzeni oryginalnej $X$ do przestrzeni wynikowej $Y = X \times W$.
 \section{Klasyfikacja}
 \subsection{Klasyfikator Najbliższych Sąsiadów}
-Klasyfikator najbliższych sąsiadów pozwala szybko otrzymać rezultaty. 
-Jest prosty w działaniu i implementacji.
-Otrzymane rezultaty mogą nie być zadowalające w bardziej złożonych zagadnieniach.
+Klasyfikator najbliższych sąsiadów jest prosty w działaniu i implementacji.
+Pozwala szybko otrzymać rezultaty, jednak mogą one nie być zadowalające w bardziej złożonych zagadnieniach.
 Zasada działania w uproszczeniu sprowadza się do reprezentacji obserwacji za pomocą wektorów cech.
-Obliczane są odległości pomiędzy wektorami. \cite{Du2013}
-Klasa jest przypisywana na podstawie klasy najbliższej, sąsiedniej obserwacji.
+Obliczane są odległości pomiędzy wektorami \cite{Du2013}.
+Klasa nowej obserwacji ustalana jest na podstawie klas najbliższych znanych obserwacji ze zbioru uczącego.
 Klasyfikator jest podatny na ilość cech branych pod uwagę w czasie klasyfikacji.
 Redukcja liczby parametrów, uwzględniająca usunięcie cech silnie skorelowanych i słabo różnicujących znacząco podnosi wydajność i skuteczność klasyfikatora.
 
 Metoda klasyfikuje obserwacje biorąc pod uwagę najbliższą obserwację ze zbioru uczącego.
 Obserwacje ze zbioru uczącego rozmieszczone są w wielowymiarowej przestrzeni cech.
 Przestrzeń ta jest podzielona na strefy odpowiadające klasom.
-Obserwacja znajdująca się w danej strefie zostaje przypisana do klasy do której ta strefa należy.
+Obserwacja znajdująca się w danej strefie zostaje przypisana do klasy, do której ta strefa należy.
 Podział na strefy odbywa się w czasie fazy uczenia klasyfikatora.
 Kształt i klasa strefy zależy od odległości obserwacji ze zbioru uczącego.
-Punkt w przestrzeni przypisany zostaje do klasy, jeżeli w jego najbliższym sąsiedztwie zostanie znalezionych $k$ sąsiadów należących do tej klasy.
-Klasyfikatorowi należy zdefiniować liczbę $k$ - liczbę wymaganych sąsiadów klasy, pozwalającą określić klasę badanej obserwacji, 
-oraz funkcję liczącą dystans pomiędzy dwoma wektorami. Najczęściej jest to norma euklidesowa. \cite{Martin2011}
+Punkt w przestrzeni przypisany zostaje do danej klasy, jeżeli w jego najbliższym sąsiedztwie zostanie znalezionych $k$ sąsiadów należących do tej klasy.
+Należy zdefiniować liczbę $k$ - liczbę wymaganych sąsiadów, pozwalającą określić klasę badanej obserwacji, 
+oraz funkcję liczącą dystans pomiędzy dwoma wektorami. Najczęściej jest to norma euklidesowa \cite{Martin2011}.
 
 \begin{algorithm}
 	\caption{Klasyfikator Najbliższych sąsiadów}
@@ -483,24 +482,24 @@ oraz funkcję liczącą dystans pomiędzy dwoma wektorami. Najczęściej jest to
 		\Until{$\neg selectedClass$}
 		\EndProcedure
 	\end{algorithmic}
+	\label{knn:alg}
 \end{algorithm}
 
 Dane wejściowe muszą być znormalizowane. 
-W przeciwnym razie cechy o bezwzględnie wyższych wartościach będą miały większy wpływ na klasyfikację,
-bez rozróżnienia ich zdolności różnicowania zbioru.
-Algorytm jest wrażliwy na liczbę cech - wymiarów przestrzeni w której umieszczana jest obserwacja.
-Każda cecha wprowadza wymiar równoważny z pozostałymi wymiarami. 
-Nie jest brana pod uwagę korelacja cech, ani ich zdolność różnicowania obserwacji.
-Dla klasyfikowanej obserwacji obliczany jest dystans pomiędzy nią,
-a każdą obserwacją ze zbiory testowego, uwzględniająca wszystkie wymiary.
+W przeciwnym razie cechy o bezwzględnie wyższych wartościach będą miały większy wpływ na klasyfikację.
+Algorytm \ref{knn:alg} jest wrażliwy na liczbę cech - wymiarów przestrzeni, w której umieszczana jest obserwacja.
+Każda cecha odpowiada jednemu wymiarowi w przestrzeni.
+Nie jest brana pod uwagę korelacja cech, ani zdolność cech do różnicowania obserwacji.
+Dla klasyfikowanej obserwacji obliczany jest dystans pomiędzy tą obserwacją,
+a każdą obserwacją ze zbioru testowego, uwzględniająca wszystkie wymiary.
 Prowadzi to do znacznego wzrostu złożoności obliczeniowej klasyfikacji, dla większej liczby cech, czy zbiorów danych uczących.
 
 Istnieją modyfikacje klasyfikatora najbliższych sąsiadów redukujące wymienione wady. 
 Opisana została klasyczna wersja algorytmu.
 
-\subsection{Maszyny Wektorów Wspierających}
+\subsection{Maszyna Wektorów Wspierających}
 
-Maszyny Wektorów Wspierających \ang{Support Vector Machine} wykorzystywany jest do klasyfikacji obserwacji w uczeniu maszynowym.
+Maszyna Wektorów Wspierających \ang{Support Vector Machine} wykorzystywana jest do klasyfikacji obserwacji w uczeniu maszynowym.
 Należy do grupy modeli uczonych w sposób nadzorowany. 
 Uczenie odbywa się przez zadanie zbioru danych testowych, 
 każda obserwacja jest oznaczona jako należąca do jednej z dwóch klas.
@@ -512,18 +511,15 @@ Każda obserwacja zostaje umieszczona w $n$-wymiarowej przestrzeni cech i reprez
 zaczynający się w początku układu współrzędnych, a kończący się w punkcie określającym obserwację. 
 Hiperpłaszczyzna \ang{hyperplane} jest $n-1$ wymiarowa i zgodnie z definicją rozdziela przestrzeń na dwie części.
 Poszukiwana hiperpłaszczyzna powinna być hiperpłaszczyzną optymalną \ang{optimal hyperplane}, 
-to czyli znajdować się w jak największej odległości od najbliższych obserwacji należących do różnych klas.
-\cite{Cortes1995}
+to znaczy powinna znajdować się w jak największej odległości od najbliższych obserwacji należących do różnych klas \cite{Cortes1995}.
 
-Biorąc przestrzeń dwuwymiarową, możemy ją rozmieścić na płaszczyźnie. 
-Na płaszczyźnie tej kładziemy dowolną prostą. 
-Prosta ta dzieli płaszczyznę na dwie części.
-Prosta jest więc hiperpłaszczyzną przestrzeni dwuwymiarowej.
+Przestrzeń dwuwymiarową, możemy rozmieścić na płaszczyźnie. 
+Prosta dzieli tę płaszczyznę na dwie części.
 Analogicznie sytuacja przestawia się w przestrzeni trójwymiarowej.
-Może ją przeciąć dowolna płaszczyzna.
+Może ją przeciąć dowolną płaszczyzną.
 Płaszczyzna dzieli przestrzeń trójwymiarową na dwie części, jest więc jej hiperpłaszczyzną.
 
-Sposób tworzenia klasyfikatora SVM przedstawia się następująco.
+Sposób tworzenia klasyfikatora SVM jest się następujący.
 Obserwacje $x_i$ rozmieszczone są w $n$-wymiarowej przestrzeni cech, gdzie $x_i \in R^n$.
 Klasy $y_i$ są oznaczone jako $-1$ i $+1$, gdzie $y_i \in \{-1, +1\}$, co można zapisać jako:
 \begin{equation}
@@ -535,8 +531,7 @@ Obserwacje są liniowo separowalne, jeżeli istnieje wektor $\bm{w}$ i taki skal
 	\bm{w} \cdot \bm{x_i} + b \geq 1 \textrm{ jeśli } y_i = 1\\
 	\bm{w} \cdot \bm{x_i} + b \leq 1 \textrm{ jeśli } y_i = -1,
 \end{gather}
-są prawdziwe dla wszystkich obserwacji w zbiorze.
-\cite{Cortes1995}
+są prawdziwe dla wszystkich obserwacji w zbiorze \cite{Cortes1995}.
 Powyższy układ nierówności można zapisać w postaci:
 \begin{equation}
 	y_i(\bm{w} \cdot \bm{x_i} + b) \geq 1
@@ -577,7 +572,7 @@ Obliczamy pierwszą wartość wektora $\vec{w}$
 \begin{equation}\label{eq:svm:hyperplane}
 	{\vec{w}}=\sum_{i=1}^K \alpha_i y_i {\vec{x}}_i
 \end{equation}
-gdzie $\alpha_i>0$. \cite{Mittal2016}
+gdzie $\alpha_i>0$ \cite{Mittal2016}.
 Podczas każdego cyklu uczącego, wektor $\vec{w}$ może zostać zmodyfikowany przez obserwację, 
 zgodnie z regułą:
 \begin{equation}
@@ -603,7 +598,7 @@ Ostatecznie płaszczyznę \ref{eq:svm:hyperplane} określamy dobierając wartoś
 Rzeczywiste problemy rozmieszczone w przestrzeni wielowymiarowej nie są separowalne liniowo. 
 Rozwiązanie problemu nieseparowalnego liniowo sprowadza się do znalezienia hiperpłaszczyzny Miękkiego Marginesu \ang{Soft Margin}, 
 która rozdziela obserwacje dwóch klas zawierającą jak najmniejszą liczbę błędnych klasyfikacji.
-W takim przypadku błędne klasyfikacje są kosztem nie do uniknięcia. \cite{Dellepiane2015}
+W takim przypadku błędne klasyfikacje są nie do uniknięcia \cite{Dellepiane2015}.
 Poszukiwanie rozwiązania polega na wyznaczeniu hiperpłaszczyzny rozdzielającej przestrzeń 
 minimalizując błędy klasyfikacji na zbiorze uczącym i nieznanym zbiorze testowym.
 
@@ -611,8 +606,8 @@ Przyjmijmy zbiór uczący $D$, który nie jest separowalny liniowo.
 Nie istnieje hiperpłaszczyzna rozdzielająca obserwacje dwóch klas.
 Zostanie więc stworzony margines błędu, dopuszczający istnienie błędnych klasyfikacji w swoim obrębie.
 Występowanie błędnych klasyfikacji jest tolerowane, ale wystąpienia błędnych klasyfikacji są minimalizowane.
-Błędną klasyfikację wyraża się niepewnością $\xi_i$ \ang{slack variable}. 
-Wartość niepewności $\xi_i$ jest wprost proporcjonalna do odległości obserwacji $\vec{x_i}$
+Błędną klasyfikację wyraża się zmienną pomocniczą $\xi_i$ \ang{slack variable}. 
+Wartość zmiennej pomocniczej $\xi_i$ jest wprost proporcjonalna do odległości obserwacji $\vec{x_i}$
 Formalnie problem optymalizacji SVM można zapisać w postaci:
 
 \begin{equation}
@@ -631,8 +626,8 @@ Parametr $k$ określa normę marginesu.
 Margines pierwszej normy jest mniej wrażliwy na obserwacje leżące poza nim,
 dzięki temu margines pierwszej normy jest lepszy do klasyfikacji danych mniej uporządkowanych.
 
-\subsubsection{Funkcje jądrowe}
-Funkcja jądrowa \ang{kernel method} 
+\subsubsection{Funkcje jądra}
+Funkcja jądrwa \ang{kernel method} 
 przyporządkowuje każdej reprezentacji obserwacji w przestrzeni,
 reprezentację w innej przestrzeni o większej liczbie wymiarów.
 Zabieg zwiększenia liczby wymiarów ma na celu ułatwienie 
@@ -641,48 +636,36 @@ reprezentacji w przestrzeni pierwotnej.
 
 Przykładem jest SVM, poszukujący hiperpłaszczyzny.
 Jeżeli dane nie są seprowalne liniowo,
-ale są separowalne nieliniowo to stosując sztuczkę jądrową \ang{kernel trick} 
-przeniesiemy zbiór obserwacji do przestrzeni w której będzie on separowalny liniowo.
-\cite{Patle2013}
+ale są separowalne nieliniowo to stosując sztuczkę jądra \ang{kernel trick} 
+przeniesiemy zbiór obserwacji do przestrzeni w której będzie on separowalny liniowo \cite{Patle2013}.
 
 \begin{equation}
 	\langle \vec{x_1} \cdot \vec{x_2} \rangle \gets K(\vec{x_1}, \vec{x_2}) = \langle \Phi(\vec{x_1}) \cdot \Phi(\vec{x_2}) \rangle
 \end{equation}
 
-Jądro liniowe \ref{eq:svm:kern:lin} jest najprostszą funkcją jądrową. 
+Jądro liniowe \ref{eq:svm:kern:lin} jest najprostszą funkcją jądra. 
 sprowadza się do iloczyny wektorowego i dodania stałej $c$.
-Liniowa funkcja jądrowa w niektórych przypadkach nie wprowadza zmian zmieniających rezultat działania algorytmu.
-\begin{figure}[hc]
-	\begin{equation}
-		\label{eq:svm:kern:lin}
-		K(x, x_i) = x \cdot x ^ T + c
-	\end{equation}
-	\caption{Liniowa funkcja jądrowa}
-\end{figure}
+Liniowa funkcja jądra w niektórych przypadkach nie wprowadza zmian zmieniających rezultat działania algorytmu.
+\begin{equation}
+	\label{eq:svm:kern:lin}
+	K(x, x_i) = x \cdot x ^ T + c
+\end{equation}
 
-Jądro wielomianowe \ref{eq:svm:kern:poly} znajduje zastosowanie przy problemach,
-gdzie dane są znormalizowane. 
-Wielomianową funkcję jądrową określają współczynnik $\alpha$, stałą $c$ i stopień wielomiany $d$.
-\begin{figure}[hc]
-	\begin{equation}
-		\label{eq:svm:kern:poly}
-		K(x, x_i) = (\alpha x^T x_i + c)^d 
-	\end{equation}
-	\caption{Wielomianowa funkcja jądrowa}
-\end{figure}
+Wielomianową funkcję jądra określają współczynnik $\alpha$, stałą $c$ i stopień wielomiany $d$.
+\begin{equation}
+	\label{eq:svm:kern:poly}
+	K(x, x_i) = (\alpha x^T x_i + c)^d 
+\end{equation}
 
 Jądro sigmoidalne \ref{eq:svm:kern:sig} pochodzi z dziedziny sieci neuronowych,
 gdzie funkcjonuje sigmoidalna funkcja aktywacji neuronu. 
-Model SVM z sigmoidalną funkcją jądrową jest równoważny dwuwarstwowej perceptonowej sieci neuronowej.
+Model SVM z sigmoidalną funkcją jądra jest równoważny dwuwarstwowej perceptonowej sieci neuronowej.
 Posiada dwa parametry: współczynnik $\alpha$ i stałą $c$, gdzie zazwyczaj $c$ przyjmuje wartość $1/N$,
 dla $N$-wymiarowej przestrzeni.
-\begin{figure}[hc]
-	\begin{equation}
-		\label{eq:svm:kern:sig}
-		K(x_i, x_j) = tanh( \alpha x_i  x_j + c)
-	\end{equation}
-	\caption{Sigmoidalna funkcja jądrowa}
-\end{figure}
+\begin{equation}
+	\label{eq:svm:kern:sig}
+	K(x_i, x_j) = tanh( \alpha x_i  x_j + c)
+\end{equation}
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
 \subsection{MLP}
 \subsubsection{Sztuczne sieci neuronowe}
@@ -700,23 +683,20 @@ Odbierają one sygnały od innych neuronów, do których są podłączone.
 Na podstawie wejścia decydują, czy podać sygnał na wejście.
 Pojedynczy neuron nie rozwiązuje złożonych problemów.
 Wiele neuronów połączonych w sieć jest w stanie wykonać skomplikowane operacje matematyczne.
-Pojedynczy neuron składa się z wejścia $\vec{x}$, wyjścia $y$, wektora wag $\vec{w}$ i skoku $b$.
+Pojedynczy neuron składa się z wejścia $\vec{x}$, wyjścia $y$, wektora wag $\vec{w}$ i przesunięcia $b$ \ang{bias}.
 Decyzję o podaniu sygnału na wyjście podejmuje funkcja aktywacji $g(\vec{x} \cdot \vec{w} + b)$.
-Wyjściem neuronu jest $0$, $1$, lub liczba zbliżona do którejś z tych wartości.
+Wyjściem neuronu są liczny z przedziału $(0, 1)$.
 Na potrzeby tej sekcji przyjmijmy progową funkcję aktywacji $g(x)$ \ref{eq:mlp:step}.
-\begin{figure}[hc]
-	\begin{equation}
-		\label{eq:mlp:step}
-	g(x)={\begin{cases}0{\text{, dla }}x<0\\1{\text{, dla }}x\geq 0\end{cases}}
-	\end{equation}
-	\caption{Progowa funkcja aktywacji}
-\end{figure}
+\begin{equation}
+	\label{eq:mlp:step}
+g(x)={\begin{cases}0{\text{, dla }}x<0\\1{\text{, dla }}x\geq 0\end{cases}}
+\end{equation}
 Neutron przyjmuje na wejście wektor $\vec{x}$.
 Wektor wejściowy zostaje pomnożony przez wektor wag $\vec{w}$ i dodany do progu aktywacji $b$.
 Rezultat jest argumentem funkcji aktywacji  $g(\vec{x} \cdot \vec{w} + b)$.
 Wartość funkcji aktywacji zostaje podana na wyjście. \ref{rys:mlp:neuron}
-Możliwości pojedynczego neuronu są ograniczone. \cite{Jeon2018}
-Posiada binarne wyjście $0$ lub $1$, 
+Możliwości pojedynczego neuronu są ograniczone \cite{Jeon2018}.
+Posiada jedynie wyjście binarne zwracające $0$ lub $1$, 
 Zadaniem neuronu jest określenie, po której stronie hiperpłaszczyzny, 
 określonej przez wektor $\vec w$ i skalar $b$.
 Funkcja aktywacji normalizuje odpowiedź.
@@ -780,15 +760,15 @@ Schemat budowy sieci neuronowej można przedstawić za pomocą grafu skierowaneg
 	\caption{Sieć neuronowa jako graf}
 	\label{rys:mlp:graf}
 \end{figure}
-Węzły grafu oznaczają neurony, a krawędzie wagi wejść neuronów do których prowadzą.
+Węzły grafu oznaczają neurony, a krawędzie wagi wejść neuronów, do których prowadzą.
 Wyjścia jednych neuronów są wejściami dla drugich.
 Wyróżniamy dwa typy sieci neuronowych.
 Sieci neuronowe jednokierunkowe, w reprezentacji grafowej tworzą acykliczny graf skierowany.
 Dzięki wyeliminowaniu cykli z sieci jej reprezentacja, uczenie i obliczenia zostają w znacznej mierze uproszczone. 
-Sieci neuronowe w których występują cykle, nazywane są sieciami rekurencyjnymi.
+Sieci neuronowe, w których występują cykle, nazywane są sieciami rekurencyjnymi.
 Węzły $x_1$ i $x_2$ są wejściami sieci neuronowej.
 Węzły $s_{1..5}$, $y_1$ i $y_2$ są neuronami z funkcją aktywacji.
-Wartości wyjściowe z węzłów $y_1$ i $y_2$ są wyjściami całej sieci neuronowej.\cite{Gurgen2017}
+Wartości wyjściowe z węzłów $y_1$ i $y_2$ są wyjściami całej sieci neuronowej \cite{Gurgen2017}.
 Przykładowo wejście $x_1$ zostaje pomnożone przez wagę $w_{x_1s_1}$ i staje się pierwszym wejściem dla neuronu $s_1$, itd.
 
 Stosuje się logiczny podział węzłów na warstwy \ref{rys:mlp:warstwy}.
@@ -824,7 +804,7 @@ Przykładem funkcji, której nie może zamodelować pojedynczy percepton jest XO
 \end{figure}
 Wykres \ref{wyk:mlp:xor} obrazuje funkcję $XOR$, oraz przykładowe hiperpłaszczyzny.
 Nie istnieje hiperpłaszczyzna rozdzielająca argumenty, dla których wartość $XOR$ przyjmuje $1$,
-od argumentów dla których $XOR$ przyjmuje wartość $0$.\cite{Labib2010}
+od argumentów, dla których $XOR$ przyjmuje wartość $0$ \cite{Labib2010}.
 \begin{figure}[h]
 	\label{wyk:mlp:sigm}
 	\centering
