@@ -8,7 +8,7 @@ from numpy.ma import mean
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import SelectKBest, RFE
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
 from sklearn.model_selection import train_test_split
@@ -16,7 +16,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import scale
-from sklearn.svm import SVC
+from sklearn.svm import SVC, SVR
 from sklearn.tree import DecisionTreeClassifier
 
 import agh
@@ -40,12 +40,13 @@ classificators = {
     # 'qda': QuadraticDiscriminantAnalysis()
 }
 selectors = {
-    'kbest': SelectKBest(k=10),
-    'lda': LinearDiscriminantAnalysis(),
+    # 'kbest': SelectKBest(k=10),
+    'rfe': RFE( SVR(kernel="linear"), 5, step=1),
+    # 'lda': LinearDiscriminantAnalysis(),
     'pca': PCA()
 }
 
-pairs = combinations(range(7), 2)
+pairs = combinations(range(7), 7)
 
 
 def clasificationStats(rows):
