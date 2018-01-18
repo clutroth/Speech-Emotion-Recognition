@@ -49,7 +49,7 @@ selectors = {
 pairs = combinations(range(7), 7)
 
 
-def clasificationStats(rows):
+def clasification_stats(rows):
     bySelectorAndClas = groupby(rows, lambda x: (x[0], x[1]))
     for ((classifier, selector), row) in bySelectorAndClas:
         print("for %s and %s: %f" % (classifier, selector, numpy.mean(map(lambda x: x[2], row))))
@@ -72,7 +72,7 @@ for [(c_name, classifier), (s_name, selector), emotions] in all_product:
     acc = float((y_test == y_pred).sum()) / y_pred.shape[0]
     rows.append([c_name, s_name, 100.0 * acc] + list(emotions))
 
-clasificationStats(rows)
+clasification_stats(rows)
 with open("corss_clasification.csv", "wb") as file:
     writer = csv.writer(file)
     writer.writerow(['klasyfikator', 'selektor', 'emocja1', 'emocja2', 'celność'])

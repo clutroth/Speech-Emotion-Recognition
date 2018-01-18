@@ -152,7 +152,7 @@ Jak przetworzyć dane, żeby otrzymać lepsze wyniki?
 Jakie przetwarzanie jest wymagane?
 \NewPage
 \chapter{Aplikacja klasyfikująca emocje}
-\section{Opis bazy danych}
+\section{Opis bazy danych}\label{sec:opis_bazy_danych}
 \TODO{sposób katalogowania}
 W pracy wykorzystano bazę danych emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
 Nagrania zawierają pięć emocji podstawowych: radość, smutek, złość, strach, zdziwienie.
@@ -216,7 +216,7 @@ Jedną z najpopularniejszych cech wykorzystywanych w systemach automatycznego ro
 jest MFCC \ang{Mel-Frequency Cepstral Coefficients}.
 Biorąc pod uwagę warunki powstawania mowy, cech indywidualnych mówcy, sposobu działania narządów mowy, percepcji mowy przez człowieka,
 daje wektor współczynników reprezentujących mowę z założenia niezależny od mówcy. 
-Przekazuje informacje o analizowanym fragmencie mowy, pomijając cechy zależne od mówiącego, takie jak częstotliwość podstawowa i jej harmoniczne.
+Przekazuje informacje o analizowanym fragmencie mowy, pomijając cechy zależne od mówiącego, takie jak częstotliwość podstawowa i jej harmoniczne \cite{Hossan2013}.
 Współczynniki MFC reprezentują dynamiczną naturę mowy, pokazując jej zmianę energii i częstotliwości w czasie.
 
 Algorytm obliczający MFCC przyjmuje na wejście sygnał mowy o długości kilkudziesięciu ms w dziedzinie czasu,
@@ -233,7 +233,7 @@ Pozwala ona przenieść sygnał z dziedziny czasu, do dziedziny częstotliwości
 Operując na sygnale cyfrowym wykorzystana dyskretna transformata Fouriera,
 bardziej precyzyjnie w wariancie szybkiej transformaty Fouriera. 
 \begin{equation}
-	X_{k}=\sum _{n=0}^{N-1}x_{n}e^{-i2\pi kn/N}\qquad k=0,\dots ,N-1
+	X_{k}=\sum _{n=0}^{N-1}x_{n}e^{\frac{-i2\pi kn}{N}}\qquad k=0,\dots ,N-1
 \end{equation}
 Szybka transformata Fouriera zwraca podobny wynik, jak dyskretna transformata Fouriera,
 ale znacznie szybciej.
@@ -242,7 +242,7 @@ Drugim etapem algorytmu, jest reprezentacja widma w skali melowej.
 Wzorując się na ludzkim narządzie słuchu, 
 który postrzega zmianę częstotliwości dźwięku nieliniowo, stosuje się skalę melową.
 Skala melowa została zdefiniowana w oparciu o subiektywne odczucia wysokości dźwięku.
-Za dźwięk podstawowy przyjmuje się, że dźwięk o częstotliwości 1000 Hz i głośności 40 dB wyraża się wartością 1000 melów.
+Za dźwięk podstawowy przyjmuje się, że dźwięk o częstotliwości 1000 Hz i głośności 40 dB wyraża się wartością 1000 melów \cite{KrishnaKishore2013}.
 Następnie na podstawie pomiarów i ocen został stworzony wzór
 \begin{equation}
 	m=2595\log _{10}\left(1+{\frac {f}{700}}\right)
@@ -260,7 +260,7 @@ Filtry środkowoprzepustowe wprowadzają pewną dyskretyzację możliwych warto�
 
 Kolejnym etapem jest obliczenie logarytmu widma w skali melowej.
 Odpowiada to interpretacji głośności przez ludzkie ucho,
-które odczuwa zmianę głośności w skali logarytmicznej.
+które odczuwa zmianę głośności w skali logarytmicznej \cite{Hossan2013}.
 \begin{equation}
 	M'_k=log(M_k)\qquad k=0, \dots, N
 	\label{eq:mfcc:log}
@@ -272,18 +272,14 @@ Daje ona odseparowanie sygnału od czynników zależnych od mówcy.
 Sygnał źródłowy - mowa był splotem informacji,
 które przekazywał oraz sygnału zależnych od mówcy wynikających z budowy jego narządu mowy, oraz sposobu mówienia.
 Cechy sygnału zależne od mówcy nie są istotne z punktu widzenia interpretacji przekazu i treści wypowiedzi.
-Odfiltrowanie tych cech, pozwoli na analizę samej treści przekazu.
-Cepstrum jest definiowane jako widmo widma.
-Okresowy sygnał czasowy spełniający warunki Dirichleta może zostać rozwinięty w szereg Fouriera.
-Rozwinięcie sygnału czasowego w trygonometryczny szereg Fouriera pozwala na analizę częstotliwości występujących w sygnale.
-Odrzucając informację jak szczególnie zmieniał się sygnał, otrzymujemy informację z jakich częstotliwości sygnał się składa.
-Powtarzając procedurę przenosimy widmo z dziedziny częstotliwości, do $quefrency$, opisującej zależności pomiędzy częstotliwościami,
-pomijając informację wartości tych częstotliwości. 
-W rezultacie uniezależniamy się od częstotliwości podstawowej i formant, które są ściśle zależne od mówcy,
-a otrzymujemy informację w jaki sposób te częstotliwości się zmieniały, niezależnie od ich wartości.
-Z definicji przeniesienie 
+Przeniesienie widma częstotliwości sygnału do cepstrum zdekoreluje zmiany częstotliwości od wartości energii.
+Zastosowana zostanie dyskretna transformata kosinusowa (DCT-II) \ang{discrete cosine transform} \cite{Hossan2013}.
+Dyskretną transformatę kosinusową definiuje wzór:
+\begin{equation}
+	X_k =
+	 \sum_{n=0}^{N-1} x_n \cos \left[k \left(n+\frac{1}{2}\right) \frac{\pi}{N} \right] \quad \quad k = 0, \dots, N-1.
+\end{equation}
 
-\TODO zrozumieć
 
 \subsubsection{Energia}
 Energia sygnału jest sumą kwadratów próbek w ramce.
@@ -814,7 +810,30 @@ od argumentów, dla których $XOR$ przyjmuje wartość $0$ \cite{Labib2010}.
 \end{figure}
 Percepton wielowarstwowy dzięki zastosowaniu wielu warstw ukrytych, 
 jest w stanie zróżnicować zbiory, które nie są separowalne liniowo.
-\chapter{Wyniki}
+\chapter{Badanie}
+Zasadniczą częścią pracy, jest napisanie programu komputerowego zdolnego rozróżnić emocje mówcy na podstawie dźwiękowego zapisu wypowiedzi.
+Aplikacja została zaimplementowana w języku \textit{Python}. 
+Została podzielona na dwie części. 
+Pierwsza część aplikacji odpowiada za wyciągnięcie cech z plików audio,
+druga dokonuje klasyfikacji emocji na podstawie wcześniej określonych cech cech.
+
+wczytanie listy plików
+	jakie informacje są wyciagane z pliku
+	nazwa pliku
+analiza pliku
+opis pliku
+	co jest zapisywane
+zapis pliku
+	o formacie CSV
+
+analiza:
+odczytanie
+przetwarzanie wstępne
+podział na ramki
+ekstrakcja cech bazowych
+spłaszczenie cech bazowych
+opis statystyczny
+\ref{sec:opis_bazy_danych}
 \TODO{
 	Wywołania aplikacji.
 	Różne klasyfikatory, parametry, klasy.

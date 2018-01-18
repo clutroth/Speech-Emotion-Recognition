@@ -139,7 +139,6 @@ def analyse_file(filename):
 def values(file, description):
     row = [description.fullname, description.emotion, description.speaker, description.type]
     row.extend(file.values())
-    sklearn.utils
     return row
 
 def find_file(path, name):
@@ -156,23 +155,18 @@ def find_file(path, name):
 
 korpus = '/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/'
 
-korpusFileList=find_file(korpus, '*.wav')
-
-angry_files = ['/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/RA/AKL_RA_T.wav',
-         '/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/NE/MCH_NE_P.wav']
-fileList=korpusFileList#[:10]
-# fileList=angry_files
-firstFileName = '/home/wdk/uczelnia/mgr/materiały/agh/EmotiveKorpus/RA/AKL_RA_T.wav'
-firstFile = analyse_file(firstFileName)
+fileList=find_file(korpus, '*.wav')
+firstFileName = fileList[0]
+featureNames = analyse_file(firstFileName).keys()
 names = ['filename', 'emotion', 'speaker', 'type']
-names.extend(firstFile.keys())
+names.extend(featureNames)
 
 with open("features_analysis.csv", "wb") as file:
     writer = csv.writer(file)
     writer.writerow(names)
     for filename in fileList:
         print "processing " + filename
-        firstFile = analyse_file(filename)
+        file = analyse_file(filename)
         des = FileDescription(filename)
 
-        writer.writerow(values(firstFile, des))
+        writer.writerow(values(file, des))
