@@ -5,7 +5,6 @@ import numpy as np
 
 import fnmatch
 import os
-import sklearn
 from python_speech_features import mfcc
 from python_speech_features import sigproc
 from scipy.io import wavfile
@@ -13,6 +12,7 @@ from python_speech_features import ssc
 from emo.model import Signal, FeatureDescriptor
 from emo.stage import preprocess
 from sklearn.utils import check_array
+
 
 def read_file(filename):
     [fs, x] = wavfile.read(filename)

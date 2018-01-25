@@ -5,6 +5,7 @@
 % mgr. inż. Błażeja Wincenciaka
 % Wersja 0.1 - 8 października 2016
 %
+\usepackage{listings}
 \usepackage{polski}
 \usepackage{helvet}
 \usepackage[T1]{fontenc}
@@ -98,10 +99,11 @@
 }
 \newcommand{\ang}[1]{\textit{(ang. #1)}}
 \newcommand{\MATLAB}{\textsc{Matlab}\xspace}
-\newcommand{\Rys}[1]{(Rysunek \ref{#1})}
-\newcommand{\Wyk}[1]{(Wykres \ref{#1})}
-\newcommand{\Tab}[1]{(Tabela \ref{#1})}
-\newcommand{\Alg}[1]{(Algorytm \ref{#1})}
+\newcommand{\Rys}[1]{(Rysunek~\ref{#1})}
+\newcommand{\Wyk}[1]{(Wykres~\ref{#1})}
+\newcommand{\Tab}[1]{(Tabela~\ref{#1})}
+\newcommand{\Alg}[1]{(Algorytm~\ref{#1})}
+\newcommand{\Lst}[1]{(Listing~\ref{#1})}
 \newcommand{\Eq}[1]{(\ref{#1})}
 
 \begin{document}
@@ -152,56 +154,6 @@ Jak przetworzyć dane, żeby otrzymać lepsze wyniki?
 Jakie przetwarzanie jest wymagane?
 \NewPage
 \chapter{Aplikacja klasyfikująca emocje}
-\section{Opis bazy danych}\label{sec:opis_bazy_danych}
-\TODO{sposób katalogowania}
-W pracy wykorzystano bazę danych emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
-Nagrania zawierają pięć emocji podstawowych: radość, smutek, złość, strach, zdziwienie.
-Ponadto zostały nagrane wypowiedzi w tonie neutralnym jako punkt odniesienia i ironicznym, jako emocja złożona.
-W nagraniu wzięło udział 6 mężczyzn i 6 kobiet od 20 do 30 lat. 
-Mówcy byli zarówno profesjonalnymi aktorami jak i amatorami, czy wolontariuszami.
-Baza została zrealizowana jako baza danych emocji odgrywanych. 
-
-Nagrano 4 typy wypowiedzi.
-\begin{description}
-	\item [Zdania] będące sekwencją 46 prostych wypowiedzi często wykorzystywanych w życiu codziennym 
-		np. ,,Dzień dobry'', ,,Witam serdecznie''. 
-	\item [Polecenia]  np. ,,Nowy'', ,,Otwórz''. 
-		Jest to głosowa reprezentacja standardowych komend wykorzystywanych w komunikacji człowieka z komputerem.
-	\item [Cyfry] od 0 do 9.
-	\item [Tekst] czyli fragment artykułu. 
-		Lity tekst będący spójnym logicznie ciągiem zdań, lecz wyrwanym z kontekstu.
-\end{description}
-Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich stanach emocjonalnych.
-
-Baza danych składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
-Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
-Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bitów. ~\cite{Igras2009}.
-
-Nagrania nie zostały poddane przetwarzaniu wstępnemu. 
-Różnią się poziomem głośności.
-Pojedyncze nagrania wyglądają na ustandaryzowane, ale stanowią wyjątek.
-Dokładna historia nagrań nie jest znana, ich stan jest niejednolity.
-Brak jest informacji o operacjach wykonywanych na nagraniach.
-Stan nagrań jest niejednorodny i nieznany.
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{MGR_ZL_C-plot}
-	\caption{Przykład ustandaryzowanego sygnału}
-\end{figure}
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=\textwidth]{MGR_ZD_T-plot}
-	\caption{Przykład nie ustandaryzowanego sygnału}
-\end{figure}
-
-Zapis wypowiedzi został ustandaryzowany w celu zniwelowania różnic wynikających z głośności nagrania.
-\section{Przetwarzanie wstępne}
-\TODO{
-	od czytania pliku z dysku, do rozpoczęcia ekstrakcji cech
-
-	stereo2mono, standaryzacja
-}
-\NewPage
 \section{Ekstrakcja cech}
 \subsection{Cechy bazowe}
 Rolą cech bazowych jest przetworzenie sygnału czasowego podzielonego na ramki,
@@ -368,7 +320,7 @@ Wyrażona jest wzorem
 	\gamma = E \left [ \left (  \frac{X - \mu}{ \sigma }   \right )^4 \right ]
 \end{equation}
 gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
-\section{Analiza Głównych Składowych}
+\subsection{Analiza głównych składowych}
 Głównym zadaniem selekcji cech jest redukcja wymiarowości obserwacji.
 W praktyce, wiele wymiarów jest ze sobą silnie skorelowanych.
 Rozważanie obserwacji w skorelowanych wymiarach obniża skuteczność klasyfikacji.
@@ -814,25 +766,136 @@ jest w stanie zróżnicować zbiory, które nie są separowalne liniowo.
 Zasadniczą częścią pracy, jest napisanie programu komputerowego zdolnego rozróżnić emocje mówcy na podstawie dźwiękowego zapisu wypowiedzi.
 Aplikacja została zaimplementowana w języku \textit{Python}. 
 Została podzielona na dwie części. 
-Pierwsza część aplikacji odpowiada za wyciągnięcie cech z plików audio,
-druga dokonuje klasyfikacji emocji na podstawie wcześniej określonych cech cech.
+Pierwsza część aplikacji odpowiada za ekstrakcję cech sygnału z plików audio,
+druga dokonuje klasyfikacji emocji na podstawie wcześniej określonych cech.
 
-wczytanie listy plików
-	jakie informacje są wyciagane z pliku
-	nazwa pliku
-analiza pliku
-opis pliku
-	co jest zapisywane
-zapis pliku
-	o formacie CSV
+Opis środowiska:
+\begin{description}
+	\item [system operacyjny] Debian 8.10 Jessie stabilny 
+	\item [wersja jądra] 3.16.0-4-amd64
+	\item [Python] 2.7.9
+	\item [numpy] 1.13.3
+	\item [scikit-learn] 0.19.1
+	\item [python-speech-features] 0.6
+\end{description}
+Python jest interpretowanym, obiektowo zorientowanym, dynamicznie typowanym językiem programowania.
+Operuje na wysokopoziomowych strukturach, których typy i zależności są rozwiązywane dynamicznie.
+Jako język elastyczny jest przeznaczony do szybkiego tworzenia aplikacji, skryptów, czy integracji istniejących komponentów.
+Python charakteryzuje się prostą składnią sterowaną białymi znakami 
+(np. zamiast nawiasów klamrowych znanych z C, czy Javy wykorzystuje wcięcia w kodzie do definiując bloki kodu).
+Podejście to wymusza pisanie bardziej czytelnego kodu.
+Kod jest dzielony na moduły i pakiety.
+Python posiada duży zbiór bibliotek rozwijanych przez społeczność.
 
-analiza:
-odczytanie
-przetwarzanie wstępne
-podział na ramki
-ekstrakcja cech bazowych
-spłaszczenie cech bazowych
-opis statystyczny
+Numpy to najpopularniejsza biblioteka wykorzystywana do obliczeń numerycznych i uczenia maszynowego.
+Pozwala operować na n-wymarowych macierzach, zawiera podstawowe funkcje algebry liniowej itd.
+\\
+Scikit-learn biblioteką dostarczającą wymagane przez współczesny stan wiedzy implementacje algorytmów uczenia maszynowego.
+Docelowo znajduje zastosowanie przy rozwiązywaniu zadań statystycznych, analitycznych i eksploracji danych \cite{OShaughnessy2008}.  
+\\
+Python-speech-features to niewielka biblioteka wspierająca systemy automatycznego rozpoznawania mowy. 
+Dostarcza implementacje MFCC i SSC.
+
+\section{Opis bazy danych}\label{sec:opis_bazy_danych}
+\TODO{sposób katalogowania}
+W pracy wykorzystano bazę danych emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
+Nagrania zawierają pięć emocji podstawowych: radość, smutek, złość, strach, zdziwienie.
+Ponadto zostały nagrane wypowiedzi w tonie neutralnym jako punkt odniesienia i ironicznym, jako emocja złożona.
+W nagraniu wzięło udział 6 mężczyzn i 6 kobiet od 20 do 30 lat. 
+Mówcy byli zarówno profesjonalnymi aktorami jak i amatorami, czy wolontariuszami.
+Baza została zrealizowana jako baza danych emocji odgrywanych. 
+
+Nagrano 4 typy wypowiedzi.
+\begin{description}
+	\item [Zdania] będące sekwencją 46 prostych wypowiedzi często wykorzystywanych w życiu codziennym 
+		np. ,,Dzień dobry'', ,,Witam serdecznie''. 
+	\item [Polecenia]  np. ,,Nowy'', ,,Otwórz''. 
+		Jest to głosowa reprezentacja standardowych komend wykorzystywanych w komunikacji człowieka z komputerem.
+	\item [Cyfry] od 0 do 9.
+	\item [Tekst] czyli fragment artykułu. 
+		Lity tekst będący spójnym logicznie ciągiem zdań, lecz wyrwanym z kontekstu.
+\end{description}
+Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich stanach emocjonalnych.
+
+Baza danych składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
+Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
+Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bitów. ~\cite{Igras2009}.
+
+Nagrania nie zostały poddane przetwarzaniu wstępnemu. 
+Różnią się poziomem głośności.
+Pojedyncze nagrania wyglądają na ustandaryzowane, ale stanowią wyjątek.
+Dokładna historia nagrań nie jest znana, ich stan jest niejednolity.
+Brak jest informacji o operacjach wykonywanych na nagraniach.
+Stan nagrań jest niejednorodny i nieznany.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{MGR_ZL_C-plot}
+	\caption{Przykład ustandaryzowanego sygnału}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{MGR_ZD_T-plot}
+	\caption{Przykład nie ustandaryzowanego sygnału}
+\end{figure}
+
+Zapis wypowiedzi został ustandaryzowany w celu zniwelowania różnic wynikających z głośności nagrania.
+\section{Przetwarzanie wstępne}
+\TODO{
+	od czytania pliku z dysku, do rozpoczęcia ekstrakcji cech
+
+	stereo2mono, standaryzacja
+}
+\NewPage
+\section{Ekstrakcja cech wypowiedzi}
+Ekstrakcja cech rozpoczyna się od znalezienia w bazie danych wszystkich plików zwierających wypowiedź i~odczytania sygnału. 
+Kolejnym krokiem jest przetwarzanie wstępne. 
+Sygnały stereofoniczne sumowane są do monofonicznych, sygnał zostaje poddany standaryzacji.
+W następnym etapie sygnał dzielony jest na ramki o długości 500ms zachodzące na siebie co 200ms.
+Z przetworzonego wstępnie i podzielonego na ramki sygnału obliczane są cechy sygnału \Lst{lst:res:extr}.
+\begin{lstlisting}[language=Python,label={lst:res:extr},caption={funkcja obliczająca cechy sygnału pojedynczego pliku}]
+def analyse_file(filename):
+    f = read_file(filename)
+    p = preprocess(f)
+    frames = split(p, 500, 200)
+    features = [extract_features(frame) for frame in frames]
+    feturesMap = features_to_map(features)
+    return statistical_describe_features(feturesMap)
+\end{lstlisting}
+Dla każdej ramki policzono zestaw cech podstawowych: 
+\begin{itemize}
+	\item MFCC
+	\item energię
+	\item liczba przejść przez zero
+	\item energię entropii
+	\item SSC.
+\end{itemize}
+Następnie dla każdej cechy podstawowej za wszystkie ramki obliczono wartości:
+\begin{itemize}
+	\item minimalną
+	\item maksymalną
+	\item średnią
+	\item kurtozę
+	\item skośność
+	\item wariancję
+\end{itemize}
+Wyniki obliczeń są zapisane w formacie CSV.
+Pojedynczy rekord zawiera informacje o nazwie pliku, zarejestrowanej na nim emocji, 
+oraz wartościach obliczonych cech.
+Cechy zostały nazwane w konwencji \textit{(cecha bazowa) (numer wartości w wektorze) (statystyka)}.
+Przykładowo wartości \textit{mfcc 1 min}, \textit{ssc 20 max}, \textit{ssc 24 max}, \textit{mfcc 3 kurtosis} oznaczają kolejno:
+\begin{itemize}
+\item wartość najmniejszą pierwszej wartości wektora cech MFCC
+\item wartość największą dwudziestej wartości wektora cech SSC
+\item wartość największą dwudziestej czwartej wartości wektora cech SSC
+\item kurtozę trzeciej wartości wektora cech MFCC
+\end{itemize}
+
+
+Przenieść opis bazy przed badania, po teorii
+Opisać drugą część
+Które wyniki i jak pokazać, co może być interesujące?
+
+
 \ref{sec:opis_bazy_danych}
 \TODO{
 	Wywołania aplikacji.
@@ -845,9 +908,6 @@ opis statystyczny
 	\caption{Otrzymane wyniki}
 \end{table}
 
-\NewPage
-\NewPage
-\NewPage
 \NewPage
 \NewPage
 \NewPage

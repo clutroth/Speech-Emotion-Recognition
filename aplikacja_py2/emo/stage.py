@@ -10,5 +10,4 @@ def preprocess(signal):
         mono = signal.signal
     elif len(shape) == 2 and shape[1] == 2:
         mono = signal.signal[:,0]+signal.signal[:,1]
-    standarized = preprocessing.scale(mono)
-    return Signal(preprocessing.scale(standarized), signal.fs)
+    return Signal(preprocessing.scale(mono), signal.fs)
