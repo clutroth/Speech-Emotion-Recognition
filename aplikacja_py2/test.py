@@ -3,9 +3,11 @@
 import numpy
 import unittest
 
+from emo.prezentation import map_to_table
 from util import filter, binarizer
 from emo.model import *
 from emo.stage import preprocess
+
 
 class TestDataFilter(unittest.TestCase):
     def test_binarizer_wirks(self):
@@ -13,7 +15,7 @@ class TestDataFilter(unittest.TestCase):
         self.assertEquals(binarizer(sda), [0, 0, 1, 1, 2, 3])
 
     def test_binarizer_wirks2(self):
-        sda = [3,2]
+        sda = [3, 2]
         self.assertEquals(binarizer(sda), [1, 0])
 
     def test_if_works(self):
@@ -30,6 +32,30 @@ class TestDataFilter(unittest.TestCase):
             [7, 8, 9]
         ])
         self.assertEquals(new_y, [0, 1])
+
+
+class TestPrezentation(unittest.TestCase):
+    def test_map_to_table(self):
+        # (columns, rows)
+        m = {
+            ('a', 'A'): 1,
+            ('b', 'A'): 2,
+            ('a', 'B'): 3,
+            ('b', 'B'): 4
+        }
+        expected = ((['a', 'b'], ['A', 'B']), [[1, 3], [2, 4]])
+        res = map_to_table(m)
+        self.assertEquals(res, expected)
+
+    def test_map_to_table_asymmetric(self):
+        # (columns, rows)
+        m = {
+            ('a', 'A'): 1,
+            ('b', 'A'): 2,
+        }
+        expected = ((['a', 'b'], ['A']), [[1], [2]])
+        res = map_to_table(m)
+        self.assertEquals(res, expected)
 
 
 class TestStringMethods(unittest.TestCase):

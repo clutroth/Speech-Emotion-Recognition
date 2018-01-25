@@ -8,7 +8,7 @@ from numpy.ma import mean
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.feature_selection import SelectKBest, RFE
+from sklearn.feature_selection import SelectKBest, RFE, RFECV
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
 from sklearn.model_selection import train_test_split
@@ -22,11 +22,18 @@ from sklearn.tree import DecisionTreeClassifier
 import agh
 from util import filter
 
+
+class FeaturesList:
+    def __init__(self, features, excpected):
+        self.features = features
+        self.excpected = excpected
+
+
 bunch = agh.load_file('features_analysis-cc.csv')
 X = bunch.data
 y = bunch.target
 X_scaled = scale(X)
-
+featuresList = FeaturesList(X_scaled, y)
 classificators = {
     'knn': KNeighborsClassifier(5),
     'lsvc': SVC(kernel="linear", C=0.025),
@@ -41,12 +48,15 @@ classificators = {
 }
 selectors = {
     # 'kbest': SelectKBest(k=10),
-    'rfe': RFE( SVR(kernel="linear"), 5, step=1),
+    'rfe': RFECV(SVR(kernel="linear"), 5, n_jobs=-1),
     # 'lda': LinearDiscriminantAnalysis(),
     'pca': PCA()
 }
 
-pairs = combinations(range(7), 7)
+pairS = {
+    'seven': combinations(range(7), 7),
+    'two': combinations(range(7), 2)
+}
 
 
 def clasification_stats(rows):
@@ -55,26 +65,46 @@ def clasification_stats(rows):
         print("for %s and %s: %f" % (classifier, selector, numpy.mean(map(lambda x: x[2], row))))
 
 
-rows = []
+clasificationResults = {
+    'seven': [],
+    'two': []
+}
 
-all_product = product(classificators.items(), selectors.items(), pairs)
-for [(c_name, classifier), (s_name, selector), emotions] in all_product:
-    [filteredX, filteredY] = filter(X_scaled, y, emotions)
-    X_train, X_test, y_train, y_test = train_test_split(
-        filteredX, filteredY, test_size=0.33, random_state=1)
-    selector = selector.fit(X_train, y_train)
+for (classification_type, pairs) in pairS.items():
+    all_product = product(classificators.items(), selectors.items(), pairs)
 
-    X_train_sfs = selector.transform(X_train)
-    X_test_sfs = selector.transform(X_test)
-    classifier.fit(X_train_sfs, y_train)
-    y_pred = classifier.predict(X_test_sfs)
-    # Compute the accuracy of the prediction
-    acc = float((y_test == y_pred).sum()) / y_pred.shape[0]
-    rows.append([c_name, s_name, 100.0 * acc] + list(emotions))
+    for [(c_name, classifier), (s_name, selector), emotions] in all_product:
+        print [classification_type,c_name, s_name,emotions]
+        [filteredX, filteredY] = filter(featuresList.features, featuresList.excpected, emotions)
+        X_train, X_test, y_train, y_test = train_test_split(
+            filteredX, filteredY, test_size=0.33, random_state=1)
+        selector = selector.fit(X_train, y_train)
+        X_train_reduced = selector.transform(X_train)
+        X_test_reduced = selector.transform(X_test)
+        classifier.fit(X_train_reduced, y_train)
+        y_pred = classifier.predict(X_test_reduced)
+        result = {
+            'classifier': c_name,
+            'selector': s_name,
+            'emotions': emotions,
+            'emotion_names': [name for idx, name in enumerate(bunch.target_names) if idx in emotions],
+            'expected': y_test,
+            'predicted': y_pred.tolist()
+        }
+        print (result)
+        clasificationResults[classification_type].append(result)
+        # Compute the accuracy of the prediction
+    # acc = float((y_test == y_pred).sum()) / y_pred.shape[0]
+    # rows.append([
+    # c_name, s_name, 100.0 * acc] + list(emotions))
+print('encoding json')
+import json
 
-clasification_stats(rows)
-with open("corss_clasification.csv", "wb") as file:
-    writer = csv.writer(file)
-    writer.writerow(['klasyfikator', 'selektor', 'emocja1', 'emocja2', 'celność'])
-    for row in rows:
-        writer.writerow(row)
+with open('classification.json', 'w') as outfile:
+    json.dump(clasificationResults, outfile)
+# clasification_stats(rows)
+# with open("cross_classification.csv", "wb") as file:
+#     writer = csv.writer(file)
+#     writer.writerow(['klasyfikator', 'selektor', 'emocja1', 'emocja2', 'celność'])
+#     for row in rows:
+#         writer.writerow(row)
