@@ -320,7 +320,7 @@ Wyrażona jest wzorem
 	\gamma = E \left [ \left (  \frac{X - \mu}{ \sigma }   \right )^4 \right ]
 \end{equation}
 gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
-\subsection{Analiza głównych składowych}
+\subsection{Analiza głównych składowych}\label{sec:pca}
 Głównym zadaniem selekcji cech jest redukcja wymiarowości obserwacji.
 W praktyce, wiele wymiarów jest ze sobą silnie skorelowanych.
 Rozważanie obserwacji w skorelowanych wymiarach obniża skuteczność klasyfikacji.
@@ -892,37 +892,116 @@ Przykładowo wartości \textit{mfcc 1 min}, \textit{ssc 20 max}, \textit{ssc 24 
 Dane zostają zapisane w pliku $features_analysis.csv$ w celu dalszego przetwarzania.
 \section{Klasyfikacja emocji}
 Klasyfikacja emocji zostanie przeprowadzona na wcześniej przygotowanej bazie cech.
+Cechy rozmieszczone w przestrzeni zostaną poddane redukcji wymiarowości. 
+Skorelowane cechy nie różnicują zbioru wypowiedzi, a mogą obniżyć skuteczność klasyfikatora.
+Redukcja wymiarowości w tej aplikacji została zrealizowana przez selekcję cech RFECV \ang{Recursive Feature Selection cross-validated} \cite{Guyon2002}.
+RFE dokonując klasyfikacji na zbiorze testowym z wykorzystaniem kolejnych cech wybiera zestaw cech pozwalający najwyraźniej zróżnicować obserwacje.
+Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując własności wektorów i własności własnych macierzy,
+przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, następnie wybiera najistotniejsze wymiary \cite{Bro2014}.
+Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy), oraz MLP.
+Zmierzono zdolność klasyfikacji mowy wyrażającej jedną z emocji podstawowych, jak również porównano zdolność rozróżniania emocji parami.
+
+Porównując trafność rozpoznawania jednej z siedmiu emocji podstawowych w zależności od klasyfikatora i metody redukcji wymiarowości.
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_c_s_table.tex}
-	\caption{Otrzymane wyniki}
+	\caption{Trafność predykcji dla klasyfikatorów i selektorów}
+	\label{tab:acc}
 \end{table}
-
+Najlepszą trafność wykazał klasyfikator MLP po redukcji wymiarów z wykorzystaniem PCA \Tab{tab:acc}. 
+Najgorszą, klasyfikacja z wykorzystaniem KNN niezależnie od metody redukcji wymiarowości.
 \begin{table}[hc!]
 	\centering
 	\input{./app/classification_pca_mpl_table.tex}
-	\caption{Otrzymane wyniki}
+	\caption{Trafność klasyfikacji dla PCA i MLP}
+	\label{tab:mlp:pca}
 \end{table}
+Analizując efekt klasyfikacji poszczególnych emocji podstawowych\Tab{tab:mlp:pca} zostaną podane przykłady interesujących rozpoznań.
 
-
-
-\ref{sec:opis_bazy_danych}
-\TODO{
-	Wywołania aplikacji.
-	Różne klasyfikatory, parametry, klasy.
-	Dużo tabel.
-}
+\subsubsection{Rozpoznanie złości jako radość}
+Radość w 10 przypadkach została rozpoznana prawidłowo. 
+Błędnie jako złość została sklasyfikowana 4 razy. 
+Są to emocje o podobnym poziomie aktywacji, ale przeciwnym wartościowaniu.
 \begin{table}[hc!]
 	\centering
-	\input{./app/accuaricy_table.tex}
-	\caption{Otrzymane wyniki}
+	\input{./app/accuaricy_radosc_zlosc_table.tex}
+	\caption{Trafność rozróżnienia radości i złości}
+\end{table}
+\subsubsection{Rozpoznanie strachu jako zdziwienia}
+Strach jako jedyna emocja został rozpoznany w większości przypadków błędnie.
+Więcej razy została oznaczona jako zdziwienie.
+Najskuteczniejsza w klasyfikacji okazała się klasyfikator MLP i metoda redukcji wymiarowości RFE.
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_strach_zdziwienie_table.tex}
+	\caption{Trafność rozróżnienia strachu i zdziwienia}
 \end{table}
 
-\NewPage
-\NewPage
-\NewPage
-\NewPage
-
+\subsubsection{Rozpoznanie smutku}
+Smutek w przypadku klasyfikacji dla 7 klas uzyskał 100\% poprawności. 
+Emocja ta charakteryzuje się niską aktywacją i słabym wartościowaniem,
+dla tego jest bardzo dobrze rozróżnialna od smutku \Tab{tab:smutek:radosc} i złości \Tab{tab:smutek:zlosc}.
+Względnie mniejszą poprawność osiągnięto rozróżniając smutek i stan neutralny \Tab{tab:smutek:neutralny}.
+Obydwie emocje mają niski poziom aktywacji.
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_radosc_smutek_table.tex}
+	\caption{Trafność rozróżnienia radości i smutku}
+	\label{tab:smutek:radosc}
+\end{table}
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_smutek_zlosc_table.tex}
+	\caption{Trafność rozróżnienia złości i smutku}
+	\label{tab:smutek:zlosc}
+\end{table}
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
+	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
+	\label{tab:smutek:neutralny}
+\end{table}
+\subsubsection{Rozpoznanie stanu neutralnego}
+Stan neutralny, czyli względny brak emocji, to stan większości codziennych wypowiedzi.
+Stan neutralny służy za punkt odniesienia podczas określania cech charakterystycznych emocji: aktywacji, wartościowania.
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_stan-neutralny_zdziwienie_table.tex}
+	\caption{Trafność rozróżnienia stanu neutralnego i zdziwienia}
+	\label{tab:smutek:neutralny}
+\end{table}
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_stan-neutralny_strach_table.tex}
+	\caption{Trafność rozróżnienia stanu neutralnego i strachu}
+	\label{tab:smutek:neutralny}
+\end{table}
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
+	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
+	\label{tab:smutek:neutralny}
+\end{table}
+\subsubsection{Rozpoznanie irytacji}
+\TODO{opis}
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_irytacja_stan-neutralny_table.tex}
+	\caption{Trafność rozróżnienia irytacji i stany neutralnego}
+	\label{tab:smutek:neutralny}
+\end{table}
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_irytacja_strach_table.tex}
+	\caption{Trafność rozróżnienia irytacji i strachu}
+	\label{tab:smutek:neutralny}
+\end{table}
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_irytacja_radosc_table.tex}
+	\caption{Trafność rozróżnienia irytacji i radości}
+	\label{tab:smutek:neutralny}
+\end{table}
 \chapter{Wnioski}
 \NewPage
 \NewPage

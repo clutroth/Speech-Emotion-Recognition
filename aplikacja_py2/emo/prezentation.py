@@ -20,16 +20,16 @@ def saveLatex(obj, filename):
 
 # rows and columns are swapped
 def map_to_table(m):
-    column_set = set()
     row_set = set()
-    for column_, row_ in m.keys():
-        column_set.add(column_)
-        row_set.add(row_)
-    column_list = list(column_set)
+    column_set = set()
+    for row, column in m.keys():
+        row_set.add(row)
+        column_set.add(column)
     row_list = list(row_set)
-    data = np.empty((len(column_set), len(row_set))).tolist()
-    for ((column_, row_), value) in m.items():
-        idx1 = column_list.index(column_)
-        idx2 = row_list.index(row_)
-        data[idx1][idx2] = m[(column_, row_)]
-    return (column_list, row_list), data
+    column_list = list(column_set)
+    data = np.empty((len(row_set), len(column_set))).tolist()
+    for ((row, column), value) in m.items():
+        idx1 = row_list.index(row)
+        idx2 = column_list.index(column)
+        data[idx1][idx2] = m[(row, column)]
+    return (row_list, column_list), data
