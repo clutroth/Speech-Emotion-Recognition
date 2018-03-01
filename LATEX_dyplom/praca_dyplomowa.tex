@@ -136,6 +136,7 @@ gdzie terapeuta wspiera się maszyną w odczytywaniu emocji pacjenta.
 Systemy tłumaczenia maszynowego mowy mogą wykorzystać informacje mówiące o kontekście wypowiedzi i stanie mówcy.
 Telefoniczne centra obsługi klienta \ang{call center} rozpoznają stan klienta,
 oraz jego reakcję na ofertę prezentowaną przez konsultanta.
+Rozpoznanie frustracji lub zniecierpliwienia jest dla konsultanta istotną przesłanką od zakończenia rozmowy.
 
 % Jaki jest cel?
 Celem pracy jest przybliżenie tematyki komputerowego rozpoznawania mowy,
@@ -148,12 +149,60 @@ Kolejnym etapem będzie implementacja aplikacji w środowisku MATLAB.
 Na zakończenie zostaną przeprowadzone testy aplikacji,
 analiza wyników i prezentacja wniosków.
 
-% roboczo
-Jakie współczynniki można liczyć? 
-Jak przetworzyć dane, żeby otrzymać lepsze wyniki?
-Jakie przetwarzanie jest wymagane?
 \NewPage
 \chapter{Aplikacja klasyfikująca emocje}
+\section{Model emocji w mowie}
+Mowa jest najszybszym naturalnym sposobem komunikacji międzyludzkiej.
+Naturalność, szybkość i skuteczność mowy w komunikacji jest zachętą dla badaczy rozwijających interfejsy pomiędzy człowiekiem i komputerem. 
+Odwzorowanie naturalnej komunikacji jest zagadnieniem bardziej złożonym, niż rozpoznanie zawartych w wypowiedzi słów.
+Znaczenie wypowiedzi jest niesione przez treść wypowiedzi, kontekst i sposób w jaki została ona wypowiedziana.
+Emocje mówcy można rozpoznać na podstawie sposobu w jaki wypowiedział zdanie.
+Rozpoznanie przez maszynę stanu emocjonalnego mówcy jest istotne do zrozumienia sensu jego wypowiedzi.
+
+Rozpoznawanie emocji w mowie jest złożonym zagadnieniem z następujących powodów.
+Nie jest oczywiste jakie cechy mowy odpowiadają za wyrażanie poszczególnych emocji.
+Wydźwięk wypowiedzi może być różny w zależności od mówcy, stylu budowania zdań, tempa mowy, co wywiera wpływ na cechy sygnału mowy, a standardowa wartość jest zależna od mówcy.
+Kolejną komplikacją jest kontekst kulturowy wypowiedzi. 
+Społeczności, których członkowie przynależą do różnych kultur, w różny sposób będą swoje emocje wyrażali i interpretowali.
+Człowiek znajdujący się przez dłuższy czas w jednym stanie emocjonalnym.
+Smutek trwający przez dni czy tygodnie będzie w tym czasie maskował inne emocje odczuwane przez człowieka.
+
+Istnieją dwa modele emocji powstałe w XX w. wykorzystywane w psychologii.
+Model Paula Ekmana postuluje istnienie sześciu emocji podstawowych (złość, obrzydzenie, strach, szczęście, smutek, zaskoczenie) \cite{Eisner2015},
+natomiast model Roperta Plutchika zakłada istnienie ośmiu emocji podstawowych, połączonych w pary przeciwieństw:
+\begin{itemize}
+	\item szczęście i smutek
+	\item złość i strach
+	\item ufność i obrzydzenie
+	\item zaskoczenie i przewidywanie
+\end{itemize}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Plutchik-Emotions-Wheel}
+	\caption{Model emocji Plutchika}
+	\label{rys:intro:plutnik}
+\end{figure}
+%http://anafora.dmz.edu.pl/teoria-emocji-plutchika/#jp-carousel-3046
+Emocje powstały na drodze ewolucji \cite{Plutchik2001}.
+Pozwalają tworzyć błyskawiczne reakcje na bodźce środowiskowe.
+Emocje podstawowe tworzą bardziej złożone emocje łącząc się ze sobą.
+Emocje znajdujące się naprzeciw siebie nie mogą istnieć w tym samym momencie. 
+
+
+Ludzie rozpoznają emocje przez odczuwanie. 
+Powszechnie stosuje się rozmieszczenie emocji na dwuwymiarowej przestrzeni pobudzenia i wartościowości \cite{Fernandez2004}.
+Pobudzenie określa energię przez jaką wyraża się emocja.
+Wysokim poziomem pobudzenia charakteryzują się radość, złość i strach. 
+Skutkuje to przyspieszonym biciem serca, podniesionym ciśnieniem krwi, przyspieszonym oddechem, uczuciem suchości w ustach.
+Z kolei smutek, będący emocją o niskim pobudzeniu skutkuje spowolnionym biciem serca.
+Cechy mowy takie jak częstotliwość podstawowa, dynamika, artykulacja są silnie skorelowane z emocjami o skrajnym pobudzeniu \cite{Cahn1990}.
+Pobudzenie nie rozróżnia emocji w sposób wystarczający. 
+Przykładowo radość i złość są emocjami o wysokim pobudzeniu, mimo są różnymi emocjami.
+Wykorzystywana jest tu cecha emocji zwana wartościowością, określająca, czy dana emocja jest nacechowana pozytywnie czy negatywnie.
+Radość jest więc emocją nacechowaną pozytywnie o wysokim pobudzeniu, złość jest nacechowana negatywnie o wysokim pobudzeniu.
+Smutek jest emocją negatywną o niskim pobudzeniu.
+
+
 \section{Ekstrakcja cech}
 \subsection{Cechy bazowe}
 Rolą cech bazowych jest przetworzenie sygnału czasowego podzielonego na ramki,
@@ -921,7 +970,7 @@ Analizując efekt klasyfikacji poszczególnych emocji podstawowych\Tab{tab:mlp:p
 \subsubsection{Rozpoznanie złości jako radość}
 Radość w 10 przypadkach została rozpoznana prawidłowo. 
 Błędnie jako złość została sklasyfikowana 4 razy. 
-Są to emocje o podobnym poziomie aktywacji, ale przeciwnym wartościowaniu.
+Są to emocje o podobnym poziomie pobudzenia, ale przeciwnym wartościowaniu.
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_radosc_zlosc_table.tex}
@@ -939,10 +988,10 @@ Najskuteczniejsza w klasyfikacji okazała się klasyfikator MLP i metoda redukcj
 
 \subsubsection{Rozpoznanie smutku}
 Smutek w przypadku klasyfikacji dla 7 klas uzyskał 100\% poprawności. 
-Emocja ta charakteryzuje się niską aktywacją i słabym wartościowaniem,
+Emocja ta charakteryzuje się niskim pobudzeniem i słabym wartościowaniem,
 dla tego jest bardzo dobrze rozróżnialna od smutku \Tab{tab:smutek:radosc} i złości \Tab{tab:smutek:zlosc}.
 Względnie mniejszą poprawność osiągnięto rozróżniając smutek i stan neutralny \Tab{tab:smutek:neutralny}.
-Obydwie emocje mają niski poziom aktywacji.
+Obydwie emocje mają niski poziom pobudzenia.
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_radosc_smutek_table.tex}
@@ -962,25 +1011,28 @@ Obydwie emocje mają niski poziom aktywacji.
 	\label{tab:smutek:neutralny}
 \end{table}
 \subsubsection{Rozpoznanie stanu neutralnego}
-Stan neutralny, czyli względny brak emocji, to stan większości codziennych wypowiedzi.
-Stan neutralny służy za punkt odniesienia podczas określania cech charakterystycznych emocji: aktywacji, wartościowania.
+Stan neutralny jest punktem odniesienia dla emocji, jest to stan człowieka nie odczuwającego w danym momencie żadnych emocji.
+Charakteryzuje się bardzo niskim pobudzeniem i wartościowością.
+Zerowy ładunek emocjonalny wypowiedzi stanu neutralnego pozwala dobrze rozróżnić je od wypowiedzi emocjonalnych. 
+Odróżnienie stanu neutralnego od zdziwienia \Tab{tab:neutralny:zdziwienie}, strachu \Tab{tab:neutralny:strach} i smutku \Tab{tab:neutralny:smutek}
+
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_stan-neutralny_zdziwienie_table.tex}
 	\caption{Trafność rozróżnienia stanu neutralnego i zdziwienia}
-	\label{tab:smutek:neutralny}
+	\label{tab:neutralny:zdziwienie}
 \end{table}
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_stan-neutralny_strach_table.tex}
 	\caption{Trafność rozróżnienia stanu neutralnego i strachu}
-	\label{tab:smutek:neutralny}
+	\label{tab:neutralny:strach}
 \end{table}
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
 	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
-	\label{tab:smutek:neutralny}
+	\label{tab:neutralny:smutek}
 \end{table}
 \subsubsection{Rozpoznanie irytacji}
 \TODO{opis}
