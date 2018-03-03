@@ -8,6 +8,7 @@
 \usepackage{listings}
 \usepackage{polski}
 \usepackage{helvet}
+\usepackage{caption}
 \usepackage[T1]{fontenc}
 \usepackage{anyfontsize}
 \usepackage[utf8]{inputenc}
@@ -106,6 +107,8 @@
 \newcommand{\Lst}[1]{(Listing~\ref{#1})}
 \newcommand{\Eq}[1]{(\ref{#1})}
 
+\newcommand{\zrodlo}[1]{\caption*{źródło: \url{#1}}}
+
 \begin{document}
 \maketitle
 %-----------------
@@ -180,6 +183,7 @@ natomiast model Roperta Plutchika zakłada istnienie ośmiu emocji podstawowych,
 	\centering
 	\includegraphics[width=\textwidth]{Plutchik-Emotions-Wheel}
 	\caption{Model emocji Plutchika}
+	\zrodlo{http://anafora.dmz.edu.pl/teoria-emocji-plutchika/}
 	\label{rys:intro:plutnik}
 \end{figure}
 %http://anafora.dmz.edu.pl/teoria-emocji-plutchika/#jp-carousel-3046
@@ -255,6 +259,7 @@ Filtry środkowoprzepustowe wprowadzają pewną dyskretyzację możliwych warto�
 	\centering
 	\includegraphics[width=\textwidth]{melfilterbank}
 	\caption{Środkowoprzepustowe filtry melowe}
+	\zrodlo{https://srohrer32.github.io/eecs351project/}
 	\label{rys:mfcc:melfilterbank}
 \end{figure}
 %https://srohrer32.github.io/eecs351project/
@@ -1012,10 +1017,10 @@ Obydwie emocje mają niski poziom pobudzenia.
 \end{table}
 \subsubsection{Rozpoznanie stanu neutralnego}
 Stan neutralny jest punktem odniesienia dla emocji, jest to stan człowieka nie odczuwającego w danym momencie żadnych emocji.
-Charakteryzuje się bardzo niskim pobudzeniem i wartościowością.
-Zerowy ładunek emocjonalny wypowiedzi stanu neutralnego pozwala dobrze rozróżnić je od wypowiedzi emocjonalnych. 
-Odróżnienie stanu neutralnego od zdziwienia \Tab{tab:neutralny:zdziwienie}, strachu \Tab{tab:neutralny:strach} i smutku \Tab{tab:neutralny:smutek}
-
+Charakteryzuje pobudzeniem i wartościowością bliskimi zeru.
+Zerowy ładunek emocjonalny wypowiedzi stanu neutralnego pozwala dobrze rozróżnić je od wypowiedzi zabarwionych emocjonalnie. 
+Tabele obrazujące różnienie stanu neutralnego i zdziwienia \Tab{tab:neutralny:zdziwienie}, strachu \Tab{tab:neutralny:strach} i smutku \Tab{tab:neutralny:smutek}
+pokazują wysoką rozróżnialność od wypowiedzi emocjonalnych. 
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_stan-neutralny_zdziwienie_table.tex}
@@ -1035,28 +1040,81 @@ Odróżnienie stanu neutralnego od zdziwienia \Tab{tab:neutralny:zdziwienie}, st
 	\label{tab:neutralny:smutek}
 \end{table}
 \subsubsection{Rozpoznanie irytacji}
-\TODO{opis}
+Irytacja jako jedyna emocja z bazy danych nie jest emocją podstawową według Ekmana.
+Założeniem twórców bazy danych wypowiedzi emocjonalnych było dodanie emocji złożonej.
+W modelu Plutchika irytacja jest mniej intensywnie przeżywaną formą złości.
+Nie jest więc diadą, ani triadą czyli emocją posiadająca dwa lub trzy składniki,
+ale jest emocją podstawową o niskiej intensywności.
+Szczególną uwagę zwraca wysoka rozróżnialność irytacji i złości.
+Według Plutchika są one tą samą emocją przeżywaną z różną intensywnością,
+a rozróżnialność złości i irytacji osiąga 90\%.
+\begin{table}[hc!]
+	\centering
+	\input{./app/accuaricy_irytacja_zlosc_table.tex}
+	\caption{Trafność rozróżnienia irytacji i złości}
+	\label{tab:irytacja:zlosc}
+\end{table}
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_irytacja_stan-neutralny_table.tex}
 	\caption{Trafność rozróżnienia irytacji i stany neutralnego}
-	\label{tab:smutek:neutralny}
+	\label{tab:irytacja:neutralny}
 \end{table}
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_irytacja_strach_table.tex}
 	\caption{Trafność rozróżnienia irytacji i strachu}
-	\label{tab:smutek:neutralny}
+	\label{tab:irytacja:strach}
 \end{table}
 \begin{table}[hc!]
 	\centering
 	\input{./app/accuaricy_irytacja_radosc_table.tex}
 	\caption{Trafność rozróżnienia irytacji i radości}
-	\label{tab:smutek:neutralny}
+	\label{tab:irytacja:zlosc}
 \end{table}
+%\subsubsection{Rozpoznanie par przeciwstawnych}
+%\begin{table}[hc!]
+%	\centering
+%	\input{./app/accuaricy_radosc_smutek_table.tex}
+%	\caption{Trafność rozróżnienia radości i smutku}
+%	\label{tab:radosc:smutek}
+%\end{table}
+%\begin{table}[hc!]
+%	\centering
+%	\input{./app/accuaricy_strach_zlosc_table.tex}
+%	\caption{Trafność rozróżnienia strachu i złości}
+%	\label{tab:strach:zlosc}
+%\end{table}
 \chapter{Wnioski}
-\NewPage
-\NewPage
+Emocje są nieodłącznym elementem życia ludzkiego. 
+Powstały na drodze ewolucji i mają istotny udział w postrzeganiu świata zewnętrznego, oraz interakcji międzyludzkich.
+Umożliwiają błyskawiczną reakcję na bodziec, czy zdarzenie wzbudzający stan emocjonalny bez dogłębnej analizy sytuacji jakiej człowiek doświadcza.
+W najbardziej elementarnym stopniu z punktu widzenia przetrwania wymuszają na decyzję o podjęciu walki w sytuacji zagrożenia, lub ucieczki w przerażeniu.
+Bez udziału świadomości nastrajają człowieka pozytywnie lub negatywnie w napotkanych sytuacjach, wspomagają podejmowanie decyzji.
+Z punktu widzenia społecznego stanowią część komunikacji międzyludzkiej.
+Zrozumienie emocji powstających w drugim człowieku pozwala zrozumieć perspektywę drugiego człowieka.
+Przykładowo rozpoznając złość u człowieka napotkanego na ulicy można przewidzieć, że jego zachowanie może stać się agresywne.
+To pozwala podjąć odpowiednie działania, np. oddalić się.
+Samo rozpoznanie emocji odbywa się przez interpretacje zachowań i bodźców wysyłanych przez daną osobę.
+Emocje mogą być wyrażane przez postawę, mowę ciała, mimikę, czy mowę.
+Analizując mowę pod kątem wyrażania emocji należy zwrócić uwagę na treść wypowiedzi, jak i na sposób w jaki została wypowiedziana.
+Niniejsza praca szczególną uwagę poświęciła analizie cech sygnału mowy wypowiedzi o zabarwieniu emocjonalnym i rozpoznaniu emocji, które wyraża.
+
+Sygnał każdej wypowiedzi emocjonalnej z ,,Bazy danych nagrań mowy emocjonalnej AGH'' został podzielony na ramki, które zostały poddane analizie.
+Dla każdej ramki zostały wyciągnięte wartości różnych cech sygnału. 
+Cechy wypowiedzi tworzą wartości statystyczne poszczególnych cech ramek danej wypowiedzi np. wartość maksymalna entropii.
+Wykorzystując różne techniki redukcji wymiarowości i klasyfikacji maszynowej przeprowadzono klasyfikację emocji wypowiedzi dla dwóch przypadków.
+Pierwsza klasyfikacja przyporządkowywała wypowiedź do jednej z 7 klas - 6 emocji i stanu neutralnego.
+Druga klasyfikacja badała rozróżnialność emocji parami pokazując jak emocje w mowie różnią się między sobą.
+
+Najskuteczniejszą parą redukcji wymiarowości i klasyfikatora jest PCA i MLP. 
+Przyporządkowując wypowiedź do jednej z 7 klas uzyskano 46,73\% celności.
+
+Rozróżniając parami największą celność uzyskała para PCA i SVM z liniową funkcją jądra.
+Najmniej rozróżnialną parą emocji jest strach i zdziwienie. 
+Są to emocje podobne, na diagramie Pluchnika znajdują się na sąsiednich polach.
+Emocją najbardziej wyróżniającą się od pozostałych jest smutek, 
+dla którego celność często osiągała 100\% (smutek i radość, smutek i złość).
 
 \bibliography{praca_dyplomowa}{}
 \bibliographystyle{plain}
