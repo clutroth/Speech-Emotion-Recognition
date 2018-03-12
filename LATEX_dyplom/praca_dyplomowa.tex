@@ -67,9 +67,9 @@
 
 
 \opiekun{dr inż. Andrzej Majkowski}
-\konsultant{prof. Dzielny Konsultant}  % opcjonalnie
+%\konsultant{prof. Dzielny Konsultant}  % opcjonalnie
 \terminwykonania{1 września 2017} % data na oświadczeniu o samodzielności
-\rok{2017}
+\rok{2018}
 
 
 % Podziekowanie - opcjonalne
@@ -107,7 +107,7 @@
 \newcommand{\Lst}[1]{(Listing~\ref{#1})}
 \newcommand{\Eq}[1]{(\ref{#1})}
 
-\newcommand{\zrodlo}[1]{\caption*{źródło: \url{#1}}}
+\newcommand{\zrodlo}[1]{\captionsetup{font=scriptsize}\caption*{źródło: \url{#1}}}
 
 \begin{document}
 \maketitle
@@ -124,36 +124,36 @@ Wpływają na interpretację bodźców z otoczenia,
 myśli a w konsekwencji mają istotny wpływ na zachowanie i reakcje.
 
 % informacje zakodowane w mowie
-Mowa jest nośnikiem informacji wykorzystywanym w komunikacji międzyludzkiej,
+Mowa jest nośnikiem informacji wykorzystywanym w komunikacji międzyludzkiej
 oraz pomiędzy człowiekiem i komputerem \ang{Human-Computer Interaction}.
 Komunikat głosowy składa się z treści językowej,
-którą można zapisać w formie tekstu,
-oraz akustycznej, która również opisuje wypowiedź takie jak:
+którą można zapisać w formie tekstu
+oraz akustycznej, która również opisuje wypowiedź. Przykładowo:
 drżący ze strachu głos, czy ciężki oddech świadczący o gniewie.
 
 % Zastosowanie maszynowego rozpoznawania emocji
-Rozpoznawanie emocji mówcy jest istotne w aplikacjach wykorzystujących mowę w komunikacji człowiek-maszyna.
-Zwłaszcza, jeśli odpowiedź systemu jest uzależniona od nastroju człowieka.
+Rozpoznawanie emocji mówcy jest istotne w aplikacjach wykorzystujących mowę w komunikacji człowiek-maszyna,
+zwłaszcza, jeśli odpowiedź systemu jest uzależniona od nastroju człowieka.
 Klasyfikacja emocji wypowiedzi jest wykorzystywana w terapiach,
 gdzie terapeuta wspiera się maszyną w odczytywaniu emocji pacjenta.
 Systemy tłumaczenia maszynowego mowy mogą wykorzystać informacje mówiące o kontekście wypowiedzi i stanie mówcy.
-Telefoniczne centra obsługi klienta \ang{call center} rozpoznają stan klienta,
+Telefoniczne centra obsługi klienta \ang{call center} rozpoznają stan klienta
 oraz jego reakcję na ofertę prezentowaną przez konsultanta.
 Rozpoznanie frustracji lub zniecierpliwienia jest dla konsultanta istotną przesłanką od zakończenia rozmowy.
 
 % Jaki jest cel?
 Celem pracy jest przybliżenie tematyki komputerowego rozpoznawania mowy,
-przegląd wykorzystywanych narzędzi, oraz ocena znanych rozwiązań.
+przegląd narzędzi do oceny znanych rozwiązań.
 Produktem końcowym będzie aplikacja komputerowa rozpoznająca emocje w sygnale mowy.
 W trakcje tworzenia pracy zostanie dokonana analiza znanych rozwiązań tego zagadnienia.
-Następnie zostanie opracowany schemat aplikacji, bazujący na poprzednich badaniach,
+Następnie zostanie opracowany schemat aplikacji,
 pozwalający stworzyć aplikację w warunkach tworzenia pracy magisterskiej.
-Kolejnym etapem będzie implementacja aplikacji w środowisku MATLAB.
-Na zakończenie zostaną przeprowadzone testy aplikacji,
-analiza wyników i prezentacja wniosków.
+Kolejnym etapem będzie implementacja aplikacji w środowisku Python.
+Na zakończenie zostaną przeprowadzone badania z wykorzystaniem aplikacji.
+Następnie po analizie wyników zostaną podane wnioski.
 
 \NewPage
-\chapter{Aplikacja klasyfikująca emocje}
+\chapter{Rozpoznawanie emocji w głosie}
 \section{Model emocji w mowie}
 Mowa jest najszybszym naturalnym sposobem komunikacji międzyludzkiej.
 Naturalność, szybkość i skuteczność mowy w komunikacji jest zachętą dla badaczy rozwijających interfejsy pomiędzy człowiekiem i komputerem. 
@@ -162,17 +162,17 @@ Znaczenie wypowiedzi jest niesione przez treść wypowiedzi, kontekst i sposób 
 Emocje mówcy można rozpoznać na podstawie sposobu w jaki wypowiedział zdanie.
 Rozpoznanie przez maszynę stanu emocjonalnego mówcy jest istotne do zrozumienia sensu jego wypowiedzi.
 
-Rozpoznawanie emocji w mowie jest złożonym zagadnieniem z następujących powodów.
+Rozpoznawanie emocji w mowie jest złożonym zagadnieniem.
 Nie jest oczywiste jakie cechy mowy odpowiadają za wyrażanie poszczególnych emocji.
 Wydźwięk wypowiedzi może być różny w zależności od mówcy, stylu budowania zdań, tempa mowy, co wywiera wpływ na cechy sygnału mowy, a standardowa wartość jest zależna od mówcy.
 Kolejną komplikacją jest kontekst kulturowy wypowiedzi. 
 Społeczności, których członkowie przynależą do różnych kultur, w różny sposób będą swoje emocje wyrażali i interpretowali.
-Człowiek znajdujący się przez dłuższy czas w jednym stanie emocjonalnym.
+Człowiek znajdujący się przez dłuższy czas w jednym stanie emocjonalnym nie zauważa słabszych emocji, których chwilowo doświadcza.
 Smutek trwający przez dni czy tygodnie będzie w tym czasie maskował inne emocje odczuwane przez człowieka.
 
 Istnieją dwa modele emocji powstałe w XX w. wykorzystywane w psychologii.
 Model Paula Ekmana postuluje istnienie sześciu emocji podstawowych (złość, obrzydzenie, strach, szczęście, smutek, zaskoczenie) \cite{Eisner2015},
-natomiast model Roperta Plutchika zakłada istnienie ośmiu emocji podstawowych, połączonych w pary przeciwieństw:
+natomiast model Roperta Plutchika\cite{Eisner2015} ,zakłada istnienie ośmiu emocji podstawowych, połączonych w pary przeciwieństw:
 \begin{itemize}
 	\item szczęście i smutek
 	\item złość i strach
@@ -195,7 +195,6 @@ Emocje znajdujące się naprzeciw siebie nie mogą istnieć w tym samym momencie
 
 Ludzie rozpoznają emocje przez odczuwanie. 
 Powszechnie stosuje się rozmieszczenie emocji na dwuwymiarowej przestrzeni pobudzenia i wartościowości \cite{Fernandez2004}.
-Pobudzenie określa energię przez jaką wyraża się emocja.
 Wysokim poziomem pobudzenia charakteryzują się radość, złość i strach. 
 Skutkuje to przyspieszonym biciem serca, podniesionym ciśnieniem krwi, przyspieszonym oddechem, uczuciem suchości w ustach.
 Z kolei smutek, będący emocją o niskim pobudzeniu skutkuje spowolnionym biciem serca.
@@ -215,12 +214,12 @@ Sygnał w dziedzinie czasu, ma wszystkie informacje, jakie możemy wykorzystać,
 ale analiza sygnału wyłącznie w dziedzinie czasu nie daje zadowalających rezultatów.
 Przeniesienie sygnału do dziedziny częstotliwości, przez zastosowanie transformaty Fouriera,
 pozwoli analizować jego zmienność w zależności od częstotliwości, 
-pomijając cechy wyeksponowane w dziedzinie czasu.
-\subsubsection{MFCC}
+uzupełniając cechy wyeksponowane w dziedzinie czasu.
+\subsubsection{Mel-Frequency Cepstral Coefficients (MFCC)}
 Jedną z najpopularniejszych cech wykorzystywanych w systemach automatycznego rozpoznawania mowy,
 jest MFCC \ang{Mel-Frequency Cepstral Coefficients}.
-Biorąc pod uwagę warunki powstawania mowy, cech indywidualnych mówcy, sposobu działania narządów mowy, percepcji mowy przez człowieka,
-daje wektor współczynników reprezentujących mowę z założenia niezależny od mówcy. 
+Biorąc pod uwagę warunki powstawania mowy, cechy indywidualne mówcy, sposób działania narządów mowy, sposób percepcji mowy przez człowieka,
+MFCC daje wektor współczynników reprezentujących mowę z założenia niezależny od mówcy. 
 Przekazuje informacje o analizowanym fragmencie mowy, pomijając cechy zależne od mówiącego, takie jak częstotliwość podstawowa i jej harmoniczne \cite{Hossan2013}.
 Współczynniki MFC reprezentują dynamiczną naturę mowy, pokazując jej zmianę energii i częstotliwości w czasie.
 
@@ -276,7 +275,7 @@ Dla każdej $k$-tej wartości sygnału $M$ jest liczony logarytm, gdzie $N$ jest
 Ostatnia faza to obliczenie współczynników cepstralnych.
 Daje ona odseparowanie sygnału od czynników zależnych od mówcy.
 Sygnał źródłowy - mowa był splotem informacji,
-które przekazywał oraz sygnału zależnych od mówcy wynikających z budowy jego narządu mowy, oraz sposobu mówienia.
+które przekazywał oraz sygnału zależnych od mówcy wynikających z budowy jego narządu mowy oraz sposobu mówienia.
 Cechy sygnału zależne od mówcy nie są istotne z punktu widzenia interpretacji przekazu i treści wypowiedzi.
 Przeniesienie widma częstotliwości sygnału do cepstrum zdekoreluje zmiany częstotliwości od wartości energii.
 Zastosowana zostanie dyskretna transformata kosinusowa (DCT-II) \ang{discrete cosine transform} \cite{Hossan2013}.
@@ -317,7 +316,7 @@ Entropia energii mówi o sumie prawdopodobieństw wystąpienia danej wartości p
 \end{equation}
 Jeżeli w ramce występuje wiele skrajnych wartości, entropia sygnału będzie duża. 
 Pozwala to stwierdzić zmienność i rozbieżność wartości sygnału w ramce.
-\subsubsection{SSC}
+\subsubsection{Spectral Subband Centroids (SSC)}
 Centroidy Podpasm Widma \ang{Spectral Subband Centroids} opisuje cechy widma podobne do formant.
 Analizując widmo sygnału dzieli je na podpasma, następnie znajdując środek ciężkości w każdym podpaśmie \cite{Majstorovic2011}.
 \begin{equation}
@@ -337,7 +336,7 @@ Powyższa formułą definiuje centroidy, gdzie dzieląc widmo na $m$ pasm:
 \end{description}
 SSC pozwala na znaczną parametryzację, przez określenie szerokości pasma, np połowa częstotliwości próbkowania sygnału.
 Kolejną decyzją jest określenie kształtu filtra środkowoprzepustowego, definiującego pasmo, 
-jak i liczba, oraz wzajemne położenie pasm.
+jak i liczba oraz wzajemne położenie pasm.
 \subsection{Opis statystyczny}
 Ostatnim etapem ekstrakcji cech, jest określenie ich parametrów statystycznych.
 Dla każdej ramki sygnału zostały obliczone cechy bazowe, opisane w poprzedniej sekcji.
@@ -484,7 +483,7 @@ Prowadzi to do znacznego wzrostu złożoności obliczeniowej klasyfikacji, dla w
 Istnieją modyfikacje klasyfikatora najbliższych sąsiadów redukujące wymienione wady. 
 Opisana została klasyczna wersja algorytmu.
 
-\subsection{Maszyna Wektorów Wspierających}
+\subsection{Maszyna Wektorów Wspierających (SVM)}
 
 Maszyna Wektorów Wspierających \ang{Support Vector Machine} wykorzystywana jest do klasyfikacji obserwacji w uczeniu maszynowym.
 Należy do grupy modeli uczonych w sposób nadzorowany. 
@@ -536,7 +535,7 @@ Odległość pomiędzy obserwacjami a hiperpłaszczyzną definiuje się następu
 czyli rzut skalarny \ang{scalar projection} wektora obserwacji $\bm{x}$ na wektor jednostkowy $\hat{\bm{w}} = \frac{\bm{w}}{|\bm{w}|}$
 obrazujący położenie płaszczyzny.
 Wartość rzutu skalarnego jest odległością obserwacji od hiperpłaszczyzny. 
-Różnica najmniejszej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=1$,
+Różnica najmniejszej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=1$
 oraz największej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=-1$ 
 powinna być jak największa.
 Obserwacje znajdujące się w najmniejszej odległości od hiperpłaszczyzny nazywane są wektorami wspierającymi \ang{support vectors}
@@ -654,11 +653,10 @@ dla $N$-wymiarowej przestrzeni.
 	K(x_i, x_j) = tanh( \alpha x_i  x_j + c)
 \end{equation}
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
-\subsection{MLP}
-\subsubsection{Sztuczne sieci neuronowe}
+\subsection{Sztuczne sieci neuronowe}
 Sztuczne sieci neuronowe \ang{Artificial Neural Network} są modelami zainspirowanymi ludzkim mózgiem.
 Składają się z ogromnej liczby węzłów, każdy węzeł wykonuje prostą operację matematyczną.
-Każdy neuron posiada wejścia, wyjście, oraz zestaw parametrów go określających. 
+Każdy neuron posiada wejścia, wyjście oraz zestaw parametrów go określających. 
 Dzięki połączeniom węzłów - sztucznych neuronów sieci neuronowe są w stanie rozwiązywać złożone problemy.
 Proces uczenia sieci neuronowej polega na dostosowywaniu parametrów węzłów prowadzącego do znalezienia optymalnego rozwiązania problemu.
 Sztuczne sieci neuronowe są bardzo popularnym i rozbudowanym zagadnieniem uczenia maszynowego.
@@ -789,7 +787,7 @@ Przykładem funkcji, której nie może zamodelować pojedynczy percepton jest XO
 	\caption{Tabela funkcji XOR}
 	\label{tab:mlp:xor}
 \end{table}
-Wykres \ref{wyk:mlp:xor} obrazuje funkcję $XOR$, oraz przykładowe hiperpłaszczyzny.
+Wykres \ref{wyk:mlp:xor} obrazuje funkcję $XOR$ oraz przykładowe hiperpłaszczyzny.
 Nie istnieje hiperpłaszczyzna rozdzielająca argumenty, dla których wartość $XOR$ przyjmuje $1$,
 od argumentów, dla których $XOR$ przyjmuje wartość $0$ \cite{Labib2010}.
 \begin{figure}[h]
@@ -816,7 +814,8 @@ od argumentów, dla których $XOR$ przyjmuje wartość $0$ \cite{Labib2010}.
 \end{figure}
 Percepton wielowarstwowy dzięki zastosowaniu wielu warstw ukrytych, 
 jest w stanie zróżnicować zbiory, które nie są separowalne liniowo.
-\chapter{Badanie}
+\chapter{Struktura oprogramowania}
+\chapter{Przeprowadzone badania}
 Zasadniczą częścią pracy, jest napisanie programu komputerowego zdolnego rozróżnić emocje mówcy na podstawie dźwiękowego zapisu wypowiedzi.
 Aplikacja została zaimplementowana w języku \textit{Python}. 
 Została podzielona na dwie części. 
@@ -870,7 +869,7 @@ Nagrano 4 typy wypowiedzi.
 \end{description}
 Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich stanach emocjonalnych.
 
-Baza danych składa się z opisu, oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
+Baza danych składa się z opisu oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
 Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
 Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bitów. ~\cite{Igras2009}.
 
@@ -944,7 +943,7 @@ Redukcja wymiarowości w tej aplikacji została zrealizowana przez selekcję cec
 RFE dokonując klasyfikacji na zbiorze testowym z wykorzystaniem kolejnych cech wybiera zestaw cech pozwalający najwyraźniej zróżnicować obserwacje.
 Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując własności wektorów i własności własnych macierzy,
 przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, następnie wybiera najistotniejsze wymiary \cite{Bro2014}.
-Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy), oraz MLP.
+Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy) oraz MLP.
 Zmierzono zdolność klasyfikacji mowy wyrażającej jedną z emocji podstawowych, jak również porównano zdolność rozróżniania emocji parami.
 
 Porównując trafność rozpoznawania jednej z siedmiu emocji podstawowych w zależności od klasyfikatora i metody redukcji wymiarowości.
@@ -1079,7 +1078,7 @@ a rozróżnialność złości i irytacji osiąga 90\%.
 %\end{table}
 \chapter{Wnioski}
 Emocje są nieodłącznym elementem życia ludzkiego. 
-Powstały na drodze ewolucji i mają istotny udział w postrzeganiu świata zewnętrznego, oraz interakcji międzyludzkich.
+Powstały na drodze ewolucji i mają istotny udział w postrzeganiu świata zewnętrznego oraz interakcji międzyludzkich.
 Umożliwiają błyskawiczną reakcję na bodziec, czy zdarzenie wzbudzający stan emocjonalny bez dogłębnej analizy sytuacji jakiej człowiek doświadcza.
 W najbardziej elementarnym stopniu z punktu widzenia przetrwania wymuszają na decyzję o podjęciu walki w sytuacji zagrożenia, lub ucieczki w przerażeniu.
 Bez udziału świadomości nastrajają człowieka pozytywnie lub negatywnie w napotkanych sytuacjach, wspomagają podejmowanie decyzji.
