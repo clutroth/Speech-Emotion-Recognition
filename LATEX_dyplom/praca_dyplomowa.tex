@@ -234,26 +234,25 @@ zwracając wektor cech \Rys{rys:mgcc:schemat}.
 
 Pierwszym krokiem algorytmu jest obliczenie transformaty Fouriera \cite{Steidl2009}. 
 Pozwala ona przenieść sygnał z dziedziny czasu, do dziedziny częstotliwości. 
-Operując na sygnale cyfrowym wykorzystana dyskretna transformata Fouriera,
-bardziej precyzyjnie w wariancie szybkiej transformaty Fouriera. 
+Operując na sygnale cyfrowym wykorzystana jest dyskretna transformata Fouriera,
 \begin{equation}
 	X_{k}=\sum _{n=0}^{N-1}x_{n}e^{\frac{-i2\pi kn}{N}}\qquad k=0,\dots ,N-1
 \end{equation}
-Szybka transformata Fouriera zwraca podobny wynik, jak dyskretna transformata Fouriera,
-ale znacznie szybciej.
+bardziej precyzyjnie w wariancie szybkiej transformaty Fouriera. 
+Szybka transformata Fouriera zwraca podobny wynik, jak dyskretna transformata Fouriera
+wykonując znacznie mniej operacji obliczeniowych.
 
 Drugim etapem algorytmu, jest reprezentacja widma w skali melowej. 
 Wzorując się na ludzkim narządzie słuchu, 
 który postrzega zmianę częstotliwości dźwięku nieliniowo, stosuje się skalę melową.
 Skala melowa została zdefiniowana w oparciu o subiektywne odczucia wysokości dźwięku.
-Za dźwięk podstawowy przyjmuje się, że dźwięk o częstotliwości 1000 Hz i głośności 40 dB wyraża się wartością 1000 melów \cite{KrishnaKishore2013}.
+Za dźwięk podstawowy przyjmuje się, dźwięk o częstotliwości 1000 Hz i głośności 40 dB wyrażony wartością 1000 melów \cite{KrishnaKishore2013}.
 Następnie na podstawie pomiarów i ocen został stworzony wzór
 \begin{equation}
 	m=2595\log _{10}\left(1+{\frac {f}{700}}\right)
 \end{equation}
 Przeniesienie widma do skali melowej wykonuje się przez aplikację szeregu trójkątnych filtrów środkowoprzepustowych. 
 Wprowadza to pewną różnicę, względem psychoakustycznego postrzegania dźwięku, gdzie skala dźwięku jest ciągła.
-Filtry środkowoprzepustowe wprowadzają pewną dyskretyzację możliwych wartości.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{melfilterbank}
@@ -274,10 +273,11 @@ Dla każdej $k$-tej wartości sygnału $M$ jest liczony logarytm, gdzie $N$ jest
 
 Ostatnia faza to obliczenie współczynników cepstralnych.
 Daje ona odseparowanie sygnału od czynników zależnych od mówcy.
-Sygnał źródłowy - mowa był splotem informacji,
-które przekazywał oraz sygnału zależnych od mówcy wynikających z budowy jego narządu mowy oraz sposobu mówienia.
+Sygnał głosu zawiera informacje zawarte w komunikacie wypowiedzi oraz 
+cechy sygnału zależne od mówcy wynikające z budowy jego narządu mowy oraz sposobu mówienia.
 Cechy sygnału zależne od mówcy nie są istotne z punktu widzenia interpretacji przekazu i treści wypowiedzi.
-Przeniesienie widma częstotliwości sygnału do cepstrum zdekoreluje zmiany częstotliwości od wartości energii.
+Sygnał w dziedzinie częstotliwości pokazuje wartości energii poszczególnych składowych sygnału.
+Przeniesienie sygnału do dziedziny cepstrum pozwala zauważyć częstotliwość zmian sygnału częstotliwościowego.
 Zastosowana zostanie dyskretna transformata kosinusowa (DCT-II) \ang{discrete cosine transform} \cite{Hossan2013}.
 Dyskretną transformatę kosinusową definiuje wzór:
 \begin{equation}
@@ -306,26 +306,25 @@ Liczbę przejść przez zero wyraża się w liczbie miejsc, gdzie sąsiednie pr�
 	\end{cases}
 	\label{eq:zcr}
 \end{equation}
-Jeżeli liczba przejść przez zero jest duża, można założyć, że dana ramka nie zawiera mowy.
-Ramki zawierające mowę mają wysoką liczbę przejść przez zero.
-\subsubsection{Energia entropii}
-Entropia energii mówi o sumie prawdopodobieństw wystąpienia danej wartości próbki $p_k$ w sygnale \cite{Majstorovic2011}.
+Okresowy sygnał ma niższą liczbę przejść przez zero niż sygnał niezawierający mowy\cite{Walters-Williams2010}.
+\subsubsection{Energia}
+Entropia mówi o sumie prawdopodobieństw wystąpienia danej wartości próbki $p_k$ w sygnale \cite{Majstorovic2011}.
 \begin{equation}
 	Ee_{s}=-\sum _{k=1}^{N}p_k log(p_k)
-	\label{eq:entropy_energy}
+	\label{eq:entropy}
 \end{equation}
 Jeżeli w ramce występuje wiele skrajnych wartości, entropia sygnału będzie duża. 
 Pozwala to stwierdzić zmienność i rozbieżność wartości sygnału w ramce.
 \subsubsection{Spectral Subband Centroids (SSC)}
-Centroidy Podpasm Widma \ang{Spectral Subband Centroids} opisuje cechy widma podobne do formant.
-Analizując widmo sygnału dzieli je na podpasma, następnie znajdując środek ciężkości w każdym podpaśmie \cite{Majstorovic2011}.
+Centroidy Podpasm Widma \ang{Spectral Subband Centroids} opisują cechy widma podobne do formant.
+Analizując widmo sygnału dzieli się je na podpasma, następnie znajdując środek ciężkości w każdym podpaśmie \cite{Majstorovic2011}.
 \begin{equation}
 	C_m=\frac
 	{\int_{l_m}^{h_m} f w_m(f) P^\gamma(f)df}
 	{\int_{l_m}^{h_m} w_m(f) P^\gamma(f)df}
 	\label{eq:ssc}
 \end{equation}
-Powyższa formułą definiuje centroidy, gdzie dzieląc widmo na $m$ pasm:
+Powyższa formuła definiuje centroidy, gdzie dzieląc widmo na $m$ pasm:
 \begin{description}
 	\item[$C_m$] $m$-ty centroid
 	\item[$l_m$] dolna granica pasma
@@ -334,9 +333,8 @@ Powyższa formułą definiuje centroidy, gdzie dzieląc widmo na $m$ pasm:
 	\item[$P(f)$] moc widma
 	\item[$\gamma$] współczynnik mocy widma
 \end{description}
-SSC pozwala na znaczną parametryzację, przez określenie szerokości pasma, np połowa częstotliwości próbkowania sygnału.
 Kolejną decyzją jest określenie kształtu filtra środkowoprzepustowego, definiującego pasmo, 
-jak i liczba oraz wzajemne położenie pasm.
+jak i liczbę oraz wzajemnego położenia pasm.
 \subsection{Opis statystyczny}
 Ostatnim etapem ekstrakcji cech, jest określenie ich parametrów statystycznych.
 Dla każdej ramki sygnału zostały obliczone cechy bazowe, opisane w poprzedniej sekcji.
@@ -373,7 +371,7 @@ Wyrażona jest wzorem
 	\gamma = E \left [ \left (  \frac{X - \mu}{ \sigma }   \right )^4 \right ]
 \end{equation}
 gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
-\subsection{Analiza głównych składowych}\label{sec:pca}
+\subsection{Analiza składowych głównych}\label{sec:pca}
 Głównym zadaniem selekcji cech jest redukcja wymiarowości obserwacji.
 W praktyce, wiele wymiarów jest ze sobą silnie skorelowanych.
 Rozważanie obserwacji w skorelowanych wymiarach obniża skuteczność klasyfikacji.
