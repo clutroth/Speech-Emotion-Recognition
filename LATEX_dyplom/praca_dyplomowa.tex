@@ -27,6 +27,7 @@
 \usepackage[pdftex]{hyperref}
 \usepackage{bm}
 \usepackage{amsmath}
+\usepackage{multicol}
 
 % rozmaite polecenia pomocnicze
 % gdzie rysunki?
@@ -106,6 +107,8 @@
 \newcommand{\Alg}[1]{(Algorytm~\ref{#1})}
 \newcommand{\Lst}[1]{(Listing~\ref{#1})}
 \newcommand{\Eq}[1]{(\ref{#1})}
+
+\renewcommand{\vec}[1]{\bm{#1}}
 
 \newcommand{\zrodlo}[1]{\captionsetup{font=scriptsize}\caption*{źródło: \url{#1}}}
 
@@ -237,8 +240,11 @@ Pozwala ona przenieść sygnał z dziedziny czasu, do dziedziny częstotliwości
 Operując na sygnale cyfrowym wykorzystana jest dyskretna transformata Fouriera,
 \begin{equation}
 	X_{k}=\sum _{n=0}^{N-1}x_{n}e^{\frac{-i2\pi kn}{N}}\qquad k=0,\dots ,N-1
-\end{equation}
-bardziej precyzyjnie w wariancie szybkiej transformaty Fouriera. 
+\end{equation}, gdzie 
+$x_n$ - próbka sygnału czasowego, 
+$N$ - liczba próbek w badanym sygnale czasowym,
+$X_k$ - próbka sygnału częstotliwościowego.
+W praktyce stosuje się wariant szybkiej transformaty Fouriera. 
 Szybka transformata Fouriera zwraca podobny wynik, jak dyskretna transformata Fouriera
 wykonując znacznie mniej operacji obliczeniowych.
 
@@ -250,7 +256,9 @@ Za dźwięk podstawowy przyjmuje się, dźwięk o częstotliwości 1000 Hz i gł
 Następnie na podstawie pomiarów i ocen został stworzony wzór
 \begin{equation}
 	m=2595\log _{10}\left(1+{\frac {f}{700}}\right)
-\end{equation}
+\end{equation}, gdzie
+$f$ - częstotliwość w Hz,
+$m$ - częstotliwość w melach.
 Przeniesienie widma do skali melowej wykonuje się przez aplikację szeregu trójkątnych filtrów środkowoprzepustowych. 
 Wprowadza to pewną różnicę, względem psychoakustycznego postrzegania dźwięku, gdzie skala dźwięku jest ciągła.
 \begin{figure}[h]
@@ -283,7 +291,12 @@ Dyskretną transformatę kosinusową definiuje wzór:
 \begin{equation}
 	X_k =
 	 \sum_{n=0}^{N-1} x_n \cos \left[k \left(n+\frac{1}{2}\right) \frac{\pi}{N} \right] \quad \quad k = 0, \dots, N-1.
-\end{equation}
+\end{equation}, gdzie
+$n$ - numer próbki sygnału czasowego,
+$k$ - numer próbki transformaty DCT,
+$N$ - liczba próbek w rozpatrywanym sygnale czasowym,
+$x_n$ - próbka sygnału czasowego,
+$X_k$ - próbka sygnału częstotliwościowego.
 
 
 \subsubsection{Energia}
@@ -360,17 +373,17 @@ skośność ujemna, że prawy ogon znajduje się dalej,
 a zerowa informuje o symetrycznym rozkładzie.
 Skośność definiujemy jako
 \begin{equation}
-	\gamma = E \left [ \left (  \frac{X - \mu}{ \sigma }   \right )^3 \right ]
+	\gamma = E \left [ \left (  \frac{\vec X - \mu}{ \sigma }   \right )^3 \right ]
 \end{equation}
-gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
+gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $\vec X$ wartościami cechy.
 
 Kurtoza jest czwartym momentem centralnym.
 Wyraża spłaszczenie rozkładu. 
 Wyrażona jest wzorem
 \begin{equation}
-	\gamma = E \left [ \left (  \frac{X - \mu}{ \sigma }   \right )^4 \right ]
+	\gamma = E \left [ \left (  \frac{\vec X - \mu}{ \sigma }   \right )^4 \right ]
 \end{equation}
-gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $X$ wartościami cechy.
+gdzie $\mu$ jest średnią arytmetyczną, $\sigma$ odchyleniem standardowym, a $\vec X$ wartościami cechy.
 \subsection{Analiza składowych głównych}\label{sec:pca}
 Głównym zadaniem selekcji cech jest redukcja wymiarowości obserwacji.
 W praktyce, wiele wymiarów jest ze sobą silnie skorelowanych.
@@ -379,7 +392,7 @@ Niektóre klasyfikatory interpretują cechę reprezentowaną przez wiele skorelo
 Celem selekcji cech, jest wybór takiego zestawu cech, który gwarantuje największą zmienność eliminując wymiary silnie skorelowane, 
 lub transformując przestrzeń w sposób gwarantujący największą zmienność w wymiarach.
 
-Analiza Głównych Składowych - \ang{Principal Component Analysis} służy redukcji liczby wymiarów przestrzeni,
+Analiza składowych głównych - \ang{Principal Component Analysis - PCA} służy redukcji liczby wymiarów przestrzeni,
 w których rozpatrywane są obserwacje.
 Zmierza do wyboru cech exponujących największą zmienność w zbiorze obserwacji.
 Główne składowe zostają uporządkowane w kolejności od największej zmienności do najmniejszej \cite{Bro2014}.
@@ -388,23 +401,30 @@ Definiowane są jako wektory własne macierzy kowariancji.
 \subsubsection{Standaryzacja}
 Do poprawnego działania PCA wymaga ustandaryzowanych danych wejściowych.
 Ponieważ PCA ma za zadanie stworzyć podprzestrzeń maksymalizującą wariancję,
-należy dane ustandaryzować, aby oryginalna wartość danych nie 
-przekłamywała jej różnorodności.
+należy dane ustandaryzować.
 Standaryzacja jest pierwszym etapem PCA.
 \subsubsection{Obliczenie wektorów i wartości własnych macierzy kowariancji}
 Wartości i wektory własne macierzy kowariancji są podstawą PCA.
-Wektory własne określają kierunki nowej przestrzeni cech, a wartości własne określają jej wielkość.
+Wektory własne określają kierunki nowej przestrzeni cech.
 W klasycznym ujęciu PCA polega na rozkładzie na wektory i wartości własne macierzy kowariancji o wymiarach $d \times d$,
 gdzie każdy element przedstawia kowariancję pomiędzy dwiema cechami. 
 Kowariancję pomiędzy parą cech definiuje się w następujący sposób:
 \begin{equation}
-	\sigma_{jk}=\frac{1}{n - 1}\sum_{i=1}{n}(x_{ij}-\bar x_j)(x_{ik} - \bar x_k)
+	\sigma_{jk}=\frac{1}{n - 1}\sum_{i=1}^{n}(x_{ij}-\bar x_j)(x_{ik} - \bar x_k)
 \end{equation}
+gdzie 
+$n$ - liczba kolumn
+$\sigma_{jk}$ - wartość $j,k$ macierzy kowariancji,
+$x_{ij}$ - wartość $i,j$ macierzy, 
+$\bar{x_j}$ - wartość średnia $j$-tego wiersza,
+$x_{ik}$ - wartość $i,k$ macierzy, 
+$\bar{x_k}$ - wartość średnia $k$-tego wiersza,
+
 W zapisie macierzowym wzór na macierz kowariancji przedstawia się:
 \begin{equation}
-	\Sigma=\frac{1}{n - 1}\left((X-\bar x)^T(X - \bar x)\right)
+	S=\frac{1}{n - 1}\left((\vec{X}-\bar x)^T(\vec{X} - \bar x)\right)
 \end{equation}
-gdzie $\bar x$ jest wartością średnią cechy.
+gdzie $\vec X$ - macierz obserwacji.
 Kolejnym krokiem jest znalezienie wartości własnych macierzy kowariancji i odpowiadających im wektorów własnych.
 \subsubsection{Sortowanie par wartości i wektorów własnych}
 PCA najczęściej jest wykorzystywana do redukcji wymiarowości, 
@@ -417,17 +437,18 @@ Mogą one zostać pominięte w dalszej analizie.
 Pary wektorów i wartości własnych są sortowane względem wartości własnych,
 te najmniej istotne zostają odrzucone.
 W celu określenia, jaka najmniejsza liczba wymiarów pozwoli nam zróżnicować przestrzeń,
-wykorzystuje się wyjaśnioną wariancję.
+wykorzystuje się wyjaśnioną wariancję \cite{Bro2014}.
 Wybiera się te wektory własne, które w sumie dają wariancję wystarczająco zbliżoną do wariancji wynikającej ze wszystkich wektorów własnych.
 
 \subsubsection{Macierz projekcji}
 Macierz projekcji służy przeniesieniu obserwacji z przestrzeni oryginalnej $d$ wymiarowej,
 do przestrzeni $k$-wymiarowej, nie tracąc znaczących informacji.
-Do zbudowania macierzy projekcji $W$ posłuży $k$ wektorów własnych posiadających największe własności własne.
+Do zbudowania macierzy projekcji $\vec W$ posłuży $k$ wektorów własnych posiadających największe własności własne.
 \begin{equation}
 	W = [\vec e_1 \vec e_2 \dots \vec e_k]
 \end{equation}
-Ostatnim etapem będzie przeniesienie obserwacji z przestrzeni oryginalnej $X$ do przestrzeni wynikowej $Y = X \times W$.
+Ostatnim etapem będzie przeniesienie obserwacji z przestrzeni oryginalnej $X$ do przestrzeni wynikowej $\vec Y = \vec X \times \vec W$.
+Liczba wymiarów nowej przestrzeni $d$ jest znacznie mniejsza od liczby wymiarów starej przestrzeni $k$.
 \section{Klasyfikacja}
 \subsection{Klasyfikator Najbliższych Sąsiadów}
 Klasyfikator najbliższych sąsiadów jest prosty w działaniu i implementacji.
@@ -435,10 +456,10 @@ Pozwala szybko otrzymać rezultaty, jednak mogą one nie być zadowalające w ba
 Zasada działania w uproszczeniu sprowadza się do reprezentacji obserwacji za pomocą wektorów cech.
 Obliczane są odległości pomiędzy wektorami \cite{Du2013}.
 Klasa nowej obserwacji ustalana jest na podstawie klas najbliższych znanych obserwacji ze zbioru uczącego.
-Klasyfikator jest podatny na ilość cech branych pod uwagę w czasie klasyfikacji.
+Klasyfikator jest podatny na liczbę cech branych pod uwagę w czasie klasyfikacji.
 Redukcja liczby parametrów, uwzględniająca usunięcie cech silnie skorelowanych i słabo różnicujących znacząco podnosi wydajność i skuteczność klasyfikatora.
 
-Metoda klasyfikuje obserwacje biorąc pod uwagę najbliższą obserwację ze zbioru uczącego.
+KNN klasyfikuje obserwacje biorąc pod uwagę najbliższą obserwację ze zbioru uczącego.
 Obserwacje ze zbioru uczącego rozmieszczone są w wielowymiarowej przestrzeni cech.
 Przestrzeń ta jest podzielona na strefy odpowiadające klasom.
 Obserwacja znajdująca się w danej strefie zostaje przypisana do klasy, do której ta strefa należy.
@@ -475,7 +496,7 @@ Algorytm \ref{alg:knn:alg} jest wrażliwy na liczbę cech - wymiarów przestrzen
 Każda cecha odpowiada jednemu wymiarowi w przestrzeni.
 Nie jest brana pod uwagę korelacja cech, ani zdolność cech do różnicowania obserwacji.
 Dla klasyfikowanej obserwacji obliczany jest dystans pomiędzy tą obserwacją,
-a każdą obserwacją ze zbioru testowego, uwzględniająca wszystkie wymiary.
+a każdą obserwacją ze zbioru testowego.
 Prowadzi to do znacznego wzrostu złożoności obliczeniowej klasyfikacji, dla większej liczby cech, czy zbiorów danych uczących.
 
 Istnieją modyfikacje klasyfikatora najbliższych sąsiadów redukujące wymienione wady. 
@@ -483,7 +504,7 @@ Opisana została klasyczna wersja algorytmu.
 
 \subsection{Maszyna Wektorów Wspierających (SVM)}
 
-Maszyna Wektorów Wspierających \ang{Support Vector Machine} wykorzystywana jest do klasyfikacji obserwacji w uczeniu maszynowym.
+Maszyna Wektorów Wspierających \ang{Support Vector Machine - SVM} wykorzystywana jest do klasyfikacji obserwacji w uczeniu maszynowym.
 Należy do grupy modeli uczonych w sposób nadzorowany. 
 Uczenie odbywa się przez zadanie zbioru danych testowych, 
 każda obserwacja jest oznaczona jako należąca do jednej z dwóch klas.
@@ -504,7 +525,7 @@ Może ją przeciąć dowolną płaszczyzną.
 Płaszczyzna dzieli przestrzeń trójwymiarową na dwie części, jest więc jej hiperpłaszczyzną.
 
 Sposób tworzenia klasyfikatora SVM jest się następujący.
-Obserwacje $x_i$ rozmieszczone są w $n$-wymiarowej przestrzeni cech, gdzie $x_i \in R^n$.
+Obserwacje $x_i$ rozmieszczone są w $n$-wymiarowej przestrzeni cech, gdzie $\vec{x_i} \in R^n$.
 Klasy $y_i$ są oznaczone jako $-1$ i $+1$, gdzie $y_i \in \{-1, +1\}$, co można zapisać jako:
 \begin{equation}
 	(\bm{x_1},y_1), ..., (\bm{x_i}, y_i), \textrm{ gdzie } y_i \in \{-1, +1\}
@@ -524,30 +545,29 @@ Hiperpłaszczyzna optymalna
 \begin{equation}
 	\bm{w_0} \cdot \bm{x_i}  + b_0 = 0
 \end{equation}
-
 istnieje w przypadku, kiedy rozdziela zbiór treningowy z zachowaniem największej możliwej odległości od obserwacji obydwu klas.
-Odległość pomiędzy obserwacjami a hiperpłaszczyzną definiuje się następująco:
+Odległość pomiędzy obserwacjami a hiperpłaszczyzną definiuje
+rzut skalarny \ang{scalar projection} \Eq{svm:eq:rzut} wektora obserwacji $\bm{x}$ na wektor jednostkowy $\hat{\bm{w}} = \frac{\bm{w}}{|\bm{w}|}$
+obrazujący położenie płaszczyzny.
 \begin{equation}
 	\rho(\bm{w}, b) = \min\limits_{\{x:y=1\}} \frac{\bm{x} \cdot \bm{w}} {|\bm{w}|} - \max\limits_{\{x:y=-1\}}  \frac{\bm{x} \cdot \bm{w}} {|\bm{w}|} 
+	\label{svm:eq:rzut}
 \end{equation}
-czyli rzut skalarny \ang{scalar projection} wektora obserwacji $\bm{x}$ na wektor jednostkowy $\hat{\bm{w}} = \frac{\bm{w}}{|\bm{w}|}$
-obrazujący położenie płaszczyzny.
 Wartość rzutu skalarnego jest odległością obserwacji od hiperpłaszczyzny. 
-Różnica najmniejszej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=1$
-oraz największej odległości pomiędzy hiperpłaszczyzną, a obserwacją należącą do klasy $y=-1$ 
+Różnica najmniejszej odległości pomiędzy hiperpłaszczyzną a obserwacją należącą do klasy $y=1$
+oraz największej odległości pomiędzy hiperpłaszczyzną a obserwacją należącą do klasy $y=-1$ 
 powinna być jak największa.
 Obserwacje znajdujące się w najmniejszej odległości od hiperpłaszczyzny nazywane są wektorami wspierającymi \ang{support vectors}
 
 Klasyfikacja polega na umieszczeniu klasyfikowanej obserwacji w przestrzeni cech.
 Obserwacja należy do tej klasy, do której należą obserwacje leżące po tej samej stronie hiperpłaszczyzny.
-\subsubsection{Uczenie modelu}
+\subsubsection{Uczenie}
 %http://fourier.eng.hmc.edu/e161/lectures/svm/node3.html
 Uczenie odbywa się przez zadanie zbioru obserwacji testowych. 
-Mamy zbiór obserwacji, separowalny liniowo, każda z obserwacji należy do klasy $P$ lub $N$:
-\begin{displaymath}
-	\{ ({\bf x}_k, y_k), k=1,\cdots,K \} 
-\end{displaymath}
-gdzie klasy są oznaczone jako $y_k \in \{1,-1\}$ określają obserwacje $\vec{x}_k$.
+Mamy zbiór obserwacji, separowalny liniowo, każda z obserwacji $\vec{x}_k$ należy do klasy $-1$ lub $1$:
+\begin{equation}
+	\{ ({\bf x}_k, y_k), k=1,\cdots,K \} \mbox{, gdzie } y_k \in \{1,-1\}
+\end{equation}
 Celem optymalizacji jest odnalezienie wektora $\vec{w}$ i stałej $b$ wyznaczających hiperpłaszczyznę
 sperarującą liniowo obserwacje różnych klas w przestrzeni. 
 
@@ -579,7 +599,7 @@ Ostatecznie płaszczyznę \Eq{eq:svm:hyperplane} określamy dobierając wartośc
 \end{equation}
 
 \subsubsection{Hiperpłaszczyzna Miękkiego Marginesu}
-Rzeczywiste problemy rozmieszczone w przestrzeni wielowymiarowej nie są separowalne liniowo. 
+Obserwacje rozmieszczone w przestrzeni wielowymiarowej nie są separowalne liniowo. 
 Rozwiązanie problemu nieseparowalnego liniowo sprowadza się do znalezienia hiperpłaszczyzny Miękkiego Marginesu \ang{Soft Margin}, 
 która rozdziela obserwacje dwóch klas zawierającą jak najmniejszą liczbę błędnych klasyfikacji.
 W takim przypadku błędne klasyfikacje są nie do uniknięcia \cite{Dellepiane2015}.
@@ -611,7 +631,7 @@ Margines pierwszej normy jest mniej wrażliwy na obserwacje leżące poza nim,
 dzięki temu margines pierwszej normy jest lepszy do klasyfikacji danych mniej uporządkowanych.
 
 \subsubsection{Funkcje jądra}
-Funkcja jądrwa \ang{kernel method} 
+Funkcja jądra \ang{kernel method} 
 przyporządkowuje każdej reprezentacji obserwacji w przestrzeni,
 reprezentację w innej przestrzeni o większej liczbie wymiarów.
 Zabieg zwiększenia liczby wymiarów ma na celu ułatwienie 
@@ -628,17 +648,17 @@ przeniesiemy zbiór obserwacji do przestrzeni w której będzie on separowalny l
 \end{equation}
 
 Jądro liniowe \Eq{eq:svm:kern:lin} jest najprostszą funkcją jądra. 
-sprowadza się do iloczyny wektorowego i dodania stałej $c$.
+sprowadza się do iloczynu wektorowego i dodania stałej $c$.
 Liniowa funkcja jądra w niektórych przypadkach nie wprowadza zmian zmieniających rezultat działania algorytmu.
 \begin{equation}
 	\label{eq:svm:kern:lin}
-	K(x, x_i) = x \cdot x ^ T + c
+	K(\vec x, \vec{x_i}) = \vec x \cdot \vec x ^ T + c
 \end{equation}
 
 Wielomianową funkcję jądra określają współczynnik $\alpha$, stałą $c$ i stopień wielomiany $d$.
 \begin{equation}
 	\label{eq:svm:kern:poly}
-	K(x, x_i) = (\alpha x^T x_i + c)^d 
+	K(\vec x, \vec{x_i}) = (\alpha \vec x^T \vec x_i + c)^d 
 \end{equation}
 
 Jądro sigmoidalne \Eq{eq:svm:kern:sig} pochodzi z dziedziny sieci neuronowych,
@@ -648,14 +668,14 @@ Posiada dwa parametry: współczynnik $\alpha$ i stałą $c$, gdzie zazwyczaj $c
 dla $N$-wymiarowej przestrzeni.
 \begin{equation}
 	\label{eq:svm:kern:sig}
-	K(x_i, x_j) = tanh( \alpha x_i  x_j + c)
+	K(\vec{x_i}, \vec{x_j}) = tanh( \alpha \vec{x_i}  \vec{x_j} + c)
 \end{equation}
 %http://crsouza.com/2010/03/17/kernel-functions-for-machine-learning-applications/
 \subsection{Sztuczne sieci neuronowe}
 Sztuczne sieci neuronowe \ang{Artificial Neural Network} są modelami zainspirowanymi ludzkim mózgiem.
 Składają się z ogromnej liczby węzłów, każdy węzeł wykonuje prostą operację matematyczną.
 Każdy neuron posiada wejścia, wyjście oraz zestaw parametrów go określających. 
-Dzięki połączeniom węzłów - sztucznych neuronów sieci neuronowe są w stanie rozwiązywać złożone problemy.
+Dzięki połączeniom węzłów (sztucznych neuronów) sieci neuronowe są w stanie rozwiązywać złożone problemy.
 Proces uczenia sieci neuronowej polega na dostosowywaniu parametrów węzłów prowadzącego do znalezienia optymalnego rozwiązania problemu.
 Sztuczne sieci neuronowe są bardzo popularnym i rozbudowanym zagadnieniem uczenia maszynowego.
 Znajdują zastosowanie w rozpoznawaniu obrazów, mowy, pisma, robotyce. 
@@ -668,7 +688,7 @@ Pojedynczy neuron nie rozwiązuje złożonych problemów.
 Wiele neuronów połączonych w sieć jest w stanie wykonać skomplikowane operacje matematyczne.
 Pojedynczy neuron składa się z wejścia $\vec{x}$, wyjścia $y$, wektora wag $\vec{w}$ i przesunięcia $b$ \ang{bias}.
 Decyzję o podaniu sygnału na wyjście podejmuje funkcja aktywacji $g(\vec{x} \cdot \vec{w} + b)$.
-Wyjściem neuronu są liczny z przedziału $(0, 1)$.
+Wyjściem neuronu są liczby z przedziału $(0, 1)$.
 Na potrzeby tej sekcji przyjmijmy progową funkcję aktywacji $g(x)$ \Eq{eq:mlp:step}.
 \begin{equation}
 	\label{eq:mlp:step}
@@ -677,12 +697,12 @@ g(x)={\begin{cases}0{\text{, dla }}x<0\\1{\text{, dla }}x\geq 0\end{cases}}
 Neutron przyjmuje na wejście wektor $\vec{x}$.
 Wektor wejściowy zostaje pomnożony przez wektor wag $\vec{w}$ i dodany do progu aktywacji $b$.
 Rezultat jest argumentem funkcji aktywacji  $g(\vec{x} \cdot \vec{w} + b)$.
-Wartość funkcji aktywacji zostaje podana na wyjście. \Rys{rys:mlp:neuron}
+Wartość funkcji aktywacji zostaje podana na wyjście. \Rys{rys:mlp:neuron}.
 Możliwości pojedynczego neuronu są ograniczone \cite{Jeon2018}.
-Posiada jedynie wyjście binarne zwracające $0$ lub $1$, 
+Posiada jedynie wyjście binarne zwracające $0$ lub $1$. 
 Zadaniem neuronu jest określenie, po której stronie hiperpłaszczyzny, 
-określonej przez wektor $\vec w$ i skalar $b$.
-Funkcja aktywacji normalizuje odpowiedź.
+określonej przez wektor $\vec w$ i skalar $b$ znajduje się obserwacja.
+Funkcja aktywacji ogranicza odpowiedź do wcześniej zadanego zakresu.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{neuron}
@@ -715,7 +735,8 @@ Może przyjąć wszystkie wartości z zakresu $y \in (0,1)$.
 Rzutuje to na interpretację wartości zwracanej przez neuron,
 która nie działa już zgodnie z regułą \textit{wszystko, albo nic}.
 Neuron z funkcją sigmoidalną nie jest już klasyfikatorem binarnym, ponieważ może zwrócić np. wartość $sigm(0) = 0,5$.
-Pozwala to na tworzenie bardziej ogólnych sieci neuronowych, znajdujących zastosowanie w większej liczbie zastosowań.
+Pozwala to na tworzenie sieci neuronowych operujących na rozmytej,
+zwiększając zakres problemów w których zastosowanie mogą znaleźć sztuczne sieci neuronowe.
 
 %http://lowrank.net/gnuplot/datafile2-e.html
 
@@ -767,7 +788,7 @@ Wartości zwrócone przez warstwę $L_3$ - wyjściową są wynikiem działania c
 	\caption{Warstwy sieci neuronowej}
 	\label{rys:mlp:warstwy}
 \end{figure}
-\subsubsection{Percepton wielowarstwowy}
+\subsubsection{Percepton wielowarstwowy - MLP}
 Percepton wielowarstwowy \ang{Multi-layer percepton} jest najpopularniejszym typem sztucznej sieci neuronowej.
 Jest zbudowany z warstw wejściowej, wyjściowej i wielu warstw ukrytych.
 Percepton wielowarstwowy w odróżnieniu od perceptonu jednowarstwowego może rozwiązywać problemy nieliniowe.
@@ -813,7 +834,6 @@ od argumentów, dla których $XOR$ przyjmuje wartość $0$ \cite{Labib2010}.
 Percepton wielowarstwowy dzięki zastosowaniu wielu warstw ukrytych, 
 jest w stanie zróżnicować zbiory, które nie są separowalne liniowo.
 \chapter{Struktura oprogramowania}
-\chapter{Przeprowadzone badania}
 Zasadniczą częścią pracy, jest napisanie programu komputerowego zdolnego rozróżnić emocje mówcy na podstawie dźwiękowego zapisu wypowiedzi.
 Aplikacja została zaimplementowana w języku \textit{Python}. 
 Została podzielona na dwie części. 
@@ -833,25 +853,25 @@ Python jest interpretowanym, obiektowo zorientowanym, dynamicznie typowanym jęz
 Operuje na wysokopoziomowych strukturach, których typy i zależności są rozwiązywane dynamicznie.
 Jako język elastyczny jest przeznaczony do szybkiego tworzenia aplikacji, skryptów, czy integracji istniejących komponentów.
 Python charakteryzuje się prostą składnią sterowaną białymi znakami 
-(np. zamiast nawiasów klamrowych znanych z C, czy Javy wykorzystuje wcięcia w kodzie do definiując bloki kodu).
+(np. zamiast nawiasów klamrowych znanych z C, czy Javy, Python wykorzystuje wcięcia w kodzie definiując bloki kodu).
 Podejście to wymusza pisanie bardziej czytelnego kodu.
 Kod jest dzielony na moduły i pakiety.
 Python posiada duży zbiór bibliotek rozwijanych przez społeczność.
 
 Numpy to najpopularniejsza biblioteka wykorzystywana do obliczeń numerycznych i uczenia maszynowego.
-Pozwala operować na n-wymarowych macierzach, zawiera podstawowe funkcje algebry liniowej itd.
+Pozwala operować na n-wymiarowych macierzach, zawiera podstawowe funkcje algebry liniowej itd.
 \\
-Scikit-learn biblioteką dostarczającą wymagane przez współczesny stan wiedzy implementacje algorytmów uczenia maszynowego.
+Scikit-learn jest biblioteką dostarczającą wymagane przez współczesny stan wiedzy implementacje algorytmów uczenia maszynowego.
 Docelowo znajduje zastosowanie przy rozwiązywaniu zadań statystycznych, analitycznych i eksploracji danych \cite{OShaughnessy2008}.  
 \\
 Python-speech-features to niewielka biblioteka wspierająca systemy automatycznego rozpoznawania mowy. 
 Dostarcza implementacje MFCC i SSC.
-
+\chapter{Przeprowadzone badania}
 \section{Opis bazy danych}\label{sec:opis_bazy_danych}
-W pracy wykorzystano bazę danych emocji w mowie powstały w Akademii Górniczo-Hutniczej w Krakowie.
+W pracy wykorzystano bazę danych emocji w mowie powstałą w Akademii Górniczo-Hutniczej w Krakowie.
 Nagrania zawierają pięć emocji podstawowych: radość, smutek, złość, strach, zdziwienie.
 Ponadto zostały nagrane wypowiedzi w tonie neutralnym jako punkt odniesienia i ironicznym, jako emocja złożona.
-W nagraniu wzięło udział 6 mężczyzn i 6 kobiet od 20 do 30 lat. 
+W nagraniu wzięło udział 6 mężczyzn i 6 kobiet w wieku od 20 do 30 lat. 
 Mówcy byli zarówno profesjonalnymi aktorami jak i amatorami, czy wolontariuszami.
 Baza została zrealizowana jako baza danych emocji odgrywanych. 
 
@@ -869,7 +889,7 @@ Dla każdego z 6 mówców zarejestrowano każdy typ wypowiedzi we wszystkich sta
 
 Baza danych składa się z opisu oraz wypowiedzi posegregowanych w katalogach oznaczających odgrywaną emocję.
 Nazwy plików wskazują na mówcę, emocję oraz typ wypowiedzi.
-Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bitów. ~\cite{Igras2009}.
+Nagrania zostały zapisane w formie plików WAV przy częstotliwości próbkowania 44100Hz i rozdzielczości 16 bitów ~\cite{Igras2009}.
 
 Nagrania nie zostały poddane przetwarzaniu wstępnemu. 
 Różnią się poziomem głośności.
@@ -881,16 +901,19 @@ Stan nagrań jest niejednorodny i nieznany.
 	\centering
 	\includegraphics[width=\textwidth]{MGR_ZL_C-plot}
 	\caption{Przykład ustandaryzowanego sygnału}
+	\label{rys:opis:ustandaryzowany}
 \end{figure}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{MGR_ZD_T-plot}
 	\caption{Przykład nie ustandaryzowanego sygnału}
+	\label{rys:opis:nieustandaryzowany}
 \end{figure}
 
-Zapis wypowiedzi został ustandaryzowany w celu zniwelowania różnic wynikających z głośności nagrania.
+Zapis wypowiedzi został ustandaryzowany\Rys{rys:opis:ustandaryzowany} w celu zniwelowania różnic wynikających z głośności nagrania\Rys{rys:opis:nieustandaryzowany}.
 \section{Ekstrakcja cech wypowiedzi}
 Ekstrakcja cech rozpoczyna się od znalezienia w bazie danych wszystkich plików zwierających wypowiedź i~odczytania sygnału. 
+Nie rozróżniano wypowiedzi ze względu na ich treść: polecenia, zdania, cyfry, tekst.
 Kolejnym krokiem jest przetwarzanie wstępne. 
 Sygnały stereofoniczne sumowane są do monofonicznych, sygnał zostaje poddany standaryzacji.
 W następnym etapie sygnał dzielony jest na ramki o długości 500ms zachodzące na siebie co 200ms.
@@ -912,7 +935,7 @@ Dla każdej ramki policzono zestaw cech podstawowych:
 	\item energię entropii
 	\item SSC.
 \end{itemize}
-Następnie dla każdej cechy podstawowej za wszystkie ramki obliczono wartości:
+Następnie dla każdej cechy podstawowej dla wszystkich ramek obliczono wartości:
 \begin{itemize}
 	\item minimalną
 	\item maksymalną
@@ -933,13 +956,48 @@ Przykładowo wartości \textit{mfcc 1 min}, \textit{ssc 20 max}, \textit{ssc 24 
 \item kurtozę trzeciej wartości wektora cech MFCC
 \end{itemize}
 Dane zostają zapisane w pliku $features_analysis.csv$ w celu dalszego przetwarzania.
+Wyznaczono wartości następujących cech:
+\begin{itemize}
+\item energia kurtoza
+\item energia wartość maksymalna
+\item energia średnia
+\item energia wartość minimalna
+\item energia skośność
+\item energia wariancja
+\item entropia kurtoza
+\item entropia wartość maksymalna
+\item entropia średnia
+\item entropia wartość minimalna
+\item entropia skośność
+\item entropia wariancja
+\item MFCC (współczynniki 1-13)  kurtoza
+\item MFCC (współczynniki 1-13)  wartość maksymalna
+\item MFCC (współczynniki 1-13)  średnia
+\item MFCC (współczynniki 1-13)  wartość minimalna
+\item MFCC (współczynniki 1-13)  skośność
+\item MFCC (współczynniki 1-13)  wariancja
+\item SSC (współczynniki 1-26)  kurtoza
+\item SSC (współczynniki 1-26)  wartość maksymalna
+\item SSC (współczynniki 1-26)  średnia
+\item SSC (współczynniki 1-26)  średnia
+\item SSC (współczynniki 1-26)  wartość minimalna
+\item SSC (współczynniki 1-26)  skośność
+\item SSC (współczynniki 1-26)  wariancja
+\item liczba przejść przez zero kurtoza
+\item liczba przejść przez zero wartość maksymalna
+\item liczba przejść przez zero średnia
+\item liczba przejść przez zero wartość minimalna
+\item liczba przejść przez zero skośność
+\item liczba przejść przez zero wariancja
+\end{itemize}
+
 \section{Klasyfikacja emocji}
-Klasyfikacja emocji zostanie przeprowadzona na wcześniej przygotowanej bazie cech.
-Cechy rozmieszczone w przestrzeni zostaną poddane redukcji wymiarowości. 
+Klasyfikacja emocji została przeprowadzona na wcześniej przygotowanej bazie cech.
+Cechy rozmieszczone w przestrzeni zostały poddane redukcji wymiarowości. 
 Skorelowane cechy nie różnicują zbioru wypowiedzi, a mogą obniżyć skuteczność klasyfikatora.
 Redukcja wymiarowości w tej aplikacji została zrealizowana przez selekcję cech RFECV \ang{Recursive Feature Selection cross-validated} \cite{Guyon2002}.
 RFE dokonując klasyfikacji na zbiorze testowym z wykorzystaniem kolejnych cech wybiera zestaw cech pozwalający najwyraźniej zróżnicować obserwacje.
-Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując własności wektorów i własności własnych macierzy,
+Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując wektory własne i wartości własne macierzy.
 przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, następnie wybiera najistotniejsze wymiary \cite{Bro2014}.
 Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy) oraz MLP.
 Zmierzono zdolność klasyfikacji mowy wyrażającej jedną z emocji podstawowych, jak również porównano zdolność rozróżniania emocji parami.
@@ -1077,8 +1135,8 @@ a rozróżnialność złości i irytacji osiąga 90\%.
 \chapter{Wnioski}
 Emocje są nieodłącznym elementem życia ludzkiego. 
 Powstały na drodze ewolucji i mają istotny udział w postrzeganiu świata zewnętrznego oraz interakcji międzyludzkich.
-Umożliwiają błyskawiczną reakcję na bodziec, czy zdarzenie wzbudzający stan emocjonalny bez dogłębnej analizy sytuacji jakiej człowiek doświadcza.
-W najbardziej elementarnym stopniu z punktu widzenia przetrwania wymuszają na decyzję o podjęciu walki w sytuacji zagrożenia, lub ucieczki w przerażeniu.
+Umożliwiają błyskawiczną reakcję na bodziec, czy zdarzenie wzbudzające stan emocjonalny bez dogłębnej analizy sytuacji jakiej człowiek doświadcza.
+W najbardziej elementarnym stopniu z punktu widzenia przetrwania wpływają na decyzję o podjęciu walki w sytuacji zagrożenia, lub ucieczki w przerażeniu.
 Bez udziału świadomości nastrajają człowieka pozytywnie lub negatywnie w napotkanych sytuacjach, wspomagają podejmowanie decyzji.
 Z punktu widzenia społecznego stanowią część komunikacji międzyludzkiej.
 Zrozumienie emocji powstających w drugim człowieku pozwala zrozumieć perspektywę drugiego człowieka.
