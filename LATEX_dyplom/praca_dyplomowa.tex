@@ -449,6 +449,21 @@ Do zbudowania macierzy projekcji $\vec W$ posłuży $k$ wektorów własnych posi
 \end{equation}
 Ostatnim etapem będzie przeniesienie obserwacji z przestrzeni oryginalnej $X$ do przestrzeni wynikowej $\vec Y = \vec X \times \vec W$.
 Liczba wymiarów nowej przestrzeni $d$ jest znacznie mniejsza od liczby wymiarów starej przestrzeni $k$.
+\subsection{Rekurencyjna Eliminacja Cech}\label{sec:rfe}
+Metoda Rekurencyjnej Eliminacji Cech \ang{Recursive Feature Elimination - RFE}
+dokonuje usuwa kolejno cechy ze zbioru cech wykorzystywanych
+w poszukiwaniu optymalnego podzbioru cech pozwalającego na klasyfikację obserwacji \cite{Guyon2002}.
+Eliminacja cech wykonuje się iteracyjnie w krokach:
+\begin{enumerate}
+	\item wytrenuj klasyfikator
+	\item stwórz ranking cech najlepiej różnicujących
+	\item usuń najmniej różnicującą cechę
+\end{enumerate}
+Tworzenie rankingu cech może zostać wykonane przez uczenie klasyfikatora i badanie jego poprawności dla różnych zestawów cech.
+Pozwala to oceniać poszczególne cechy oceniając skuteczność klasyfikatorów przez które były wykorzystywane.
+Przedstawiona procedura jest przykładem eliminacji wstecznej cech \ang{backward future elimination}.
+W przyczyn wydajnościowych można usuwać kilka najmniej użytecznych cech każdorazowo.
+Należy podkreślić, że cechy znajdujące się najwyżej w rankingu nie muszą być zbiorem najlepiej różnicujących cech \cite{Guyon2002}.
 \section{Klasyfikacja}
 \subsection{Klasyfikator Najbliższych Sąsiadów}
 Klasyfikator najbliższych sąsiadów jest prosty w działaniu i implementacji.
@@ -995,7 +1010,8 @@ Wyznaczono wartości następujących cech:
 Klasyfikacja emocji została przeprowadzona na wcześniej przygotowanej bazie cech.
 Cechy rozmieszczone w przestrzeni zostały poddane redukcji wymiarowości. 
 Skorelowane cechy nie różnicują zbioru wypowiedzi, a mogą obniżyć skuteczność klasyfikatora.
-Redukcja wymiarowości w tej aplikacji została zrealizowana przez selekcję cech RFECV \ang{Recursive Feature Selection cross-validated} \cite{Guyon2002}.
+Redukcja wymiarowości w tej aplikacji została zrealizowana przez selekcję cech RFECV \ang{Recursive Feature Selection cross-validated} \cite{Guyon2002}
+opisaną w sekcji \ref{sec:rfe}.
 RFE dokonując klasyfikacji na zbiorze testowym z wykorzystaniem kolejnych cech wybiera zestaw cech pozwalający najwyraźniej zróżnicować obserwacje.
 Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując wektory własne i wartości własne macierzy.
 przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, następnie wybiera najistotniejsze wymiary \cite{Bro2014}.
