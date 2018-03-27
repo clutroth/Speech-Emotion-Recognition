@@ -12,6 +12,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{anyfontsize}
 \usepackage[utf8]{inputenc}
+\usepackage{lscape}
 \usepackage[pdftex]{graphicx}
 \usepackage{caption}
 \usepackage{tabularx}
@@ -57,6 +58,11 @@
 %%%%%%%%%%%%%%% Dodatkowe Pakiety %%%%%%%%%%%%%%%%%
 \usepackage{prmag2017}   % definiuje komendy opieku,nrindeksu, rodzaj pracy, ...
 \usepackage{xspace}
+\lstset{
+  breakatwhitespace=true,
+  breaklines=true, 
+  language=Python
+}
 
 %%%%%%%%%%%%%%% Strona Tytułowa %%%%%%%%%%%%%%%%%
 % To trzeba wypelnic swoimi danymi
@@ -488,13 +494,13 @@ oraz funkcję liczącą dystans pomiędzy dwoma wektorami. Najczęściej jest to
 	\caption{Klasyfikator Najbliższych sąsiadów}
 	\begin{algorithmic}[1]
 		\Procedure {kNN}{$T$, $k$, $dist$, $o$}
-		\State $D \leftarrow []$
+		\State $D \leftarrow [ ]$
 		\ForAll {$t \in T$}
 		\State $D(t) \leftarrow dist(t, o)$
 		\EndFor
 		\State $S \leftarrow sort(D, T)$ \Comment obserwacje posortowane względem odległości
 		\State $selectedClass \leftarrow 0$
-		\State $counter \leftarrow []$ \Comment licznik najbliższych sąsiadów z klasy
+		\State $counter \leftarrow [ ]$ \Comment licznik najbliższych sąsiadów z klasy
 		\Repeat
 		\ForAll {$s \in S$}
 		\State $counter(class(s))++$
@@ -507,7 +513,8 @@ oraz funkcję liczącą dystans pomiędzy dwoma wektorami. Najczęściej jest to
 
 Dane wejściowe muszą być znormalizowane. 
 W przeciwnym razie cechy o bezwzględnie wyższych wartościach będą miały większy wpływ na klasyfikację.
-Algorytm \ref{alg:knn:alg} jest wrażliwy na liczbę cech - wymiarów przestrzeni, w której umieszczana jest obserwacja.
+KNN jest wrażliwy na liczbę cech - wymiarów przestrzeni, w której umieszczana jest obserwacja. 
+Przykładowa implementacja KNN została zaprezentowana w pseudokodzie \Alg{alg:knn:alg}.
 Każda cecha odpowiada jednemu wymiarowi w przestrzeni.
 Nie jest brana pod uwagę korelacja cech, ani zdolność cech do różnicowania obserwacji.
 Dla klasyfikowanej obserwacji obliczany jest dystans pomiędzy tą obserwacją,
@@ -809,6 +816,7 @@ Jest zbudowany z warstw wejściowej, wyjściowej i wielu warstw ukrytych.
 Percepton wielowarstwowy w odróżnieniu od perceptonu jednowarstwowego może rozwiązywać problemy nieliniowe.
 Przykładem funkcji, której nie może zamodelować pojedynczy percepton jest XOR \ang{exclusive or} \Tab{tab:mlp:xor}.
 \begin{table}[h]
+	\caption{Tabela funkcji XOR}
 	\centering
 	\begin{tabular}{ |l|c|r| }
 		\hline
@@ -818,7 +826,6 @@ Przykładem funkcji, której nie może zamodelować pojedynczy percepton jest XO
 		1 	& 0 	& 1 \\ \hline
 		1 	& 1 	& 0 \\ \hline
 	\end{tabular}
-	\caption{Tabela funkcji XOR}
 	\label{tab:mlp:xor}
 \end{table}
 Wykres \ref{wyk:mlp:xor} obrazuje funkcję $XOR$ oraz przykładowe hiperpłaszczyzny.
@@ -881,6 +888,88 @@ Docelowo znajduje zastosowanie przy rozwiązywaniu zadań statystycznych, analit
 \\
 Python-speech-features to niewielka biblioteka wspierająca systemy automatycznego rozpoznawania mowy. 
 Dostarcza implementacje MFCC i SSC.
+
+Aplikacja jest zbudowana z trzech modułów.
+Pierwszy $feature\_extraction.py$ jest odpowiedzialny za obliczenie cech sygnałów wypowiedzi. 
+Wczytuje plik z dźwiękowym zapisem wypowiedzi i dzieli go na ramki, 
+dla każdej ramki obliczane są cech bazowe.
+Następnie dla każdego pliku liczone są statystyki ze wszystkich ramek pliku.
+\begin{lstlisting}[language=python,caption={Program obliczający cechy wypowiedzi},label={lst:fe}]
+fileList=find_file(korpus, '*.wav')
+firstFileName = fileList[0]
+featureNames = analyse_file(firstFileName).keys()
+names = ['filename', 'emotion', 'speaker', 'type']
+names.extend(featureNames)
+
+with open("features_analysis.csv", "wb") as file:
+    writer = csv.writer(file)
+    writer.writerow(names)
+    for filename in fileList:
+        print "processing " + filename
+        file = analyse_file(filename)
+        des = FileDescription(filename)
+
+        writer.writerow(values(file, des))	
+\end{lstlisting}
+Wyniki analizy zapisywane są do pliku csv \Lst{lst:fe}w celu późniejszego przetwarzania.
+Procedura ekstrakcji cech dla każdej ramki została przedstawiona w listingu \ref{lst:def_extract_fetures}.
+Wszystkie cechu bazowe MFCC i SCC zostały przedstawione w tej funkcji.
+\begin{lstlisting}[language=python,caption={Ekstrakcja cech wypowiedzi},label={lst:def_extract_fetures}]
+def extract_features(frame):
+    def entrophy(sig, subframes_number=10):
+        energy =  [sum(s ** 2) for s in np.array_split(sig, subframes_number)]
+        total_energy = sum(energy)
+        probabilities=[e/total_energy for e in energy]
+        return sum([p+np.log2(p) for p in probabilities if p not in [0]])
+
+    return Features(
+        mfcc=mfcc(frame.signal, frame.fs, float(len(frame.signal)) / frame.fs, winfunc=np.hamming)[0],
+        ssc=ssc(frame.signal, frame.fs, float(len(frame.signal)) / frame.fs, winfunc=np.hamming)[0],
+        energy=np.sum(frame.signal ** 2),
+        zero_corssing_rate = ((frame.signal [:-1] * frame.signal [1:]) < 0).sum(),
+        entrophy=entrophy(frame.signal)
+    )
+\end{lstlisting}
+Opis statystyczny został w praktyce całkowicie wykonany z wykorzystaniem zewnętrznych bibliotek \Lst{lst:feature_description}. 
+\begin{lstlisting}[language=python,caption={Opis statystyczny cech},label={lst:feature_description}]
+class FeatureDescriptor:
+    def __init__(self, feature):
+        [nobs, [self.min, self.max], self.mean, self.variance, self.skewness, self.kurtosis] = stats.describe(feature)
+\end{lstlisting}
+
+Drugim moduł znajduje się w pliku $classification.py$.
+Odpowiada on za przeprowadzenie klasyfikacji z wykorzystaniem różnych metod redukcji wymiarowości i klasyfikacji.
+Posiada on definicje klasyfikatorów i reduktorów wymiarowości. 
+Zaimplementowane są w nim dwa sposoby porównywania par reduktor-klasyfikator.
+Skuteczność klasyfikacji jest badana w przypadku, gdy bierzemy pod uwagę wszystkie 7 klas-emocji, jak i w przypadku gdy emocje porównywane są parami.
+Wyniki klasyfikacji zapisywane są w formacie JSON w celu późniejszej prezentacji \Lst{lst:classification}.
+\begin{lstlisting}[caption={Klasyfikacja emocji},label={lst:classification}]
+for (classification_type, pairs) in pairS.items():
+    all_product = product(classificators.items(), selectors.items(), pairs)
+
+    for [(c_name, classifier), (s_name, selector), emotions] in all_product:
+        print [classification_type,c_name, s_name,emotions]
+        [filteredX, filteredY] = filter(featuresList.features, featuresList.excpected, emotions)
+        X_train, X_test, y_train, y_test = train_test_split(
+            filteredX, filteredY, test_size=0.33, random_state=1)
+        selector = selector.fit(X_train, y_train)
+        X_train_reduced = selector.transform(X_train)
+        X_test_reduced = selector.transform(X_test)
+        classifier.fit(X_train_reduced, y_train)
+        y_pred = classifier.predict(X_test_reduced)
+        result = {
+            'classifier': c_name,
+            'selector': s_name,
+            'emotions': emotions,
+            'emotion_names': [name for idx, name in enumerate(bunch.target_names) if idx in emotions],
+            'expected': y_test,
+            'predicted': y_pred.tolist()
+        }
+        print (result)
+        clasificationResults[classification_type].append(result)
+\end{lstlisting}
+
+Trzeci moduł $latex_tables.py$ odpowiada za prezentację wyników w niniejszej pracy z wykorzystaniem języka \LaTeX{} i modułu Pythona umożliwiającego tworzenie tabel. 
 \chapter{Przeprowadzone badania}
 \section{Opis bazy danych}\label{sec:opis_bazy_danych}
 W pracy wykorzystano bazę danych emocji w mowie powstałą w Akademii Górniczo-Hutniczej w Krakowie.
@@ -1018,40 +1107,47 @@ przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, nast
 Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy) oraz MLP.
 Zmierzono zdolność klasyfikacji mowy wyrażającej jedną z emocji podstawowych, jak również porównano zdolność rozróżniania emocji parami.
 
+Zbiór danych wejściowych został losowo podzielony na dwie części testową i uczącą w proporcji 1:2.
+Otrzymano 216 wypowiedzi w zbiorze uczącym i 107 w zbiorze testującym.
+
+\subsection{Klasyfikacja dla siedmiu klas}
 Porównując trafność rozpoznawania jednej z siedmiu emocji podstawowych w zależności od klasyfikatora i metody redukcji wymiarowości.
 \begin{table}[hc!]
+	\caption{Trafność predykcji dla klasyfikatorów i selektorów}
 	\centering
 	\input{./app/accuaricy_c_s_table.tex}
-	\caption{Trafność predykcji dla klasyfikatorów i selektorów}
 	\label{tab:acc}
 \end{table}
 Najlepszą trafność wykazał klasyfikator MLP po redukcji wymiarów z wykorzystaniem PCA \Tab{tab:acc}. 
 Najgorszą, klasyfikacja z wykorzystaniem KNN niezależnie od metody redukcji wymiarowości.
+\begin{landscape}
 \begin{table}[hc!]
+	\caption{Trafność klasyfikacji dla PCA i MLP 7 klas emocji}
 	\centering
 	\input{./app/classification_pca_mpl_table.tex}
-	\caption{Trafność klasyfikacji dla PCA i MLP}
 	\label{tab:mlp:pca}
 \end{table}
+\end{landscape}
 Analizując efekt klasyfikacji poszczególnych emocji podstawowych\Tab{tab:mlp:pca} zostaną podane przykłady interesujących rozpoznań.
 
+\subsection{Klasyfikacja dla dwóch klas}
 \subsubsection{Rozpoznanie złości jako radość}
 Radość w 10 przypadkach została rozpoznana prawidłowo. 
 Błędnie jako złość została sklasyfikowana 4 razy. 
 Są to emocje o podobnym poziomie pobudzenia, ale przeciwnym wartościowaniu.
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia radości i złości}
 	\centering
 	\input{./app/accuaricy_radosc_zlosc_table.tex}
-	\caption{Trafność rozróżnienia radości i złości}
 \end{table}
 \subsubsection{Rozpoznanie strachu jako zdziwienia}
 Strach jako jedyna emocja został rozpoznany w większości przypadków błędnie.
 Więcej razy została oznaczona jako zdziwienie.
 Najskuteczniejsza w klasyfikacji okazała się klasyfikator MLP i metoda redukcji wymiarowości RFE.
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia strachu i zdziwienia}
 	\centering
 	\input{./app/accuaricy_strach_zdziwienie_table.tex}
-	\caption{Trafność rozróżnienia strachu i zdziwienia}
 \end{table}
 
 \subsubsection{Rozpoznanie smutku}
@@ -1061,21 +1157,21 @@ dla tego jest bardzo dobrze rozróżnialna od smutku \Tab{tab:smutek:radosc} i z
 Względnie mniejszą poprawność osiągnięto rozróżniając smutek i stan neutralny \Tab{tab:smutek:neutralny}.
 Obydwie emocje mają niski poziom pobudzenia.
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia radości i smutku}
 	\centering
 	\input{./app/accuaricy_radosc_smutek_table.tex}
-	\caption{Trafność rozróżnienia radości i smutku}
 	\label{tab:smutek:radosc}
 \end{table}
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia złości i smutku}
 	\centering
 	\input{./app/accuaricy_smutek_zlosc_table.tex}
-	\caption{Trafność rozróżnienia złości i smutku}
 	\label{tab:smutek:zlosc}
 \end{table}
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
 	\centering
 	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
-	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
 	\label{tab:smutek:neutralny}
 \end{table}
 \subsubsection{Rozpoznanie stanu neutralnego}
@@ -1085,21 +1181,21 @@ Zerowy ładunek emocjonalny wypowiedzi stanu neutralnego pozwala dobrze rozróż
 Tabele obrazujące różnienie stanu neutralnego i zdziwienia \Tab{tab:neutralny:zdziwienie}, strachu \Tab{tab:neutralny:strach} i smutku \Tab{tab:neutralny:smutek}
 pokazują wysoką rozróżnialność od wypowiedzi emocjonalnych. 
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia stanu neutralnego i zdziwienia}
 	\centering
 	\input{./app/accuaricy_stan-neutralny_zdziwienie_table.tex}
-	\caption{Trafność rozróżnienia stanu neutralnego i zdziwienia}
 	\label{tab:neutralny:zdziwienie}
 \end{table}
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia stanu neutralnego i strachu}
 	\centering
 	\input{./app/accuaricy_stan-neutralny_strach_table.tex}
-	\caption{Trafność rozróżnienia stanu neutralnego i strachu}
 	\label{tab:neutralny:strach}
 \end{table}
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
 	\centering
 	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
-	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
 	\label{tab:neutralny:smutek}
 \end{table}
 \subsubsection{Rozpoznanie irytacji}
@@ -1112,27 +1208,27 @@ Szczególną uwagę zwraca wysoka rozróżnialność irytacji i złości.
 Według Plutchika są one tą samą emocją przeżywaną z różną intensywnością,
 a rozróżnialność złości i irytacji osiąga 90\%.
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia irytacji i złości}
 	\centering
 	\input{./app/accuaricy_irytacja_zlosc_table.tex}
-	\caption{Trafność rozróżnienia irytacji i złości}
 	\label{tab:irytacja:zlosc}
 \end{table}
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia irytacji i stany neutralnego}
 	\centering
 	\input{./app/accuaricy_irytacja_stan-neutralny_table.tex}
-	\caption{Trafność rozróżnienia irytacji i stany neutralnego}
 	\label{tab:irytacja:neutralny}
 \end{table}
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia irytacji i strachu}
 	\centering
 	\input{./app/accuaricy_irytacja_strach_table.tex}
-	\caption{Trafność rozróżnienia irytacji i strachu}
 	\label{tab:irytacja:strach}
 \end{table}
 \begin{table}[hc!]
+	\caption{Trafność rozróżnienia irytacji i radości}
 	\centering
 	\input{./app/accuaricy_irytacja_radosc_table.tex}
-	\caption{Trafność rozróżnienia irytacji i radości}
 	\label{tab:irytacja:zlosc}
 \end{table}
 %\subsubsection{Rozpoznanie par przeciwstawnych}

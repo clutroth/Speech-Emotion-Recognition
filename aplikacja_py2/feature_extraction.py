@@ -24,7 +24,7 @@ def split(signal, frame_len, frame_step):
 
 
 def extract_features(frame):
-    def entropy_of_energy(sig, subframes_number=10):
+    def entrophy(sig, subframes_number=10):
         energy =  [sum(s ** 2) for s in np.array_split(sig, subframes_number)]
         total_energy = sum(energy)
         probabilities=[e/total_energy for e in energy]
@@ -35,15 +35,15 @@ def extract_features(frame):
         ssc=ssc(frame.signal, frame.fs, float(len(frame.signal)) / frame.fs, winfunc=np.hamming)[0],
         energy=np.sum(frame.signal ** 2),
         zero_corssing_rate = ((frame.signal [:-1] * frame.signal [1:]) < 0).sum(),
-        entropy_of_energy=entropy_of_energy(frame.signal)
+        entrophy=entrophy(frame.signal)
     )
 
 class Features:
-    def __init__(self, mfcc, energy,zero_corssing_rate,entropy_of_energy,ssc):
+    def __init__(self, mfcc, energy, zero_corssing_rate, entrophy, ssc):
         self.mfcc = mfcc
         self.energy = energy
         self.zero_corssing_rate=zero_corssing_rate
-        self.entropy_of_energy=entropy_of_energy
+        self.entropy_of_energy=entrophy
         self.ssc=ssc
 
 
