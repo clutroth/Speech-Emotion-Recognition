@@ -61,7 +61,8 @@
 \lstset{
   breakatwhitespace=true,
   breaklines=true, 
-  language=Python
+  language=Python,
+  captionpos=b
 }
 
 %%%%%%%%%%%%%%% Strona Tytułowa %%%%%%%%%%%%%%%%%
@@ -106,7 +107,6 @@
 	\input{streszczenia.tex}
 }
 \newcommand{\ang}[1]{\textit{(ang. #1)}}
-\newcommand{\MATLAB}{\textsc{Matlab}\xspace}
 \newcommand{\Rys}[1]{(Rysunek~\ref{#1})}
 \newcommand{\Wyk}[1]{(Wykres~\ref{#1})}
 \newcommand{\Tab}[1]{(Tabela~\ref{#1})}
@@ -134,11 +134,11 @@ myśli a w konsekwencji mają istotny wpływ na zachowanie i reakcje.
 
 % informacje zakodowane w mowie
 Mowa jest nośnikiem informacji wykorzystywanym w komunikacji międzyludzkiej
-oraz pomiędzy człowiekiem i komputerem \ang{Human-Computer Interaction}.
+oraz pomiędzy człowiekiem i komputerem \- \ang{Human-Computer Interaction}.
 Komunikat głosowy składa się z treści językowej,
 którą można zapisać w formie tekstu
 oraz akustycznej, która również opisuje wypowiedź. Przykładowo:
-drżący ze strachu głos, czy ciężki oddech świadczący o gniewie.
+drżący głos, czy ciężki oddech świadczący o gniewie.
 
 % Zastosowanie maszynowego rozpoznawania emocji
 Rozpoznawanie emocji mówcy jest istotne w aplikacjach wykorzystujących mowę w komunikacji człowiek-maszyna,
@@ -152,12 +152,9 @@ Rozpoznanie frustracji lub zniecierpliwienia jest dla konsultanta istotną przes
 
 % Jaki jest cel?
 Celem pracy jest przybliżenie tematyki komputerowego rozpoznawania mowy,
-przegląd narzędzi do oceny znanych rozwiązań.
-Produktem końcowym będzie aplikacja komputerowa rozpoznająca emocje w sygnale mowy.
+przegląd narzędzi do oceny znanych rozwiązań oraz aplikacji komputerowej rozpoznającej emocje w sygnale mowy.
 W trakcje tworzenia pracy zostanie dokonana analiza znanych rozwiązań tego zagadnienia.
-Następnie zostanie opracowany schemat aplikacji,
-pozwalający stworzyć aplikację w warunkach tworzenia pracy magisterskiej.
-Kolejnym etapem będzie implementacja aplikacji w środowisku Python.
+Kolejnym etapem będzie implementacja aplikacji rozpoznającej emocje w głosie w środowisku Python.
 Na zakończenie zostaną przeprowadzone badania z wykorzystaniem aplikacji.
 Następnie po analizie wyników zostaną podane wnioski.
 
@@ -181,7 +178,7 @@ Smutek trwający przez dni czy tygodnie będzie w tym czasie maskował inne emoc
 
 Istnieją dwa modele emocji powstałe w XX w. wykorzystywane w psychologii.
 Model Paula Ekmana postuluje istnienie sześciu emocji podstawowych (złość, obrzydzenie, strach, szczęście, smutek, zaskoczenie) \cite{Eisner2015},
-natomiast model Roperta Plutchika\cite{Eisner2015} ,zakłada istnienie ośmiu emocji podstawowych, połączonych w pary przeciwieństw:
+natomiast model Roperta Plutchika\cite{Eisner2015}, zakłada istnienie ośmiu emocji podstawowych, połączonych w pary przeciwieństw \Rys{rys:intro:plutnik}:
 \begin{itemize}
 	\item szczęście i smutek
 	\item złość i strach
@@ -203,7 +200,7 @@ Emocje znajdujące się naprzeciw siebie nie mogą istnieć w tym samym momencie
 
 
 Ludzie rozpoznają emocje przez odczuwanie. 
-Powszechnie stosuje się rozmieszczenie emocji na dwuwymiarowej przestrzeni pobudzenia i wartościowości \cite{Fernandez2004}.
+Powszechnie stosuje się rozmieszczenie emocji na dwuwymiarowej przestrzeni pobudzenia \ang{arousal} i wartościowości \ang{valence} \cite{Fernandez2004}.
 Wysokim poziomem pobudzenia charakteryzują się radość, złość i strach. 
 Skutkuje to przyspieszonym biciem serca, podniesionym ciśnieniem krwi, przyspieszonym oddechem, uczuciem suchości w ustach.
 Z kolei smutek, będący emocją o niskim pobudzeniu skutkuje spowolnionym biciem serca.
@@ -217,22 +214,15 @@ Smutek jest emocją negatywną o niskim pobudzeniu.
 
 \section{Ekstrakcja cech}
 \subsection{Cechy bazowe}
-Rolą cech bazowych jest przetworzenie sygnału czasowego podzielonego na ramki,
-do postaci, które zostaną wykorzystane w dalszych etapach obliczeń.
-Sygnał w dziedzinie czasu, ma wszystkie informacje, jakie możemy wykorzystać, 
-ale analiza sygnału wyłącznie w dziedzinie czasu nie daje zadowalających rezultatów.
-Przeniesienie sygnału do dziedziny częstotliwości, przez zastosowanie transformaty Fouriera,
-pozwoli analizować jego zmienność w zależności od częstotliwości, 
-uzupełniając cechy wyeksponowane w dziedzinie czasu.
-\subsubsection{Mel-Frequency Cepstral Coefficients (MFCC)}
+\subsubsection{Mel-frequency cepstral coefficients (MFCC)}
 Jedną z najpopularniejszych cech wykorzystywanych w systemach automatycznego rozpoznawania mowy,
 jest MFCC \ang{Mel-Frequency Cepstral Coefficients}.
 Biorąc pod uwagę warunki powstawania mowy, cechy indywidualne mówcy, sposób działania narządów mowy, sposób percepcji mowy przez człowieka,
 MFCC daje wektor współczynników reprezentujących mowę z założenia niezależny od mówcy. 
 Przekazuje informacje o analizowanym fragmencie mowy, pomijając cechy zależne od mówiącego, takie jak częstotliwość podstawowa i jej harmoniczne \cite{Hossan2013}.
-Współczynniki MFC reprezentują dynamiczną naturę mowy, pokazując jej zmianę energii i częstotliwości w czasie.
+Współczynniki MFCC reprezentują dynamiczną naturę mowy, pokazując jej zmianę energii i częstotliwości w czasie.
 
-Algorytm obliczający MFCC przyjmuje na wejście sygnał mowy o długości kilkudziesięciu ms w dziedzinie czasu,
+Algorytm obliczający MFCC przyjmuje na wejście sygnał mowy o długości kilkudziesięciu ms,
 zwracając wektor cech \Rys{rys:mgcc:schemat}.
 \begin{figure}[h]
 	\centering
@@ -249,7 +239,7 @@ Operując na sygnale cyfrowym wykorzystana jest dyskretna transformata Fouriera,
 \end{equation}, gdzie 
 $x_n$ - próbka sygnału czasowego, 
 $N$ - liczba próbek w badanym sygnale czasowym,
-$X_k$ - próbka sygnału częstotliwościowego.
+$X_k$ - próbka sygnału w dziedzinie częstotliwości.
 W praktyce stosuje się wariant szybkiej transformaty Fouriera. 
 Szybka transformata Fouriera zwraca podobny wynik, jak dyskretna transformata Fouriera
 wykonując znacznie mniej operacji obliczeniowych.
@@ -265,7 +255,7 @@ Następnie na podstawie pomiarów i ocen został stworzony wzór
 \end{equation}, gdzie
 $f$ - częstotliwość w Hz,
 $m$ - częstotliwość w melach.
-Przeniesienie widma do skali melowej wykonuje się przez aplikację szeregu trójkątnych filtrów środkowoprzepustowych. 
+Przeniesienie widma do skali melowej wykonuje się przez aplikację szeregu trójkątnych filtrów środkowoprzepustowych \Rys{rys:mfcc:melfilterbank}. 
 Wprowadza to pewną różnicę, względem psychoakustycznego postrzegania dźwięku, gdzie skala dźwięku jest ciągła.
 \begin{figure}[h]
 	\centering
@@ -283,7 +273,7 @@ które odczuwa zmianę głośności w skali logarytmicznej \cite{Hossan2013}.
 	M'_k=log(M_k)\qquad k=0, \dots, N
 	\label{eq:mfcc:log}
 \end{equation}
-Dla każdej $k$-tej wartości sygnału $M$ jest liczony logarytm, gdzie $N$ jest liczbą wartości w skali melowej \Eq{eq:mfcc:log}.
+Dla każdej $k$-tej wartości sygnału $M$ jest liczony logarytm, gdzie $N$ jest liczbą flitrów \Eq{eq:mfcc:log}.
 
 Ostatnia faza to obliczenie współczynników cepstralnych.
 Daje ona odseparowanie sygnału od czynników zależnych od mówcy.
@@ -325,17 +315,17 @@ Liczbę przejść przez zero wyraża się w liczbie miejsc, gdzie sąsiednie pr�
 	\end{cases}
 	\label{eq:zcr}
 \end{equation}
-Okresowy sygnał ma niższą liczbę przejść przez zero niż sygnał niezawierający mowy\cite{Walters-Williams2010}.
-\subsubsection{Energia}
+Sygnał zawierający mowę ma wyższą liczbę przejść przez zero, niż sygnał niezawierający mowy\cite{Walters-Williams2010}.
+\subsubsection{Entropia}
 Entropia mówi o sumie prawdopodobieństw wystąpienia danej wartości próbki $p_k$ w sygnale \cite{Majstorovic2011}.
 \begin{equation}
 	Ee_{s}=-\sum _{k=1}^{N}p_k log(p_k)
 	\label{eq:entropy}
 \end{equation}
-Jeżeli w ramce występuje wiele skrajnych wartości, entropia sygnału będzie duża. 
+Jeżeli w ramce występuje wiele rozbieżnych wartości, entropia sygnału będzie duża. 
 Pozwala to stwierdzić zmienność i rozbieżność wartości sygnału w ramce.
-\subsubsection{Spectral Subband Centroids (SSC)}
-Centroidy Podpasm Widma \ang{Spectral Subband Centroids} opisują cechy widma podobne do formant.
+\subsubsection{Spectral subband centroids (SSC)}
+Centroidy Podpasm Widma \ang{Spectral Subband Centroids} opisują cechy widma podobne do formant - pasm szczególnego wzmocnienia sygnału.
 Analizując widmo sygnału dzieli się je na podpasma, następnie znajdując środek ciężkości w każdym podpaśmie \cite{Majstorovic2011}.
 \begin{equation}
 	C_m=\frac
@@ -352,10 +342,10 @@ Powyższa formuła definiuje centroidy, gdzie dzieląc widmo na $m$ pasm:
 	\item[$P(f)$] moc widma
 	\item[$\gamma$] współczynnik mocy widma
 \end{description}
-Kolejną decyzją jest określenie kształtu filtra środkowoprzepustowego, definiującego pasmo, 
+W kolejnym kroku określany kształt filtra środkowoprzepustowego, definiującego pasmo, 
 jak i liczbę oraz wzajemnego położenia pasm.
 \subsection{Opis statystyczny}
-Ostatnim etapem ekstrakcji cech, jest określenie ich parametrów statystycznych.
+Ostatnim etapem ekstrakcji cech, jest określenie parametrów statystycznych.
 Dla każdej ramki sygnału zostały obliczone cechy bazowe, opisane w poprzedniej sekcji.
 Zostaną one zbadane statystycznie tworząc właściwe cechy, na podstawie których zostanie dokonana klasyfikacja.
 Użyto następujących funkcji:
@@ -373,7 +363,6 @@ Wykorzystano średnią arytmetyczną, gdzie $N$ jest liczbą ramek, a $x_n$ jest
 \end{equation}
 
 Skośność - trzeci moment centralny, jest miarą asymetrii rozkładu statystycznego. 
-Może przyjąć wartości rzeczywiste.
 Intuicyjnie skośność dodatnia oznacza, że lewy ogon rozkładu znajduje się dalej od prawego,
 skośność ujemna, że prawy ogon znajduje się dalej,
 a zerowa informuje o symetrycznym rozkładzie.
@@ -423,8 +412,6 @@ $n$ - liczba kolumn
 $\sigma_{jk}$ - wartość $j,k$ macierzy kowariancji,
 $x_{ij}$ - wartość $i,j$ macierzy, 
 $\bar{x_j}$ - wartość średnia $j$-tego wiersza,
-$x_{ik}$ - wartość $i,k$ macierzy, 
-$\bar{x_k}$ - wartość średnia $k$-tego wiersza,
 
 W zapisie macierzowym wzór na macierz kowariancji przedstawia się:
 \begin{equation}
@@ -444,6 +431,7 @@ Pary wektorów i wartości własnych są sortowane względem wartości własnych
 te najmniej istotne zostają odrzucone.
 W celu określenia, jaka najmniejsza liczba wymiarów pozwoli nam zróżnicować przestrzeń,
 wykorzystuje się wyjaśnioną wariancję \cite{Bro2014}.
+Wariancja wyjaśniona \ang{explained variation} określa w jaką część wariancji przestrzeni pierwotnej otrzymujemy w nowej przestrzeni.
 Wybiera się te wektory własne, które w sumie dają wariancję wystarczająco zbliżoną do wariancji wynikającej ze wszystkich wektorów własnych.
 
 \subsubsection{Macierz projekcji}
@@ -455,9 +443,9 @@ Do zbudowania macierzy projekcji $\vec W$ posłuży $k$ wektorów własnych posi
 \end{equation}
 Ostatnim etapem będzie przeniesienie obserwacji z przestrzeni oryginalnej $X$ do przestrzeni wynikowej $\vec Y = \vec X \times \vec W$.
 Liczba wymiarów nowej przestrzeni $d$ jest znacznie mniejsza od liczby wymiarów starej przestrzeni $k$.
-\subsection{Rekurencyjna Eliminacja Cech}\label{sec:rfe}
+\subsection{Rekurencyjna eliminacja cech}\label{sec:rfe}
 Metoda Rekurencyjnej Eliminacji Cech \ang{Recursive Feature Elimination - RFE}
-dokonuje usuwa kolejno cechy ze zbioru cech wykorzystywanych
+usuwa kolejno najmniej znaczące cechy ze zbioru cech wykorzystywanych
 w poszukiwaniu optymalnego podzbioru cech pozwalającego na klasyfikację obserwacji \cite{Guyon2002}.
 Eliminacja cech wykonuje się iteracyjnie w krokach:
 \begin{enumerate}
@@ -471,7 +459,7 @@ Przedstawiona procedura jest przykładem eliminacji wstecznej cech \ang{backward
 W przyczyn wydajnościowych można usuwać kilka najmniej użytecznych cech każdorazowo.
 Należy podkreślić, że cechy znajdujące się najwyżej w rankingu nie muszą być zbiorem najlepiej różnicujących cech \cite{Guyon2002}.
 \section{Klasyfikacja}
-\subsection{Klasyfikator Najbliższych Sąsiadów}
+\subsection{Klasyfikator najbliższych sąsiadów}
 Klasyfikator najbliższych sąsiadów jest prosty w działaniu i implementacji.
 Pozwala szybko otrzymać rezultaty, jednak mogą one nie być zadowalające w bardziej złożonych zagadnieniach.
 Zasada działania w uproszczeniu sprowadza się do reprezentacji obserwacji za pomocą wektorów cech.
@@ -491,7 +479,7 @@ Należy zdefiniować liczbę $k$ - liczbę wymaganych sąsiadów, pozwalającą 
 oraz funkcję liczącą dystans pomiędzy dwoma wektorami. Najczęściej jest to norma euklidesowa \cite{Martin2011}.
 
 \begin{algorithm}
-	\caption{Klasyfikator Najbliższych sąsiadów}
+	\caption{Klasyfikator najbliższych sąsiadów}
 	\begin{algorithmic}[1]
 		\Procedure {kNN}{$T$, $k$, $dist$, $o$}
 		\State $D \leftarrow [ ]$
@@ -540,13 +528,12 @@ Hiperpłaszczyzna \ang{hyperplane} jest $n-1$ wymiarowa i zgodnie z definicją r
 Poszukiwana hiperpłaszczyzna powinna być hiperpłaszczyzną optymalną \ang{optimal hyperplane}, 
 to znaczy powinna znajdować się w jak największej odległości od najbliższych obserwacji należących do różnych klas \cite{Cortes1995}.
 
-Przestrzeń dwuwymiarową, możemy rozmieścić na płaszczyźnie. 
-Prosta dzieli tę płaszczyznę na dwie części.
+Prosta dzieli płaszczyznę na dwie części.
 Analogicznie sytuacja przestawia się w przestrzeni trójwymiarowej.
 Może ją przeciąć dowolną płaszczyzną.
 Płaszczyzna dzieli przestrzeń trójwymiarową na dwie części, jest więc jej hiperpłaszczyzną.
 
-Sposób tworzenia klasyfikatora SVM jest się następujący.
+Sposób tworzenia klasyfikatora SVM jest  następujący.
 Obserwacje $x_i$ rozmieszczone są w $n$-wymiarowej przestrzeni cech, gdzie $\vec{x_i} \in R^n$.
 Klasy $y_i$ są oznaczone jako $-1$ i $+1$, gdzie $y_i \in \{-1, +1\}$, co można zapisać jako:
 \begin{equation}
@@ -620,7 +607,7 @@ Ostatecznie płaszczyznę \Eq{eq:svm:hyperplane} określamy dobierając wartośc
 	\mbox{to } \alpha_i^{new}=\alpha_i^{old}+\eta 
 \end{equation}
 
-\subsubsection{Hiperpłaszczyzna Miękkiego Marginesu}
+\subsubsection{Hiperpłaszczyzna miękkiego marginesu}
 Obserwacje rozmieszczone w przestrzeni wielowymiarowej nie są separowalne liniowo. 
 Rozwiązanie problemu nieseparowalnego liniowo sprowadza się do znalezienia hiperpłaszczyzny Miękkiego Marginesu \ang{Soft Margin}, 
 która rozdziela obserwacje dwóch klas zawierającą jak najmniejszą liczbę błędnych klasyfikacji.
@@ -649,7 +636,7 @@ Parametr $C$ steruje maksymalizacją marginesu i minimalizacją błędów uczeni
 Jeżeli parametr $C$ ma małą wartość, margines dopuszcza zbyt wiele błędów klasyfikacji.
 Duża wartość parametru $C$ może skutkować przeuczeniem modelu.
 Parametr $k$ określa normę marginesu. 
-Margines pierwszej normy jest mniej wrażliwy na obserwacje leżące poza nim,
+Margines pierwszej normy ($k = 1$) jest mniej wrażliwy na obserwacje leżące poza nim,
 dzięki temu margines pierwszej normy jest lepszy do klasyfikacji danych mniej uporządkowanych.
 
 \subsubsection{Funkcje jądra}
@@ -757,7 +744,7 @@ Może przyjąć wszystkie wartości z zakresu $y \in (0,1)$.
 Rzutuje to na interpretację wartości zwracanej przez neuron,
 która nie działa już zgodnie z regułą \textit{wszystko, albo nic}.
 Neuron z funkcją sigmoidalną nie jest już klasyfikatorem binarnym, ponieważ może zwrócić np. wartość $sigm(0) = 0,5$.
-Pozwala to na tworzenie sieci neuronowych operujących na rozmytej,
+Pozwala to na tworzenie sieci neuronowych operujących na logice rozmytej,
 zwiększając zakres problemów w których zastosowanie mogą znaleźć sztuczne sieci neuronowe.
 
 %http://lowrank.net/gnuplot/datafile2-e.html
@@ -832,7 +819,7 @@ Wykres \ref{wyk:mlp:xor} obrazuje funkcję $XOR$ oraz przykładowe hiperpłaszcz
 Nie istnieje hiperpłaszczyzna rozdzielająca argumenty, dla których wartość $XOR$ przyjmuje $1$,
 od argumentów, dla których $XOR$ przyjmuje wartość $0$ \cite{Labib2010}.
 \begin{figure}[h]
-	\label{wyk:mlp:sigm}
+	\label{wyk:mlp:xor}
 	\centering
 	\begin{gnuplot}[terminal=pdf,terminaloptions=color]
 		set xrange [-1:2]
@@ -894,6 +881,7 @@ Pierwszy $feature\_extraction.py$ jest odpowiedzialny za obliczenie cech sygnał
 Wczytuje plik z dźwiękowym zapisem wypowiedzi i dzieli go na ramki, 
 dla każdej ramki obliczane są cech bazowe.
 Następnie dla każdego pliku liczone są statystyki ze wszystkich ramek pliku.
+
 \begin{lstlisting}[language=python,caption={Program obliczający cechy wypowiedzi},label={lst:fe}]
 fileList=find_file(korpus, '*.wav')
 firstFileName = fileList[0]
@@ -911,9 +899,11 @@ with open("features_analysis.csv", "wb") as file:
 
         writer.writerow(values(file, des))	
 \end{lstlisting}
+
 Wyniki analizy zapisywane są do pliku csv \Lst{lst:fe}w celu późniejszego przetwarzania.
 Procedura ekstrakcji cech dla każdej ramki została przedstawiona w listingu \ref{lst:def_extract_fetures}.
 Wszystkie cechu bazowe MFCC i SCC zostały przedstawione w tej funkcji.
+
 \begin{lstlisting}[language=python,caption={Ekstrakcja cech wypowiedzi},label={lst:def_extract_fetures}]
 def extract_features(frame):
     def entrophy(sig, subframes_number=10):
@@ -930,7 +920,9 @@ def extract_features(frame):
         entrophy=entrophy(frame.signal)
     )
 \end{lstlisting}
+
 Opis statystyczny został w praktyce całkowicie wykonany z wykorzystaniem zewnętrznych bibliotek \Lst{lst:feature_description}. 
+
 \begin{lstlisting}[language=python,caption={Opis statystyczny cech},label={lst:feature_description}]
 class FeatureDescriptor:
     def __init__(self, feature):
@@ -943,6 +935,7 @@ Posiada on definicje klasyfikatorów i reduktorów wymiarowości.
 Zaimplementowane są w nim dwa sposoby porównywania par reduktor-klasyfikator.
 Skuteczność klasyfikacji jest badana w przypadku, gdy bierzemy pod uwagę wszystkie 7 klas-emocji, jak i w przypadku gdy emocje porównywane są parami.
 Wyniki klasyfikacji zapisywane są w formacie JSON w celu późniejszej prezentacji \Lst{lst:classification}.
+
 \begin{lstlisting}[caption={Klasyfikacja emocji},label={lst:classification}]
 for (classification_type, pairs) in pairS.items():
     all_product = product(classificators.items(), selectors.items(), pairs)
@@ -1036,7 +1029,7 @@ Dla każdej ramki policzono zestaw cech podstawowych:
 	\item MFCC
 	\item energię
 	\item liczba przejść przez zero
-	\item energię entropii
+	\item entropię
 	\item SSC.
 \end{itemize}
 Następnie dla każdej cechy podstawowej dla wszystkich ramek obliczono wartości:
@@ -1229,7 +1222,7 @@ a rozróżnialność złości i irytacji osiąga 90\%.
 	\caption{Trafność rozróżnienia irytacji i radości}
 	\centering
 	\input{./app/accuaricy_irytacja_radosc_table.tex}
-	\label{tab:irytacja:zlosc}
+	\label{tab:irytacja:radosc}
 \end{table}
 %\subsubsection{Rozpoznanie par przeciwstawnych}
 %\begin{table}[hc!]
