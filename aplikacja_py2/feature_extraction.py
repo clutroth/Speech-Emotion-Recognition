@@ -7,17 +7,10 @@ import fnmatch
 import os
 from python_speech_features import mfcc
 from python_speech_features import sigproc
-from scipy.io import wavfile
 from python_speech_features import ssc
 from emo.model import Signal, FeatureDescriptor
 from emo.stage import preprocess
 from sklearn.utils import check_array
-
-
-def read_file(filename):
-    [fs, x] = wavfile.read(filename)
-    return Signal(x, fs)
-
 
 def split(signal, frame_len, frame_step):
     return [Signal(s, signal.fs) for s in sigproc.framesig(signal.signal, frame_len, frame_step)]

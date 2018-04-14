@@ -583,3 +583,11 @@ LATEX_dyplom/app
 aplikacja_py2/share/
 aplikacja_py2/corss_clasification.csv
 classification.json
+
+standarized.dat
+standarized.png
+standarized.wav
+unstandarized.dat
+unstandarized.png
+unstandarized.wav
+

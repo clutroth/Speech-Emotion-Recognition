@@ -236,7 +236,7 @@ Pozwala ona przenieść sygnał z dziedziny czasu, do dziedziny częstotliwości
 Operując na sygnale cyfrowym wykorzystana jest dyskretna transformata Fouriera,
 \begin{equation}
 	X_{k}=\sum _{n=0}^{N-1}x_{n}e^{\frac{-i2\pi kn}{N}}\qquad k=0,\dots ,N-1
-\end{equation}, gdzie 
+\end{equation}
 $x_n$ - próbka sygnału czasowego, 
 $N$ - liczba próbek w badanym sygnale czasowym,
 $X_k$ - próbka sygnału w dziedzinie częstotliwości.
@@ -252,7 +252,7 @@ Za dźwięk podstawowy przyjmuje się, dźwięk o częstotliwości 1000 Hz i gł
 Następnie na podstawie pomiarów i ocen został stworzony wzór
 \begin{equation}
 	m=2595\log _{10}\left(1+{\frac {f}{700}}\right)
-\end{equation}, gdzie
+\end{equation}
 $f$ - częstotliwość w Hz,
 $m$ - częstotliwość w melach.
 Przeniesienie widma do skali melowej wykonuje się przez aplikację szeregu trójkątnych filtrów środkowoprzepustowych \Rys{rys:mfcc:melfilterbank}. 
@@ -281,13 +281,13 @@ Sygnał głosu zawiera informacje zawarte w komunikacie wypowiedzi oraz
 cechy sygnału zależne od mówcy wynikające z budowy jego narządu mowy oraz sposobu mówienia.
 Cechy sygnału zależne od mówcy nie są istotne z punktu widzenia interpretacji przekazu i treści wypowiedzi.
 Sygnał w dziedzinie częstotliwości pokazuje wartości energii poszczególnych składowych sygnału.
-Przeniesienie sygnału do dziedziny cepstrum pozwala zauważyć częstotliwość zmian sygnału częstotliwościowego.
+Przeniesienie sygnału do dziedziny cepstrum pozwala zauważyć częstotliwość zmian podpasm widma.
 Zastosowana zostanie dyskretna transformata kosinusowa (DCT-II) \ang{discrete cosine transform} \cite{Hossan2013}.
 Dyskretną transformatę kosinusową definiuje wzór:
 \begin{equation}
 	X_k =
 	 \sum_{n=0}^{N-1} x_n \cos \left[k \left(n+\frac{1}{2}\right) \frac{\pi}{N} \right] \quad \quad k = 0, \dots, N-1.
-\end{equation}, gdzie
+\end{equation}
 $n$ - numer próbki sygnału czasowego,
 $k$ - numer próbki transformaty DCT,
 $N$ - liczba próbek w rozpatrywanym sygnale czasowym,
@@ -407,7 +407,6 @@ Kowariancję pomiędzy parą cech definiuje się w następujący sposób:
 \begin{equation}
 	\sigma_{jk}=\frac{1}{n - 1}\sum_{i=1}^{n}(x_{ij}-\bar x_j)(x_{ik} - \bar x_k)
 \end{equation}
-gdzie 
 $n$ - liczba kolumn
 $\sigma_{jk}$ - wartość $j,k$ macierzy kowariancji,
 $x_{ij}$ - wartość $i,j$ macierzy, 
