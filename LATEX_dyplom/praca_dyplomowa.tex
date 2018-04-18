@@ -995,14 +995,14 @@ Brak jest informacji o operacjach wykonywanych na nagraniach.
 Stan nagrań jest niejednorodny i nieznany.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\textwidth]{MGR_ZL_C-plot}
+	\includegraphics[width=\textwidth]{standarized}
 	\caption{Przykład ustandaryzowanego sygnału}
 	\label{rys:opis:ustandaryzowany}
 \end{figure}
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=\textwidth]{MGR_ZD_T-plot}
-	\caption{Przykład nie ustandaryzowanego sygnału}
+	\includegraphics[width=\textwidth]{unstandarized}
+	\caption{Przykład nieustandaryzowanego sygnału}
 	\label{rys:opis:nieustandaryzowany}
 \end{figure}
 
@@ -1011,8 +1011,10 @@ Zapis wypowiedzi został ustandaryzowany\Rys{rys:opis:ustandaryzowany} w celu zn
 Ekstrakcja cech rozpoczyna się od znalezienia w bazie danych wszystkich plików zwierających wypowiedź i~odczytania sygnału. 
 Nie rozróżniano wypowiedzi ze względu na ich treść: polecenia, zdania, cyfry, tekst.
 Kolejnym krokiem jest przetwarzanie wstępne. 
-Sygnały stereofoniczne sumowane są do monofonicznych, sygnał zostaje poddany standaryzacji.
-W następnym etapie sygnał dzielony jest na ramki o długości 500ms zachodzące na siebie co 200ms.
+Korpus zawiera zapisy stereofoniczne i monofoniczne. 
+W przypadku zapisów stereofonicznych jeden kanał jest pusty, więc oba kanały są sumowane dając zapis monofoniczny.
+Następnie sygnał zostaje poddany standaryzacji.
+W kolejnym etapie sygnał dzielony jest na ramki o długości 500ms zachodzące na siebie co 200ms.
 Z przetworzonego wstępnie i podzielonego na ramki sygnału obliczane są cechy sygnału \Lst{lst:res:extr}.
 \begin{lstlisting}[language=Python,label={lst:res:extr},caption={funkcja obliczająca cechy sygnału pojedynczego pliku}]
 def analyse_file(filename):
@@ -1091,14 +1093,18 @@ Wyznaczono wartości następujących cech:
 Klasyfikacja emocji została przeprowadzona na wcześniej przygotowanej bazie cech.
 Cechy rozmieszczone w przestrzeni zostały poddane redukcji wymiarowości. 
 Skorelowane cechy nie różnicują zbioru wypowiedzi, a mogą obniżyć skuteczność klasyfikatora.
+
 Redukcja wymiarowości w tej aplikacji została zrealizowana przez selekcję cech RFECV \ang{Recursive Feature Selection cross-validated} \cite{Guyon2002}
 opisaną w sekcji \ref{sec:rfe}.
 RFE dokonując klasyfikacji na zbiorze testowym z wykorzystaniem kolejnych cech wybiera zestaw cech pozwalający najwyraźniej zróżnicować obserwacje.
-Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując wektory własne i wartości własne macierzy.
+
+
+Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując wektory własne i wartości własne macierzy
 przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, następnie wybiera najistotniejsze wymiary \cite{Bro2014}.
+PCA wybierze taką liczbę wymiarów, aby nowa przestrzeń wyjaśniała co najmniej 95\% wariancji przestrzeni pierwotnej.
+
 Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy) oraz MLP.
 Zmierzono zdolność klasyfikacji mowy wyrażającej jedną z emocji podstawowych, jak również porównano zdolność rozróżniania emocji parami.
-
 Zbiór danych wejściowych został losowo podzielony na dwie części testową i uczącą w proporcji 1:2.
 Otrzymano 216 wypowiedzi w zbiorze uczącym i 107 w zbiorze testującym.
 

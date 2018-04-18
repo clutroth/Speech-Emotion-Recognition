@@ -1,23 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-import csv
-import csv
 from itertools import product, combinations, groupby
 
 import numpy
-from numpy.ma import mean
 from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.feature_selection import SelectKBest, RFE, RFECV
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
+from sklearn.feature_selection import RFECV
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import scale
-from sklearn.svm import SVC, SVR
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
 
 import agh
 from util import filter
@@ -29,6 +21,7 @@ class FeaturesList:
         self.excpected = excpected
 
 
+random_state = 35795437
 bunch = agh.load_file('features_analysis-cc.csv')
 X = bunch.data
 y = bunch.target
@@ -36,21 +29,12 @@ X_scaled = scale(X)
 featuresList = FeaturesList(X_scaled, y)
 classificators = {
     'knn': KNeighborsClassifier(5),
-    'lsvc': SVC(kernel="linear", C=0.025),
-    # 'svc': SVC(gamma=2, C=1),
-    # 'gpc': GaussianProcessClassifier(1.0 * RBF(1.0)),
-    # 'dtc': DecisionTreeClassifier(max_depth=5),
-    # 'rfc': RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
-    'mlp': MLPClassifier(alpha=.1, max_iter=200),
-    # 'ad': AdaBoostClassifier(),
-    # 'gnb': GaussianNB(),
-    # 'qda': QuadraticDiscriminantAnalysis()
+    'lsvc': SVC(kernel="linear", C=.025, random_state = random_state),
+    'mlp': MLPClassifier(activation='tanh', solver='lbfgs', random_state = random_state),
 }
 selectors = {
-    # 'kbest': SelectKBest(k=10),
-    'rfe': RFECV(SVR(kernel="linear"), 5, n_jobs=-1),
-    # 'lda': LinearDiscriminantAnalysis(),
-    'pca': PCA()
+    'rfe': RFECV(SVC(kernel="linear", C=.025, random_state = random_state), 5, n_jobs=-1),
+    'pca': PCA(n_components=0.98, svd_solver='full', random_state = random_state)
 }
 
 pairS = {
@@ -77,7 +61,7 @@ for (classification_type, pairs) in pairS.items():
         print [classification_type,c_name, s_name,emotions]
         [filteredX, filteredY] = filter(featuresList.features, featuresList.excpected, emotions)
         X_train, X_test, y_train, y_test = train_test_split(
-            filteredX, filteredY, test_size=0.33, random_state=1)
+            filteredX, filteredY, test_size=0.33, random_state=random_state)
         selector = selector.fit(X_train, y_train)
         X_train_reduced = selector.transform(X_train)
         X_test_reduced = selector.transform(X_test)
@@ -93,18 +77,17 @@ for (classification_type, pairs) in pairS.items():
         }
         print (result)
         clasificationResults[classification_type].append(result)
-        # Compute the accuracy of the prediction
-    # acc = float((y_test == y_pred).sum()) / y_pred.shape[0]
-    # rows.append([
-    # c_name, s_name, 100.0 * acc] + list(emotions))
+
 print('encoding json')
 import json
-
 with open('classification.json', 'w') as outfile:
     json.dump(clasificationResults, outfile)
-# clasification_stats(rows)
-# with open("cross_classification.csv", "wb") as file:
-#     writer = csv.writer(file)
-#     writer.writerow(['klasyfikator', 'selektor', 'emocja1', 'emocja2', 'celność'])
-#     for row in rows:
-#         writer.writerow(row)
+
+# c = clasificationResults['seven'][2]
+# correct=0
+# at_all=0
+# for n in range(len(c['predicted'])):
+#     if c['predicted'][n] == c['expected'][n]:
+#         correct += 1
+# with open("results.txt", "a") as myfile:
+#     myfile.write( "%d\t%f\n"%(random_state,float(correct)/len(c['predicted'])))
