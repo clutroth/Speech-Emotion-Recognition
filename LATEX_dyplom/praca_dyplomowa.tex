@@ -1091,32 +1091,34 @@ Wyznaczono wartości następujących cech:
 
 \section{Klasyfikacja emocji}
 Klasyfikacja emocji została przeprowadzona na wcześniej przygotowanej bazie cech.
+Zbiór danych wejściowych został losowo podzielony na dwie części testową i uczącą w proporcji 1:3.
+Otrzymano 323 wypowiedzi w zbiorze uczącym i 80 w zbiorze testującym.
+Każda wypowiedź została opisana 252 cechami.
 Cechy rozmieszczone w przestrzeni zostały poddane redukcji wymiarowości. 
 Skorelowane cechy nie różnicują zbioru wypowiedzi, a mogą obniżyć skuteczność klasyfikatora.
 
 Redukcja wymiarowości w tej aplikacji została zrealizowana przez selekcję cech RFECV \ang{Recursive Feature Selection cross-validated} \cite{Guyon2002}
 opisaną w sekcji \ref{sec:rfe}.
 RFE dokonując klasyfikacji na zbiorze testowym z wykorzystaniem kolejnych cech wybiera zestaw cech pozwalający najwyraźniej zróżnicować obserwacje.
+Ocena cech odbywa się przez krzyżową walidację na 10 podzbiorach.
 
 
 Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystując wektory własne i wartości własne macierzy
 przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, następnie wybiera najistotniejsze wymiary \cite{Bro2014}.
-PCA wybierze taką liczbę wymiarów, aby nowa przestrzeń wyjaśniała co najmniej 95\% wariancji przestrzeni pierwotnej.
+Po redukcji składowych PCA, nowa przestrzeń wyjaśnia 98\% wariancji przestrzeni pierwotnej wykorzystując 113 wymiarów.
 
 Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy) oraz MLP.
 Zmierzono zdolność klasyfikacji mowy wyrażającej jedną z emocji podstawowych, jak również porównano zdolność rozróżniania emocji parami.
-Zbiór danych wejściowych został losowo podzielony na dwie części testową i uczącą w proporcji 1:2.
-Otrzymano 216 wypowiedzi w zbiorze uczącym i 107 w zbiorze testującym.
 
 \subsection{Klasyfikacja dla siedmiu klas}
-Porównując trafność rozpoznawania jednej z siedmiu emocji podstawowych w zależności od klasyfikatora i metody redukcji wymiarowości.
+Porównano trafność rozpoznawania jednej z siedmiu emocji podstawowych w zależności od klasyfikatora i metody redukcji wymiarowości.
 \begin{table}[hc!]
 	\caption{Trafność predykcji dla klasyfikatorów i selektorów}
 	\centering
 	\input{./app/accuaricy_c_s_table.tex}
 	\label{tab:acc}
 \end{table}
-Najlepszą trafność wykazał klasyfikator MLP po redukcji wymiarów z wykorzystaniem PCA \Tab{tab:acc}. 
+Najwyższą trafność wykazał klasyfikator MLP po redukcji wymiarów z wykorzystaniem PCA \Tab{tab:acc}. 
 Najgorszą, klasyfikacja z wykorzystaniem KNN niezależnie od metody redukcji wymiarowości.
 \begin{landscape}
 \begin{table}[hc!]
@@ -1127,33 +1129,101 @@ Najgorszą, klasyfikacja z wykorzystaniem KNN niezależnie od metody redukcji wy
 \end{table}
 \end{landscape}
 Analizując efekt klasyfikacji poszczególnych emocji podstawowych\Tab{tab:mlp:pca} zostaną podane przykłady interesujących rozpoznań.
+W kolumnach znajdują się emocje spodziewane, w wierszach emocje rozpoznane.
+Przykładowo aplikacja otrzymała 11 wypowiedzi na których została odegrana radość.
+Siedem z tych wypowiedzi zostało rozpoznanych prawidłowo, trzy zostały pomylone ze złością, a jedna ze zdziwieniem.
 
 \subsection{Klasyfikacja dla dwóch klas}
-\subsubsection{Rozpoznanie złości jako radość}
-Radość w 10 przypadkach została rozpoznana prawidłowo. 
-Błędnie jako złość została sklasyfikowana 4 razy. 
-Są to emocje o podobnym poziomie pobudzenia, ale przeciwnym wartościowaniu.
+\subsubsection{Rozpoznanie radości}
 \begin{table}[hc!]
 	\caption{Trafność rozróżnienia radości i złości}
 	\centering
 	\input{./app/accuaricy_radosc_zlosc_table.tex}
 \end{table}
-\subsubsection{Rozpoznanie strachu jako zdziwienia}
-Strach jako jedyna emocja został rozpoznany w większości przypadków błędnie.
-Więcej razy została oznaczona jako zdziwienie.
-Najskuteczniejsza w klasyfikacji okazała się klasyfikator MLP i metoda redukcji wymiarowości RFE.
+Radość w 7 przypadkach została rozpoznana prawidłowo. 
+Błędnie jako złość została sklasyfikowana 3 razy. 
+Są to emocje o podobnym poziomie pobudzenia, ale przeciwnym wartościowaniu.
+\subsubsection{Rozpoznanie irytacji}
+Irytacja jako jedyna emocja z bazy danych nie jest emocją podstawową według Ekmana.
+Założeniem twórców bazy danych wypowiedzi emocjonalnych było dodanie emocji złożonej.
+W modelu Plutchika irytacja jest mniej intensywnie przeżywaną formą złości.
+Nie jest więc diadą, ani triadą czyli emocją posiadająca dwa lub trzy składniki,
+ale jest emocją podstawową o niskiej intensywności.
 \begin{table}[hc!]
-	\caption{Trafność rozróżnienia strachu i zdziwienia}
+	\caption{Trafność rozróżnienia irytacji i złości}
+	\centering
+	\input{./app/accuaricy_irytacja_zlosc_table.tex}
+	\label{tab:irytacja:zlosc}
+\end{table}
+Szczególną uwagę zwraca wysoka rozróżnialność irytacji i złości.
+Według Plutchika są one tą samą emocją przeżywaną z różną intensywnością,
+a rozróżnialność złości i irytacji wynosi ponad 80\%.
+
+\begin{table}[hc!]
+	\caption{Trafność rozróżnienia irytacji i zdziwienia}
+	\centering
+	\input{./app/accuaricy_irytacja_zdziwienie_table.tex}
+	\label{tab:irytacja:zdziwienie}
+\end{table}
+\begin{table}[hc!]
+	\caption{Trafność rozróżnienia irytacji i smutku}
+	\centering
+	\input{./app/accuaricy_irytacja_smutek_table.tex}
+	\label{tab:irytacja:smutek}
+\end{table}
+\begin{table}[hc!]
+	\caption{Trafność rozróżnienia irytacji i radości}
+	\centering
+	\input{./app/accuaricy_irytacja_radosc_table.tex}
+	\label{tab:irytacja:radosc}
+\end{table}
+Irytacja najczęściej została pomylona ze zdziwieniem \Tab{tab:irytacja:zdziwienie}, smutkiem \Tab{tab:irytacja:smutek}, radością \Tab{tab:irytacja:radosc}.
+Zauważalnie wyższą skutecznością od pozostałych klasyfikatorów wykazał LSVC podczas rozróżniania irytacji i smutku.
+\subsubsection{Rozpoznanie strachu}
+\begin{table}[hc!]
+	\caption{Trafność rozróżnienia strachu i złości}
+	\centering
+	\input{./app/accuaricy_strach_zlosc_table.tex}
+	\label{tab:strach:zlosc}
+\end{table}
+Według modelu Plutchika strach i złość są emocjami przeciwnymi. 
+Podczas rozpoznania tej pary emocji udało się uzyskać 100\% skuteczności dla reduktora wymiarowości PCA i klasyfikatora LSVC \Tab{tab:strach:zlosc}.
+Dla pary PCA i MLP uzyskano 95.5\% trafności.
+
+\begin{table}[hc!]
+	\caption{Trafność rozróżnienia strachu i smutku}
+	\centering
+	\input{./app/accuaricy_smutek_strach_table.tex}
+	\label{tab:strach:smutek}
+\end{table}
+Strach był często mylony ze smutkiem \Tab{tab:strach:smutek}. 
+Obydwie emocje są emocjami negatywnymi. 
+Rozróżnialność tej pary nie przekroczyła 78\% trafności.
+
+\subsubsection{Rozpoznanie zdziwienia}
+Zdziwienie jest emocją przeciwną do przeczuwania.
+Badany korpus nie zawiera wypowiedzi nacechowanych przeczuwaniem, więc ma możliwości analizy rozróżnialności tej pary emocji w niniejszej pracy.
+\begin{table}[hc!]
+	\caption{Trafność rozróżnienia zdziwienia i strachu}
 	\centering
 	\input{./app/accuaricy_strach_zdziwienie_table.tex}
+	\label{tab:strach:zdziwienie}
 \end{table}
+\begin{table}[hc!]
+	\caption{Trafność rozróżnienia zdziwienia i złości}
+	\centering
+	\input{./app/accuaricy_zdziwienie_zlosc_table.tex}
+	\label{tab:zdziwienie:zlosc}
+\end{table}
+Został on dwukrotnie pomylony ze strachem \Tab{tab:strach:zdziwienie} i dwukrotnie ze złością \Tab{tab:zdziwienie:zlosc}.`
+W przypadki strachu trafność nie przekroczyła 70\%. 
+Rozróżnialność w parze ze złością jest zauważalnie wyższa i przekracza 80\%.
+Wszystkie trzy emocje są nacechowane negatywnie.
 
 \subsubsection{Rozpoznanie smutku}
 Smutek w przypadku klasyfikacji dla 7 klas uzyskał 100\% poprawności. 
 Emocja ta charakteryzuje się niskim pobudzeniem i słabym wartościowaniem,
-dla tego jest bardzo dobrze rozróżnialna od smutku \Tab{tab:smutek:radosc} i złości \Tab{tab:smutek:zlosc}.
-Względnie mniejszą poprawność osiągnięto rozróżniając smutek i stan neutralny \Tab{tab:smutek:neutralny}.
-Obydwie emocje mają niski poziom pobudzenia.
+dla tego jest bardzo dobrze rozróżnialna od radości \Tab{tab:smutek:radosc} i złości \Tab{tab:smutek:zlosc}.
 \begin{table}[hc!]
 	\caption{Trafność rozróżnienia radości i smutku}
 	\centering
@@ -1172,12 +1242,12 @@ Obydwie emocje mają niski poziom pobudzenia.
 	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
 	\label{tab:smutek:neutralny}
 \end{table}
+Względnie mniejszą poprawność osiągnięto rozróżniając smutek i stan neutralny \Tab{tab:smutek:neutralny}.
+Obydwie emocje mają niski poziom pobudzenia.
 \subsubsection{Rozpoznanie stanu neutralnego}
 Stan neutralny jest punktem odniesienia dla emocji, jest to stan człowieka nie odczuwającego w danym momencie żadnych emocji.
 Charakteryzuje pobudzeniem i wartościowością bliskimi zeru.
 Zerowy ładunek emocjonalny wypowiedzi stanu neutralnego pozwala dobrze rozróżnić je od wypowiedzi zabarwionych emocjonalnie. 
-Tabele obrazujące różnienie stanu neutralnego i zdziwienia \Tab{tab:neutralny:zdziwienie}, strachu \Tab{tab:neutralny:strach} i smutku \Tab{tab:neutralny:smutek}
-pokazują wysoką rozróżnialność od wypowiedzi emocjonalnych. 
 \begin{table}[hc!]
 	\caption{Trafność rozróżnienia stanu neutralnego i zdziwienia}
 	\centering
@@ -1190,45 +1260,15 @@ pokazują wysoką rozróżnialność od wypowiedzi emocjonalnych.
 	\input{./app/accuaricy_stan-neutralny_strach_table.tex}
 	\label{tab:neutralny:strach}
 \end{table}
+
 \begin{table}[hc!]
 	\caption{Trafność rozróżnienia stanu neutralnego i smutku}
 	\centering
 	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
 	\label{tab:neutralny:smutek}
 \end{table}
-\subsubsection{Rozpoznanie irytacji}
-Irytacja jako jedyna emocja z bazy danych nie jest emocją podstawową według Ekmana.
-Założeniem twórców bazy danych wypowiedzi emocjonalnych było dodanie emocji złożonej.
-W modelu Plutchika irytacja jest mniej intensywnie przeżywaną formą złości.
-Nie jest więc diadą, ani triadą czyli emocją posiadająca dwa lub trzy składniki,
-ale jest emocją podstawową o niskiej intensywności.
-Szczególną uwagę zwraca wysoka rozróżnialność irytacji i złości.
-Według Plutchika są one tą samą emocją przeżywaną z różną intensywnością,
-a rozróżnialność złości i irytacji osiąga 90\%.
-\begin{table}[hc!]
-	\caption{Trafność rozróżnienia irytacji i złości}
-	\centering
-	\input{./app/accuaricy_irytacja_zlosc_table.tex}
-	\label{tab:irytacja:zlosc}
-\end{table}
-\begin{table}[hc!]
-	\caption{Trafność rozróżnienia irytacji i stany neutralnego}
-	\centering
-	\input{./app/accuaricy_irytacja_stan-neutralny_table.tex}
-	\label{tab:irytacja:neutralny}
-\end{table}
-\begin{table}[hc!]
-	\caption{Trafność rozróżnienia irytacji i strachu}
-	\centering
-	\input{./app/accuaricy_irytacja_strach_table.tex}
-	\label{tab:irytacja:strach}
-\end{table}
-\begin{table}[hc!]
-	\caption{Trafność rozróżnienia irytacji i radości}
-	\centering
-	\input{./app/accuaricy_irytacja_radosc_table.tex}
-	\label{tab:irytacja:radosc}
-\end{table}
+Tabele obrazujące różnienie stanu neutralnego i zdziwienia \Tab{tab:neutralny:zdziwienie}, strachu \Tab{tab:neutralny:strach} i smutku \Tab{tab:neutralny:smutek}
+pokazują wysoką rozróżnialność od wypowiedzi emocjonalnych. 
 %\subsubsection{Rozpoznanie par przeciwstawnych}
 %\begin{table}[hc!]
 %	\centering

@@ -1,39 +1,44 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-import csv
+import random
 from itertools import product, combinations, groupby
 
 import numpy
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import RFECV
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import scale
 from sklearn.svm import SVC
 
 import agh
+from emo.stage import selectorInfo
 from util import filter
 
 
 class FeaturesList:
-    def __init__(self, features, excpected):
+    def __init__(self, features, expected, feature_names):
         self.features = features
-        self.excpected = excpected
+        self.expected = expected
+        self.feature_names = feature_names
 
 
-random_state = 35795437
+random_state = 2420522089
+# random_state = random.randint(0,7654567877)
 bunch = agh.load_file('features_analysis-cc.csv')
 X = bunch.data
 y = bunch.target
 X_scaled = scale(X)
-featuresList = FeaturesList(X_scaled, y)
+featuresList = FeaturesList(X_scaled, y, bunch.feature_names)
+cv = StratifiedKFold(10, random_state=random_state)
 classificators = {
     'knn': KNeighborsClassifier(5),
     'lsvc': SVC(kernel="linear", C=.025, random_state = random_state),
     'mlp': MLPClassifier(activation='tanh', solver='lbfgs', random_state = random_state),
 }
 selectors = {
-    'rfe': RFECV(SVC(kernel="linear", C=.025, random_state = random_state), 5, n_jobs=-1),
+    'rfe': RFECV(SVC(kernel="linear", C=.025, random_state=random_state), cv=cv, step=.02, n_jobs=-1),
     'pca': PCA(n_components=0.98, svd_solver='full', random_state = random_state)
 }
 
@@ -59,12 +64,12 @@ for (classification_type, pairs) in pairS.items():
 
     for [(c_name, classifier), (s_name, selector), emotions] in all_product:
         print [classification_type,c_name, s_name,emotions]
-        [filteredX, filteredY] = filter(featuresList.features, featuresList.excpected, emotions)
+        [filteredX, filteredY] = filter(featuresList.features, featuresList.expected, emotions)
         X_train, X_test, y_train, y_test = train_test_split(
-            filteredX, filteredY, test_size=0.33, random_state=random_state)
-        selector = selector.fit(X_train, y_train)
-        X_train_reduced = selector.transform(X_train)
-        X_test_reduced = selector.transform(X_test)
+            filteredX, filteredY, test_size=0.25, random_state=random_state)
+        fittedSelector = selector.fit(X_train, y_train)
+        X_train_reduced = fittedSelector.transform(X_train)
+        X_test_reduced = fittedSelector.transform(X_test)
         classifier.fit(X_train_reduced, y_train)
         y_pred = classifier.predict(X_test_reduced)
         result = {
@@ -73,6 +78,7 @@ for (classification_type, pairs) in pairS.items():
             'emotions': emotions,
             'emotion_names': [name for idx, name in enumerate(bunch.target_names) if idx in emotions],
             'expected': y_test,
+            'selector_info': selectorInfo(selector),
             'predicted': y_pred.tolist()
         }
         print (result)

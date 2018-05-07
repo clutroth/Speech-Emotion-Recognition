@@ -22,7 +22,7 @@ def uppercaser(names):
 
 def save_latex_table(filename, left_corner, data_structure):
     (rows, columns), data = map_to_table(data_structure)
-    turncatedData = [[("%.1f" % v) if isinstance(v, float) else v for v in r] for r in data]
+    turncatedData = [[("%.1f%%" % v) if isinstance(v, float) else v for v in r] for r in data]
     saveLatex(
         generate_table((uppercaser(columns), uppercaser(rows)), turncatedData, left_corner),
         filename
@@ -42,7 +42,7 @@ for classification in data['seven']:
     predicted = np.array(classification['predicted'])
     expected = np.array(classification['expected'])
     r[(classification['selector'], classification['classifier'])] = accuaricy(predicted == expected)
-save_latex_table('share/accuaricy_c_s_table.tex', 'otrzymane\\spodziewane', r)
+save_latex_table('share/accuaricy_c_s_table.tex', 'selektor\\reduktor', r)
 
 # accuracy of MLP and PCA for seven emotions
 # liczba emocji rozpoznanych od oczekiwanych dla najlepszej pary klasyfikatora i selektora
@@ -72,7 +72,6 @@ for (e1,e2) in combinations(rle, 2):
     r_emotions[frozenset([e1, e2])]={}
 for classification in data['two']:
     e, c, s = classification['emotions'],classification['classifier'],classification['selector']
-    accuaricy(np.array(classification['predicted']) == np.array(classification['expected']))
     r_emotions[frozenset(list(e))][(c, s)] = accuaricy(np.array(classification['predicted']) == np.array(classification['expected']))
 for (e1, e2) in combinations(rle, 2):
     save_latex_table('share/accuaricy_'+unspace(emotions[e1])+'_'+unspace(emotions[e2])+'_table.tex', 'klasyfikator\\reduktor', r_emotions[frozenset([e1, e2])])

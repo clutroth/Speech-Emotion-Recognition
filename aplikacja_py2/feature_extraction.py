@@ -9,7 +9,7 @@ from python_speech_features import mfcc
 from python_speech_features import sigproc
 from python_speech_features import ssc
 from emo.model import Signal, FeatureDescriptor
-from emo.stage import preprocess
+from emo.stage import preprocess, read_file
 from sklearn.utils import check_array
 
 def split(signal, frame_len, frame_step):

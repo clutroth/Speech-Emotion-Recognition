@@ -1,32 +1,25 @@
 \newpage
 \begin{center}
 \large \bf
-Aplikacja do rozpoznawania emocji w sygnale mowy
+APLIKACJA DO ROZPOZNAWANIA EMOCJI W~SYGNALE MOWY
 \end{center}
 
 \section*{Streszczenie}
-Emocje odgrywają elementarną rolę w komunikacji międzyludzkiej.
-Prawidłowa interpretacja emocji jest konieczna do prawidłowej komunikacji człowiek-człowiek i człowiek-maszyna.
-Można wyróżnić 6 emocji podstawowych, których kombinacje tworzą bardziej złożone emocje.
-Każda emocja znacząco wpływa na organizm człowieka, jego zdolność percepcji i działania.
-Wykorzystując narzędzia cyfrowego przetwarzania sygnałów można stworzyć opis liczbowy
-sygnału mowy stanowiący zestaw cech bazowych.
-Wypowiedzi zostały podzielone na równe ramki zawierające krótkie jej fragmenty.
-Dla każdej ramki sygnału wypowiedzi zostały wyznaczone cechy bazowe.
-Opis statystyczny cech bazowych wszystkich ramek wypowiedzi tworzy zestaw cech właściwych wykorzystanych w klasyfikacji.
-Ograniczono liczbę używanych cech stosując metody redukcji wymiarowości i selekcji cech.
-Opisano klasyfikatory, które zostały użyte w badaniu.
-Rozdział trzeci opisuje platformę i biblioteki które zostały zastosowane w aplikacji.
-Pokazana została struktura aplikacji oraz implementacja najistotniejszych jej modułów i komunikacji między modułami.
-Badanie rozpoczyna się opisem użytej bazy danych wypowiedzi emocjonalnych.
-Wymienione zostały cechy użyte w klasyfikacji.
-Wyniki badań klasyfikacji emocji w głosie dla dwóch i siedmiu emocji zostały przedstawione w postaci tabel.
+Celem pracy było stworzenie aplikacji klasyfikującej emocje na podstawie sygnału mowy.
+Zawiera opis narzędzi wykorzystanych w~aplikacji oraz jej budowę.
+W ostatniej części opisano bazę danych, zaimplementowane rozwiązanie oraz analizę wyników określających rozpoznawalność poszczególnych emocji spośród siedmiu klas, a~także parami.
+Całą aplikację zaimplementowano w~języku Python z~wykorzystaniem pakietów Numpy, Scikit-learn i~Python speech features.
+
+Praca została podzielona na 3 główne części, spośród których pierwsza opisuje metody i~narzędzia służące rozpoznawaniu emocji w~głosie.
+Zawiera ona przybliżenie modelu emocji, ekstrakcji cech i~ich analizę statystyczną oraz redukcję wymiarowości przestrzeni w~której zostały opisane cechy.
+Kolejna część przedstawia strukturę i~budowę aplikacji z~wyszczególnieniem istotnych fragmentów kodu.
+Ostatnia część zawiera opis wykorzystanej bazy danych, wyekstrahowanych cech wypowiedzi oraz analizę wyników klasyfikacji emocji.
+Badanie pokazuje skuteczność rozróżniania emocji spośród siedmiu klas oraz parami z~zastosowaniem różnych klasyfikatorów i~strategii redukcji wymiarowości.
 
 \bigskip
 {\noindent\bf Słowa kluczowe:} klasyfikacja, emocje, głos, mowa
 
-\vskip 2cm
-
+\newpage
 
 \begin{center}
 \large \bf
@@ -34,12 +27,12 @@ THESIS TITLE
 \end{center}
 
 \section*{Abstract}
-This thesis presents a novel way of using a novel algorithm to solve complex
+This thesis presents a~novel way of using a~novel algorithm to solve complex
 problems of filter design. In the first chapter the fundamentals of filter design
 are presented. The second chapter describes an original algorithm invented by the
 authors. Is is based on evolution strategy, but uses an original method of filter
 description similar to artificial neural network. In the third chapter the implementation
-of the algorithm in C programming language is presented. The fifth chapter contains results
+of the algorithm in C~programming language is presented. The fifth chapter contains results
 of tests which prove high efficiency and enormous accuracy of the program. Finally some
 posibilities of further development of the invented algoriths are proposed.
 
