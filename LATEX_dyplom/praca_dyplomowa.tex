@@ -62,6 +62,8 @@
   breakatwhitespace=true,
   breaklines=true, 
   language=Python,
+  aboveskip=2\baselineskip,
+  belowskip=2\baselineskip,
   captionpos=b
 }
 
@@ -138,14 +140,14 @@ oraz pomiędzy człowiekiem i komputerem \- \ang{Human-Computer Interaction}.
 Komunikat głosowy składa się z treści językowej,
 którą można zapisać w formie tekstu
 oraz akustycznej, która również opisuje wypowiedź. Przykładowo:
-drżący głos, czy ciężki oddech świadczący o gniewie.
+drżący głos, czy ciężki oddech może świadczyć o gniewie.
 
 % Zastosowanie maszynowego rozpoznawania emocji
 Rozpoznawanie emocji mówcy jest istotne w aplikacjach wykorzystujących mowę w komunikacji człowiek-maszyna,
 zwłaszcza, jeśli odpowiedź systemu jest uzależniona od nastroju człowieka.
 Klasyfikacja emocji wypowiedzi jest wykorzystywana w terapiach,
 gdzie terapeuta wspiera się maszyną w odczytywaniu emocji pacjenta.
-Systemy tłumaczenia maszynowego mowy mogą wykorzystać informacje mówiące o kontekście wypowiedzi i stanie mówcy.
+Systemy tłumaczenia maszynowego mowy mogą wykorzystać informacje o kontekście wypowiedzi i stanie mówcy.
 Telefoniczne centra obsługi klienta \ang{call center} rozpoznają stan klienta
 oraz jego reakcję na ofertę prezentowaną przez konsultanta.
 Rozpoznanie frustracji lub zniecierpliwienia jest dla konsultanta istotną przesłanką od zakończenia rozmowy.
@@ -155,8 +157,8 @@ Celem pracy jest przybliżenie tematyki komputerowego rozpoznawania mowy,
 przegląd narzędzi do oceny znanych rozwiązań oraz aplikacji komputerowej rozpoznającej emocje w sygnale mowy.
 W trakcje tworzenia pracy zostanie dokonana analiza znanych rozwiązań tego zagadnienia.
 Kolejnym etapem będzie implementacja aplikacji rozpoznającej emocje w głosie w środowisku Python.
-Na zakończenie zostaną przeprowadzone badania z wykorzystaniem aplikacji.
-Następnie po analizie wyników zostaną podane wnioski.
+Następnie zostaną przeprowadzone badania z wykorzystaniem aplikacji.
+Na zakończenie po analizie wyników zostaną podane wnioski.
 
 \NewPage
 \chapter{Rozpoznawanie emocji w głosie}
@@ -170,7 +172,7 @@ Rozpoznanie przez maszynę stanu emocjonalnego mówcy jest istotne do zrozumieni
 
 Rozpoznawanie emocji w mowie jest złożonym zagadnieniem.
 Nie jest oczywiste jakie cechy mowy odpowiadają za wyrażanie poszczególnych emocji.
-Wydźwięk wypowiedzi może być różny w zależności od mówcy, stylu budowania zdań, tempa mowy, co wywiera wpływ na cechy sygnału mowy, a standardowa wartość jest zależna od mówcy.
+Wydźwięk wypowiedzi może być różny w zależności od mówcy, stylu budowania zdań, tempa mowy, co wywiera wpływ na cechy sygnału mowy zależne od mówcy.
 Kolejną komplikacją jest kontekst kulturowy wypowiedzi. 
 Społeczności, których członkowie przynależą do różnych kultur, w różny sposób będą swoje emocje wyrażali i interpretowali.
 Człowiek znajdujący się przez dłuższy czas w jednym stanie emocjonalnym nie zauważa słabszych emocji, których chwilowo doświadcza.
@@ -215,11 +217,10 @@ Smutek jest emocją negatywną o niskim pobudzeniu.
 \section{Ekstrakcja cech}
 \subsection{Cechy bazowe}
 \subsubsection{Mel-frequency cepstral coefficients (MFCC)}
-Jedną z najpopularniejszych cech wykorzystywanych w systemach automatycznego rozpoznawania mowy,
-jest MFCC \ang{Mel-Frequency Cepstral Coefficients}.
+Jedną z najpopularniejszych cech wykorzystywanych w systemach automatycznego rozpoznawania mowy są MFCC \ang{Mel-Frequency Cepstral Coefficients}.
 Biorąc pod uwagę warunki powstawania mowy, cechy indywidualne mówcy, sposób działania narządów mowy, sposób percepcji mowy przez człowieka,
 MFCC daje wektor współczynników reprezentujących mowę z założenia niezależny od mówcy. 
-Przekazuje informacje o analizowanym fragmencie mowy, pomijając cechy zależne od mówiącego, takie jak częstotliwość podstawowa i jej harmoniczne \cite{Hossan2013}.
+Wektor ten przekazuje informacje o analizowanym fragmencie mowy, pomijając cechy zależne od mówiącego, takie jak częstotliwość podstawowa i jej harmoniczne \cite{Hossan2013}.
 Współczynniki MFCC reprezentują dynamiczną naturę mowy, pokazując jej zmianę energii i częstotliwości w czasie.
 
 Algorytm obliczający MFCC przyjmuje na wejście sygnał mowy o długości kilkudziesięciu ms,
@@ -280,8 +281,6 @@ Daje ona odseparowanie sygnału od czynników zależnych od mówcy.
 Sygnał głosu zawiera informacje zawarte w komunikacie wypowiedzi oraz 
 cechy sygnału zależne od mówcy wynikające z budowy jego narządu mowy oraz sposobu mówienia.
 Cechy sygnału zależne od mówcy nie są istotne z punktu widzenia interpretacji przekazu i treści wypowiedzi.
-Sygnał w dziedzinie częstotliwości pokazuje wartości energii poszczególnych składowych sygnału.
-Przeniesienie sygnału do dziedziny cepstrum pozwala zauważyć częstotliwość zmian podpasm widma.
 Zastosowana zostanie dyskretna transformata kosinusowa (DCT-II) \ang{discrete cosine transform} \cite{Hossan2013}.
 Dyskretną transformatę kosinusową definiuje wzór:
 \begin{equation}
@@ -315,7 +314,7 @@ Liczbę przejść przez zero wyraża się w liczbie miejsc, gdzie sąsiednie pr�
 	\end{cases}
 	\label{eq:zcr}
 \end{equation}
-Sygnał zawierający mowę ma wyższą liczbę przejść przez zero, niż sygnał niezawierający mowy\cite{Walters-Williams2010}.
+Sygnał zawierający mowę ma wyższą liczbę przejść przez zero, niż sygnał niezawierający mowy \cite{Walters-Williams2010}.
 \subsubsection{Entropia}
 Entropia mówi o sumie prawdopodobieństw wystąpienia danej wartości próbki $p_k$ w sygnale \cite{Majstorovic2011}.
 \begin{equation}
@@ -357,10 +356,11 @@ Użyto następujących funkcji:
 	\item skośność
 	\item kurtoza
 \end{enumerate}
-Wykorzystano średnią arytmetyczną, gdzie $N$ jest liczbą ramek, a $x_n$ jest wartością cechy bazowej dla $n$-tej ramki.
+Średnia arytmetyczna - suma wartości podzielona przez ich liczbę definiowana wzorem 
 \begin{equation}
 	\mu = \frac{1}{N}\sum_1^Nx_n
 \end{equation}
+gdzie $N$ jest liczbą ramek, a $x_n$ jest wartością cechy bazowej dla $n$-tej ramki.
 
 Skośność - trzeci moment centralny, jest miarą asymetrii rozkładu statystycznego. 
 Intuicyjnie skośność dodatnia oznacza, że lewy ogon rozkładu znajduje się dalej od prawego,
@@ -441,7 +441,7 @@ Do zbudowania macierzy projekcji $\vec W$ posłuży $k$ wektorów własnych posi
 	W = [\vec e_1 \vec e_2 \dots \vec e_k]
 \end{equation}
 Ostatnim etapem będzie przeniesienie obserwacji z przestrzeni oryginalnej $X$ do przestrzeni wynikowej $\vec Y = \vec X \times \vec W$.
-Liczba wymiarów nowej przestrzeni $d$ jest znacznie mniejsza od liczby wymiarów starej przestrzeni $k$.
+Liczba wymiarów nowej przestrzeni $k$ jest znacznie mniejsza od liczby wymiarów starej przestrzeni $d$.
 \subsection{Rekurencyjna eliminacja cech}\label{sec:rfe}
 Metoda Rekurencyjnej Eliminacji Cech \ang{Recursive Feature Elimination - RFE}
 usuwa kolejno najmniej znaczące cechy ze zbioru cech wykorzystywanych
@@ -453,7 +453,7 @@ Eliminacja cech wykonuje się iteracyjnie w krokach:
 	\item usuń najmniej różnicującą cechę
 \end{enumerate}
 Tworzenie rankingu cech może zostać wykonane przez uczenie klasyfikatora i badanie jego poprawności dla różnych zestawów cech.
-Pozwala to oceniać poszczególne cechy oceniając skuteczność klasyfikatorów przez które były wykorzystywane.
+Pozwala to oceniać poszczególne cechy oceniając skuteczność klasyfikatorów, przez które były wykorzystywane.
 Przedstawiona procedura jest przykładem eliminacji wstecznej cech \ang{backward future elimination}.
 W przyczyn wydajnościowych można usuwać kilka najmniej użytecznych cech każdorazowo.
 Należy podkreślić, że cechy znajdujące się najwyżej w rankingu nie muszą być zbiorem najlepiej różnicujących cech \cite{Guyon2002}.
@@ -614,7 +614,7 @@ W takim przypadku błędne klasyfikacje są nie do uniknięcia \cite{Dellepiane2
 Poszukiwanie rozwiązania polega na wyznaczeniu hiperpłaszczyzny rozdzielającej przestrzeń 
 minimalizując błędy klasyfikacji na zbiorze uczącym i nieznanym zbiorze testowym.
 
-Przyjmijmy zbiór uczący $D$, który nie jest separowalny liniowo. 
+Przyjmijmy, że $D$ oznacza zbiór uczący, który nie jest separowalny liniowo. 
 Nie istnieje hiperpłaszczyzna rozdzielająca obserwacje dwóch klas.
 Zostanie więc stworzony margines błędu, dopuszczający istnienie błędnych klasyfikacji w swoim obrębie.
 Występowanie błędnych klasyfikacji jest tolerowane, ale wystąpienia błędnych klasyfikacji są minimalizowane.
@@ -663,7 +663,7 @@ Liniowa funkcja jądra w niektórych przypadkach nie wprowadza zmian zmieniając
 	K(\vec x, \vec{x_i}) = \vec x \cdot \vec x ^ T + c
 \end{equation}
 
-Wielomianową funkcję jądra określają współczynnik $\alpha$, stałą $c$ i stopień wielomiany $d$.
+Wielomianową funkcję jądra określają współczynnik $\alpha$, stałą $c$ i stopień wielomianu $d$.
 \begin{equation}
 	\label{eq:svm:kern:poly}
 	K(\vec x, \vec{x_i}) = (\alpha \vec x^T \vec x_i + c)^d 
@@ -683,7 +683,7 @@ dla $N$-wymiarowej przestrzeni.
 Sztuczne sieci neuronowe \ang{Artificial Neural Network} są modelami zainspirowanymi ludzkim mózgiem.
 Składają się z ogromnej liczby węzłów, każdy węzeł wykonuje prostą operację matematyczną.
 Każdy neuron posiada wejścia, wyjście oraz zestaw parametrów go określających. 
-Dzięki połączeniom węzłów (sztucznych neuronów) sieci neuronowe są w stanie rozwiązywać złożone problemy.
+Dzięki połączeniom węzłów (sztucznych neuronów) sieci neuronowe są w stanie rozwiązywać złożone problemy \cite{Gurgen2017}.
 Proces uczenia sieci neuronowej polega na dostosowywaniu parametrów węzłów prowadzącego do znalezienia optymalnego rozwiązania problemu.
 Sztuczne sieci neuronowe są bardzo popularnym i rozbudowanym zagadnieniem uczenia maszynowego.
 Znajdują zastosowanie w rozpoznawaniu obrazów, mowy, pisma, robotyce. 
@@ -705,11 +705,11 @@ g(x)={\begin{cases}0{\text{, dla }}x<0\\1{\text{, dla }}x\geq 0\end{cases}}
 Neutron przyjmuje na wejście wektor $\vec{x}$.
 Wektor wejściowy zostaje pomnożony przez wektor wag $\vec{w}$ i dodany do progu aktywacji $b$.
 Rezultat jest argumentem funkcji aktywacji  $g(\vec{x} \cdot \vec{w} + b)$.
-Wartość funkcji aktywacji zostaje podana na wyjście. \Rys{rys:mlp:neuron}.
+Wartość funkcji aktywacji zostaje podana na wyjście \Rys{rys:mlp:neuron}.
 Możliwości pojedynczego neuronu są ograniczone \cite{Jeon2018}.
-Posiada jedynie wyjście binarne zwracające $0$ lub $1$. 
+Posiada on jedynie wyjście binarne zwracające $0$ lub $1$. 
 Zadaniem neuronu jest określenie, po której stronie hiperpłaszczyzny, 
-określonej przez wektor $\vec w$ i skalar $b$ znajduje się obserwacja.
+określonej przez wektor $\vec w$ i skalar $b$ znajduje się obserwacja \cite{Gurgen2017}.
 Funkcja aktywacji ogranicza odpowiedź do wcześniej zadanego zakresu.
 \begin{figure}[h]
 	\centering
@@ -744,7 +744,7 @@ Rzutuje to na interpretację wartości zwracanej przez neuron,
 która nie działa już zgodnie z regułą \textit{wszystko, albo nic}.
 Neuron z funkcją sigmoidalną nie jest już klasyfikatorem binarnym, ponieważ może zwrócić np. wartość $sigm(0) = 0,5$.
 Pozwala to na tworzenie sieci neuronowych operujących na logice rozmytej,
-zwiększając zakres problemów w których zastosowanie mogą znaleźć sztuczne sieci neuronowe.
+zwiększając zakres problemów, w których zastosowanie mogą znaleźć sztuczne sieci neuronowe.
 
 %http://lowrank.net/gnuplot/datafile2-e.html
 
@@ -866,20 +866,18 @@ Podejście to wymusza pisanie bardziej czytelnego kodu.
 Kod jest dzielony na moduły i pakiety.
 Python posiada duży zbiór bibliotek rozwijanych przez społeczność.
 
-Numpy to najpopularniejsza biblioteka wykorzystywana do obliczeń numerycznych i uczenia maszynowego.
-Pozwala operować na n-wymiarowych macierzach, zawiera podstawowe funkcje algebry liniowej itd.
-\\
-Scikit-learn jest biblioteką dostarczającą wymagane przez współczesny stan wiedzy implementacje algorytmów uczenia maszynowego.
+\textit{Numpy} to najpopularniejsza biblioteka wykorzystywana do obliczeń numerycznych i uczenia maszynowego.
+Pozwala operować na $n$-wymiarowych macierzach, zawiera podstawowe funkcje algebry liniowej itd.
+\textit{Scikit-learn} jest biblioteką dostarczającą wymagane przez współczesny stan wiedzy implementacje algorytmów uczenia maszynowego.
 Docelowo znajduje zastosowanie przy rozwiązywaniu zadań statystycznych, analitycznych i eksploracji danych \cite{OShaughnessy2008}.  
-\\
-Python-speech-features to niewielka biblioteka wspierająca systemy automatycznego rozpoznawania mowy. 
+\textit{Python-speech-features} to niewielka biblioteka wspierająca systemy automatycznego rozpoznawania mowy. 
 Dostarcza implementacje MFCC i SSC.
 
-Aplikacja jest zbudowana z trzech modułów.
+Stworzona aplikacja jest zbudowana z trzech modułów.
 Pierwszy $feature\_extraction.py$ jest odpowiedzialny za obliczenie cech sygnałów wypowiedzi. 
 Wczytuje plik z dźwiękowym zapisem wypowiedzi i dzieli go na ramki, 
-dla każdej ramki obliczane są cech bazowe.
-Następnie dla każdego pliku liczone są statystyki ze wszystkich ramek pliku.
+dla każdej ramki obliczane są cechy bazowe.
+Następnie dla każdego pliku liczone są statystyki ze wszystkich ramek pliku \Lst{lst:fe}.
 
 \begin{lstlisting}[language=python,caption={Program obliczający cechy wypowiedzi},label={lst:fe}]
 fileList=find_file(korpus, '*.wav')
@@ -899,7 +897,7 @@ with open("features_analysis.csv", "wb") as file:
         writer.writerow(values(file, des))	
 \end{lstlisting}
 
-Wyniki analizy zapisywane są do pliku csv \Lst{lst:fe}w celu późniejszego przetwarzania.
+Wyniki analizy zapisywane są do pliku csv w celu późniejszego przetwarzania.
 Procedura ekstrakcji cech dla każdej ramki została przedstawiona w listingu \ref{lst:def_extract_fetures}.
 Wszystkie cechu bazowe MFCC i SCC zostały przedstawione w tej funkcji.
 
@@ -928,8 +926,8 @@ class FeatureDescriptor:
         [nobs, [self.min, self.max], self.mean, self.variance, self.skewness, self.kurtosis] = stats.describe(feature)
 \end{lstlisting}
 
-Drugim moduł znajduje się w pliku $classification.py$.
-Odpowiada on za przeprowadzenie klasyfikacji z wykorzystaniem różnych metod redukcji wymiarowości i klasyfikacji.
+Drugim moduł programu znajduje się w pliku $classification.py$.
+Odpowiada on za przeprowadzenie klasyfikacji z wykorzystaniem różnych metod redukcji wymiarowości i różnych klasyfikatorów.
 Posiada on definicje klasyfikatorów i reduktorów wymiarowości. 
 Zaimplementowane są w nim dwa sposoby porównywania par reduktor-klasyfikator.
 Skuteczność klasyfikacji jest badana w przypadku, gdy bierzemy pod uwagę wszystkie 7 klas-emocji, jak i w przypadku gdy emocje porównywane są parami.
@@ -992,7 +990,6 @@ Różnią się poziomem głośności.
 Pojedyncze nagrania wyglądają na ustandaryzowane, ale stanowią wyjątek.
 Dokładna historia nagrań nie jest znana, ich stan jest niejednolity.
 Brak jest informacji o operacjach wykonywanych na nagraniach.
-Stan nagrań jest niejednorodny i nieznany.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{standarized}
@@ -1006,14 +1003,14 @@ Stan nagrań jest niejednorodny i nieznany.
 	\label{rys:opis:nieustandaryzowany}
 \end{figure}
 
-Zapis wypowiedzi został ustandaryzowany\Rys{rys:opis:ustandaryzowany} w celu zniwelowania różnic wynikających z głośności nagrania\Rys{rys:opis:nieustandaryzowany}.
+Zapis wypowiedzi został ustandaryzowany \Rys{rys:opis:ustandaryzowany} w celu zniwelowania różnic wynikających z głośności nagrania \Rys{rys:opis:nieustandaryzowany}.
 \section{Ekstrakcja cech wypowiedzi}
 Ekstrakcja cech rozpoczyna się od znalezienia w bazie danych wszystkich plików zwierających wypowiedź i~odczytania sygnału. 
 Nie rozróżniano wypowiedzi ze względu na ich treść: polecenia, zdania, cyfry, tekst.
 Kolejnym krokiem jest przetwarzanie wstępne. 
 Korpus zawiera zapisy stereofoniczne i monofoniczne. 
 W przypadku zapisów stereofonicznych jeden kanał jest pusty, więc oba kanały są sumowane dając zapis monofoniczny.
-Następnie sygnał zostaje poddany standaryzacji.
+Następnie sygnał zostaje poddany standaryzacji przez odjęcie od każdego elementu wartości średniej i podzielenie przez odchylenie standardowe.
 W kolejnym etapie sygnał dzielony jest na ramki o długości 500ms zachodzące na siebie co 200ms.
 Z przetworzonego wstępnie i podzielonego na ramki sygnału obliczane są cechy sygnału \Lst{lst:res:extr}.
 \begin{lstlisting}[language=Python,label={lst:res:extr},caption={funkcja obliczająca cechy sygnału pojedynczego pliku}]
@@ -1107,7 +1104,8 @@ Kolejnym narzędziem wykorzystanym do redukcji wymiarowości jest PCA wykorzystu
 przekształca przestrzeń cech zwiększając rozróżnialność obserwacji, następnie wybiera najistotniejsze wymiary \cite{Bro2014}.
 Po redukcji składowych PCA, nowa przestrzeń wyjaśnia 98\% wariancji przestrzeni pierwotnej wykorzystując 113 wymiarów.
 
-Zbadano skuteczność trzech klasyfikatorów: KNN, SVC(sieci SVM rozróżniające klasy) oraz MLP.
+Zbadano skuteczność trzech klasyfikatorów: KNN, LSVC (maszyny SVM rozróżniające klasy) oraz MLP.
+LSVC jest klasyfikatorem SVM z liniową funkcją jądra.
 Zmierzono zdolność klasyfikacji mowy wyrażającej jedną z emocji podstawowych, jak również porównano zdolność rozróżniania emocji parami.
 
 \subsection{Klasyfikacja dla siedmiu klas}
@@ -1122,15 +1120,15 @@ Najwyższą trafność wykazał klasyfikator MLP po redukcji wymiarów z wykorzy
 Najgorszą, klasyfikacja z wykorzystaniem KNN niezależnie od metody redukcji wymiarowości.
 \begin{landscape}
 \begin{table}[hc!]
-	\caption{Trafność klasyfikacji dla PCA i MLP 7 klas emocji}
+	\caption{Trafność klasyfikacji dla redukcji wymiarowości PCA i klasyfikatora MLP 7 klas emocji}
 	\centering
 	\input{./app/classification_pca_mpl_table.tex}
 	\label{tab:mlp:pca}
 \end{table}
 \end{landscape}
-Analizując efekt klasyfikacji poszczególnych emocji podstawowych\Tab{tab:mlp:pca} zostaną podane przykłady interesujących rozpoznań.
+Analizując efekt klasyfikacji poszczególnych emocji podstawowych \Tab{tab:mlp:pca} zostaną podane przykłady interesujących rozpoznań.
 W kolumnach znajdują się emocje spodziewane, w wierszach emocje rozpoznane.
-Przykładowo aplikacja otrzymała 11 wypowiedzi na których została odegrana radość.
+Przykładowo aplikacja otrzymała 11 wypowiedzi, na których została odegrana radość.
 Siedem z tych wypowiedzi zostało rozpoznanych prawidłowo, trzy zostały pomylone ze złością, a jedna ze zdziwieniem.
 
 \subsection{Klasyfikacja dla dwóch klas}
@@ -1215,7 +1213,7 @@ Badany korpus nie zawiera wypowiedzi nacechowanych przeczuwaniem, więc ma możl
 	\input{./app/accuaricy_zdziwienie_zlosc_table.tex}
 	\label{tab:zdziwienie:zlosc}
 \end{table}
-Zdziwieni zostało dwukrotnie pomylone ze strachem \Tab{tab:strach:zdziwienie} i dwukrotnie ze złością \Tab{tab:zdziwienie:zlosc}.`
+Zdziwienie zostało dwukrotnie pomylone ze strachem \Tab{tab:strach:zdziwienie} i dwukrotnie ze złością \Tab{tab:zdziwienie:zlosc}.`
 W przypadku strachu trafność nie przekroczyła 70\%. 
 Rozróżnialność w parze ze złością jest zauważalnie wyższa i przekracza 80\%.
 Wszystkie trzy emocje są nacechowane negatywnie.
@@ -1265,7 +1263,7 @@ Stan neutralny jest punktem odniesienia dla emocji, jest to stan człowieka nie 
 	\input{./app/accuaricy_stan-neutralny_smutek_table.tex}
 	\label{tab:neutralny:smutek}
 \end{table}
-Charakteryzuje pobudzeniem i wartościowością bliskimi zeru.
+Charakteryzuje się pobudzeniem i wartościowością bliskimi zeru.
 Zerowy ładunek emocjonalny wypowiedzi stanu neutralnego pozwala dobrze rozróżnić je od wypowiedzi zabarwionych emocjonalnie. 
 Tabele obrazujące różnienie stanu neutralnego i zdziwienia \Tab{tab:neutralny:zdziwienie}, strachu \Tab{tab:neutralny:strach} i smutku \Tab{tab:neutralny:smutek}
 pokazują wysoką rozróżnialność od wypowiedzi emocjonalnych. 

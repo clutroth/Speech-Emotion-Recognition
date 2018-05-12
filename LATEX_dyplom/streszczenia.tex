@@ -5,16 +5,16 @@ APLIKACJA DO ROZPOZNAWANIA EMOCJI W~SYGNALE MOWY
 \end{center}
 
 \section*{Streszczenie}
-Celem pracy było stworzenie aplikacji klasyfikującej emocje na podstawie sygnału mowy.
-Zawiera opis narzędzi wykorzystanych w~aplikacji oraz jej budowę.
-W ostatniej części opisano bazę danych, zaimplementowane rozwiązanie oraz analizę wyników określających rozpoznawalność poszczególnych emocji spośród siedmiu klas, a~także parami.
-Całą aplikację zaimplementowano w~języku Python z~wykorzystaniem pakietów Numpy, Scikit-learn i~Python speech features.
-
+Celem pracy było stworzenie aplikacji do rozpoznawania emocji na podstawie sygnału mowy.
 Praca została podzielona na 3 główne części, spośród których pierwsza opisuje metody i~narzędzia służące rozpoznawaniu emocji w~głosie.
-Zawiera ona przybliżenie modelu emocji, ekstrakcji cech i~ich analizę statystyczną oraz redukcję wymiarowości przestrzeni w~której zostały opisane cechy.
-Kolejna część przedstawia strukturę i~budowę aplikacji z~wyszczególnieniem istotnych fragmentów kodu.
-Ostatnia część zawiera opis wykorzystanej bazy danych, wyekstrahowanych cech wypowiedzi oraz analizę wyników klasyfikacji emocji.
+Zawiera ona przybliżenie modelu emocji, ekstrakcji cech i~ich analizę statystyczną, redukcję wymiarowości przestrzeni, w~której zostały opisane cechy oraz klasyfikację emocji.
+Kolejna część przedstawia strukturę i~budowę aplikacji z~wyszczególnieniem istotnych fragmentów kodu
+oraz opis wykorzystanych narzędzi.
+Aplikacja została napisana w języku Python z wykorzystaniem bibliotek numpy, skit-learn i python-speach-features.
+Ostatnia część pracy zawiera opis wykorzystanej bazy danych, wyekstrahowanych cech wypowiedzi oraz analizę wyników klasyfikacji emocji.
 Badanie pokazuje skuteczność rozróżniania emocji spośród siedmiu klas oraz parami z~zastosowaniem różnych klasyfikatorów i~strategii redukcji wymiarowości.
+Wykorzystano algorytmy rekurencyjnej eliminacji cech i analizę składowych głównych w celu zmniejszenia liczby rozpatrywanych cech.
+Do klasyfikacji użyto klasyfikatora najbliższych sąsiadów, maszyny wektorów wspierających i sztuczne sieci neuronowe.
 
 \bigskip
 {\noindent\bf Słowa kluczowe:} klasyfikacja, emocje, głos, mowa
@@ -23,20 +23,22 @@ Badanie pokazuje skuteczność rozróżniania emocji spośród siedmiu klas oraz
 
 \begin{center}
 \large \bf
-THESIS TITLE
+APPLICATION FOR EMOTION RECOGNITION BASED ON SPEECH SIGNAL
 \end{center}
 
 \section*{Abstract}
-This thesis presents a~novel way of using a~novel algorithm to solve complex
-problems of filter design. In the first chapter the fundamentals of filter design
-are presented. The second chapter describes an original algorithm invented by the
-authors. Is is based on evolution strategy, but uses an original method of filter
-description similar to artificial neural network. In the third chapter the implementation
-of the algorithm in C~programming language is presented. The fifth chapter contains results
-of tests which prove high efficiency and enormous accuracy of the program. Finally some
-posibilities of further development of the invented algoriths are proposed.
+This thesis purpose was creating an application for emotion recognition based on speech signal.
+Thesis is composed of three chapters.
+First chapter describes methods and tools used in speech emotion recognition.
+It includes emotion model introduction, features extraction, statistical analysis, and dimension reduction techniques.
+Next chapter contains application architecture with important code listings exposed, and used tools description.
+Application uses numpy, skit-learn, and python-speach-features libraries.
+Last chapter includes used database account, extracted speech features, and emotion classification results analysis.
+Research shows classification accuracy in case for tow and seven classes with different classifiers, and dimension reduction strategies.
+Recursion feature elimination, and principal component analysis have been used for dimension reduction.
+Classification have been done with nearest neighbours classifier, support vector machines, nad artificial neural networks. 
 
 \bigskip
-{\noindent\bf Keywords:} thesis, LaTeX, quality
+{\noindent\bf Keywords:} classification, emotion, speech, voice
 
 \vfill
