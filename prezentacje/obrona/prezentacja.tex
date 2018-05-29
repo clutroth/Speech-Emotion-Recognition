@@ -60,61 +60,24 @@ coding=utf8]{TorinoTh}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[t,fragile]{Badanie, wyniki, wnioski}
+Implementacja: Python, numpy scikit-learn
+
 Zbadano rozróżnialność emocji dla 7 klas i parami dla różnych par reduktorów i klasyfikatorów
+
+Dla 7 klas, MLP i PCA trafność 55,6\%.
+
+Dla 2 klas wyróżniają się MLP lub SVM z PCA
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[t,fragile]{Badanie, wyniki, wnioski}
+Rozróżniając parami, uzyskano 100\% trafności dla strachu i złości, radości i smutku, złości i smutku.
+Trafność rozróżnienia pary  strach-zdziwienie < 70\%.
+  \begin{figure}
+   \centering
+   \includegraphics[height = 0.4\textwidth]{./plutchik}
+  \end{figure}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 
 
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[t,fragile]{Algorytm Poszukiwania Harmonii}
-\framesubtitle{Pseudokod}
-\begin{algorithmic}[1]
-\fontsize{10pt}{10pt}\selectfont
-	\STATE $HM = inicjalizujPamiec(HMS, n)$
-	\FOR{$i$ w $IMP$}
-		\STATE $h$ - pusta harmonia
-		\FOR{$p=0$ \TO $n$ }
-			\IF{$HMCR > los()$}
-				\STATE $h[p] = losowyTon(HM)$
-				\IF{$PAR > los()$}
-					\STATE $h[p] = dostrojTon(h[p])$
-				\ENDIF
-			\ELSE
-				\STATE $h[p] = losowyTon()$
-			\ENDIF
-		\ENDFOR
-	\ENDFOR
-\end{algorithmic}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[t,fragile]{Scala}
-\begin{itemize}
-	\item język funkcyjny
-	\item statyczne typowany
-	\item bardzo współpracuje z Javą(JBC,JVM,dostępność metod)
-	\item zwięzła składnia($()\_:*<-=>$)
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\end{document}
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[t,fragile]{Algorytm Poszukiwania Harmonii}
-\framesubtitle{Inspiracja}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[t,fragile]{Algorytm Poszukiwania Harmonii}
-\framesubtitle{Inspiracja}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[t,fragile]{Algorytm Poszukiwania Harmonii}
-\framesubtitle{Inspiracja}
-\end{frame}

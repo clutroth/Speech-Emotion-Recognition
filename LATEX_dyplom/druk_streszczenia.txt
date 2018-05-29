@@ -1,0 +1,35 @@
+APLIKACJA DO ROZPOZNAWANIA EMOCJI
+W SYGNALE MOWY
+
+Streszczenie
+Celem pracy byo stworzenie aplikacji do rozpoznawania emocji na podstawie
+sygnau mowy. Praca zostaa podzielona na 3 gwne czci, spord ktrych pierwsza opisuje metody i narzdzia suce rozpoznawaniu emocji w gosie. Zawiera
+ona przyblienie modelu emocji, ekstrakcji cech i ich analiz statystyczn, redukcj wymiarowoci przestrzeni, w ktrej zostay opisane cechy oraz klasyfikacj
+emocji. Kolejna cz przedstawia struktur i budow aplikacji z wyszczeglnieniem istotnych fragmentw kodu oraz opis wykorzystanych narzdzi. Aplikacja
+zostaa napisana w jzyku Python z wykorzystaniem bibliotek numpy, skitlearn i python-speach-features. Ostatnia cz pracy zawiera opis wykorzystanej bazy danych, wyekstrahowanych cech wypowiedzi oraz analiz wynikw
+klasyfikacji emocji. Badanie pokazuje skuteczno rozrniania emocji spord
+siedmiu klas oraz parami z zastosowaniem rnych klasyfikatorw i strategii
+redukcji wymiarowoci. Wykorzystano algorytmy rekurencyjnej eliminacji
+cech i analiz skadowych gwnych w celu zmniejszenia liczby rozpatrywanych
+cech. Do klasyfikacji uyto klasyfikatora najbliszych ssiadw, maszyny wektorw wspierajcych i sztuczne sieci neuronowe.
+Sowa kluczowe: klasyfikacja, emocje, gos, mowa
+
+APPLICATION FOR EMOTION RECOGNITION BASED
+ON SPEECH SIGNAL
+
+Abstract
+This thesis purpose was creating an application for emotion recognition
+based on speech signal. Thesis is composed of three chapters. First chapter
+describes methods and tools used in speech emotion recognition. It includes
+emotion model introduction, features extraction, statistical analysis, and
+dimension reduction techniques. Next chapter contains application architecture with important code listings exposed, and used tools description.
+Application uses numpy, skit-learn, and python-speach-features libraries.
+Last chapter includes used database account, extracted speech features, and
+emotion classification results analysis. Research shows classification accuracy in case for tow and seven classes with different classifiers, and dimension
+reduction strategies. Recursion feature elimination, and principal component analysis have been used for dimension reduction. Classification have
+been done with nearest neighbours classifier, support vector machines, nad
+artificial neural networks.
+Keywords: classification, emotion, speech, voice
+1
+
+
